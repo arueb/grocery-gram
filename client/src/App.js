@@ -6,6 +6,9 @@ import ShoppingList from "./components/shoppingList";
 import MyRecipes from "./components/myRecipes";
 import ExploreRecipes from "./components/exploreRecipes";
 import NotFound from "./components/notFound";
+import RegisterForm from "./components/registerForm";
+import LoginForm from "./components/loginForm";
+import Logout from "./components/logout";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -24,9 +27,9 @@ class App extends Component {
 
         <main className="container">
           <Switch>
-            {/* <Route path="/login" component={LoginForm} /> */}
-            {/* <Route path="/logout" component={Logout} /> */}
-            {/* <Route path="/register" component={RegisterForm} /> */}
+            <Route path="/login" component={LoginForm} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/register" component={RegisterForm} />
             <Route path="/my-recipes" component={MyRecipes} />
             {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />

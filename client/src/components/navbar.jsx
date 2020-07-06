@@ -21,34 +21,39 @@ const Navbar = () => {
         id="navbar6"
       >
         <ul className="navbar-nav">
-          <li className="nav-item active">
-            <Link className="nav-link" to="/shopping-list">
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/shopping-list">
               Shopping List <span className="sr-only">Home</span>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/my-recipes">
+            <NavLink className="nav-link" to="/my-recipes">
               My Recipes
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/explore-recipes">
+            <NavLink className="nav-link" to="/explore-recipes">
               Explore Recipes
-            </Link>
+            </NavLink>
           </li>
         </ul>
-        {/* <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <Link className="nav-link" to="#">
+            <NavLink className="nav-link" to="/register">
               Register
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="#">
+            <NavLink className="nav-link" to="/login">
               Login
-            </Link>
+            </NavLink>
           </li>
-        </ul> */}
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/logout">
+              Sign Out
+            </NavLink>
+          </li>
+        </ul>
       </div>
     </nav>
   );
