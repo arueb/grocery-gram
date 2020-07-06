@@ -1,20 +1,10 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
-
-// import { toast } from "react-toastify";
-
 import * as userService from "../services/userService";
-// import auth from "../services/authService";
-// import { login } from "../services/authService";
+import auth from "../services/authService";
 
 class RegisterForm extends Form {
-  //   username = React.createRef(); //as a best practice, minimize the user of ref
-  // gives the username field focus upon loading the component
-
-  //   componentDidMount() {
-  //     this.username.current.focus();
-  //   }
   state = {
     data: { username: "", email: "", password: "" },
     errors: {},
@@ -30,14 +20,13 @@ class RegisterForm extends Form {
     try {
       const res = await userService.register(this.state.data);
       console.log(res);
-      //   auth.loginWithJwt(res.headers["x-auth-token"]);
-      //   this.props.history.push("/");
+      auth.loginWithJwt(res.headers["x-auth-token"]);
+      this.props.history.push("/");
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
         this.setState({ errors });
-        // toast.error("The username is already taken");
       }
     }
     console.log("submitted");
