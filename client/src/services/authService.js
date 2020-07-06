@@ -7,7 +7,6 @@ http.setJwt(getJwt());
 
 export async function login(email, password) {
   const res = await http.post(apiEndpoint, { email, password });
-  //   auth.loginWithJwt(res.headers["x-auth-token"]);
   localStorage.setItem(tokenKey, res.headers["x-auth-token"]);
 }
 

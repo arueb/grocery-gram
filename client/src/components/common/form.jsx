@@ -27,9 +27,7 @@ class Form extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault(); //prevent roundtrip http request to server
-
     const errors = this.validate();
-    // console.log(errors);
     this.setState({ errors: errors || {} });
     if (errors) return;
 
@@ -39,28 +37,17 @@ class Form extends Component {
   handleChange = ({ currentTarget: input }) => {
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-    // if (errorMessage) errors[input.name] = errorMessage;
-    // else delete errors[input.name];
-    if (!errorMessage) errors[input.name] = errorMessage;
-    delete errors[input.name];
+
+    if (!errorMessage) delete errors[input.name];
 
     const data = { ...this.state.data };
     data[input.name] = input.value;
     this.setState({ data, errors });
-    // this.setState({ data });
   };
 
   renderButton(label) {
     console.log(this.validate());
-    return (
-      <button
-        className="btn btn-primary"
-
-        // disabled={this.state.errors.length === 0} // returns truthy if errors exist or falsy if null
-      >
-        {label}
-      </button>
-    );
+    return <button className="btn btn-primary">{label}</button>;
   }
 
   renderInput(name, label, type = "text") {
