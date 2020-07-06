@@ -37,9 +37,9 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-        {/* <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <Link className="nav-link" to="#">
+            <Link className="nav-link" to="/register">
               Register
             </Link>
           </li>
@@ -48,7 +48,7 @@ const Navbar = () => {
               Login
             </Link>
           </li>
-        </ul> */}
+        </ul>
       </div>
     </nav>
   );
