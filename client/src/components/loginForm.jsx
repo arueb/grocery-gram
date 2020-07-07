@@ -40,14 +40,20 @@ class LoginForm extends Form {
   render() {
     return (
       <React.Fragment>
-        <div>
-          <h1>Login</h1>
-
-          <form onSubmit={this.handleSubmit}>
-            {this.renderInput("email", "Email")}
-            {this.renderInput("password", "Password", "password")}
-            {this.renderButton("Login")}
-          </form>
+        <div className="d-flex h-100">
+          <div className="row align-self-center w-100">
+            <div className="col-7 mx-auto modal-form row">
+              <div className="col-5 left-col bg-info"></div>
+              <div className="col-7 right-col">
+                <h2>Welcome Back</h2>
+                <form onSubmit={this.handleSubmit}>
+                  {this.renderInput("email", "Email")}
+                  {this.renderInput("password", "Password", "password")}
+                  {this.renderButton("Login")}
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     );
