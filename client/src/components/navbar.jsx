@@ -2,7 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaGgCircle } from "react-icons/fa";
 
-const Navbar = () => {
+const Navbar = ({ user }) => {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-info">
       <Link to="/" className="navbar-brand">
@@ -38,21 +38,29 @@ const Navbar = () => {
           </li>
         </ul>
         <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/register">
-              Register
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/login">
-              Login
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/logout">
-              Sign Out
-            </NavLink>
-          </li>
+          {!user && (
+            <React.Fragment>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/register">
+                  Register
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/login">
+                  Login
+                </NavLink>
+              </li>
+            </React.Fragment>
+          )}
+          {user && (
+            <React.Fragment>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/logout">
+                  Sign Out
+                </NavLink>
+              </li>
+            </React.Fragment>
+          )}
         </ul>
       </div>
     </nav>
