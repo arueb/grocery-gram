@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "./common/form";
-import Joi from "joi-browser";
+import Joi, { ref } from "joi-browser";
 import auth from "../services/authService";
 
 class LoginForm extends Form {
@@ -26,6 +26,7 @@ class LoginForm extends Form {
       await auth.login(email, password);
 
       const { state } = this.props.location;
+      console.log(state);
       window.location = state ? state.from.pathname : "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
