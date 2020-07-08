@@ -32,4 +32,9 @@ router.get("/", async (req, res) => {
   res.send(users);
 });
 
+// router.get("/:id", async (req, res) => {
+//   const users = await User.find().sort('username')
+//   res.send(users);
+// });
+
 module.exports = router;
