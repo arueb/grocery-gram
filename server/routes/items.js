@@ -4,9 +4,9 @@ const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { Item, validate } = require("../models/item");
 
-router.get("/", (req, res) => {
-  console.log("hey it's items!");
-  res.send({ hello: "items world" });
+router.get("/", async (req, res) => {
+  const items = await Item.find().sort('name');
+  res.send(items);
 });
 
 // router.post("/", async (req, res) => {
