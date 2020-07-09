@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
-const config = require("config");
-const { JsonWebTokenError } = require("jsonwebtoken");
-const { string } = require("@hapi/joi");
+// const config = require("config");
+// const { string } = require("@hapi/joi");
 
 const Schema = mongoose.Schema;
 
@@ -40,6 +39,7 @@ const recipeSchema = new Schema({
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
+const db = mongoose.Connection;
 
 validateRecipe = (recipe) => {
   const schema = Joi.object({
