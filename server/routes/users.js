@@ -31,6 +31,22 @@ router.post("/", async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 
+// add an item to user's shopping list
+router.patch("/:id", /*auth,*/ async (req, res) => {
+// need to validate the request body to ensure it includes an item objectID??
+});   
+
+// Mosh example
+// router.put("/:id", auth, async (req, res) => {
+//   const { error } = validate(req.body);
+//   if (error) return res.status(400).send(error.details[0].message);
+
+//   const genre = await Genre.findByIdAndUpdate(
+//     req.params.id,
+//     { name: req.body.name },
+//     { new: true }
+//   );
+
 // get all users
 router.get("/", async (req, res) => {
   try {
