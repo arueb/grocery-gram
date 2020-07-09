@@ -8,16 +8,26 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let item = await Item.findOne({ name: req.body.name });
-  if (item)
-    return res
-      .status(400)
-      .send("An item with this name already exists in DB.");
+  try {
+    let item = await Item.findOne({ name: req.body.name });
+    if (item)
+      return res
+        .status(400)
+        .send("An item with this name already exists in DB.");
+  }
+  catch (err) {
+    res.status(500).send("Something failed.", err);
+  }
 
   item = new Item(_.pick(req.body, ["name", "category", "price"]));
-  await item.save();
 
-  res.send('coming from POST /items');
+  try {
+    await item.save();
+    res.send(item);
+  }
+  catch (err) {
+    res.status(500).send("Something failed.", err);
+  }
 });
 
 router.get("/", async (req, res) => {
@@ -26,7 +36,7 @@ router.get("/", async (req, res) => {
     res.send(items);
   }
   catch (err) {
-    res.status(500).send("Something failed.");
+    res.status(500).send("Something failed.", err);
   }  
 });
 
@@ -37,8 +47,8 @@ router.get("/:id", async (req, res) => {
 
     res.send(item);
   }
-  catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
-    res.status(500).send("Something failed.");
+  catch (err) { // e.g. id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    res.status(500).send("Something failed.", err);
   }
 });
 
