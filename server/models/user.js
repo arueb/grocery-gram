@@ -10,11 +10,25 @@ const userSchema = new Schema({
   username: { type: String, min: 3, max: 32, unique: true, required: true },
   password: { type: String, min: 3, max: 64, required: true },
   listItems: [{
-    // type: mongoose.Types.ObjectId
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'
   }],
-  date: { type: Date, default: Date.now },   
+  deletedItems: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item'
+  }],
+  itemCounts: [{
+      itemID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item'
+      },
+      count: {
+        type: Number,
+        min: 0,
+        default: 0
+      }
+  }],
+  date: { type: Date, default: Date.now },    
 });
 
 userSchema.methods.generateAuthToken = function () {

@@ -16,6 +16,9 @@ router.post("/", async (req, res) => {
       .send("A user with this email address is already registered.");
 
   user = new User(_.pick(req.body, ["username", "email", "password"]));
+  user.listItems = [];
+  user.deletedItems = [];
+  user.itemCounts = [];
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
@@ -31,10 +34,10 @@ router.post("/", async (req, res) => {
 // get all users
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find().sort("username");
+    const users = await User.find().sort("username");  
     res.send(users);
   } catch (err) {
-    res.status(500).send("Something failed");
+    res.status(500).send("Something failed");   
   }
 });
 
