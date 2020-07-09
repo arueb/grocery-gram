@@ -38,7 +38,17 @@ router.post("/", async (req, res) => {
 });
 
 // add an item to user's shopping list
-router.patch("/:id", /*auth,*/ async (req, res) => {
+router.patch("/:id", async (req, res) => {
+  let user;
+  
+  try {
+    user = await User.findById(req.params.id);
+    if (!user) return res.status(404).send("The user with the given ID was not found.");
+  }
+  catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    res.status(500).send("Something failed.");
+  }
+
 // need to validate the request body to ensure it includes an item objectID??
 });   
 
