@@ -18,8 +18,9 @@ const recipeSchema = new Schema({
           default: 1,
         },
         itemId: {
-          type: String,
+          type: mongoose.Schema.ObjectId,
           required: true,
+          ref: "Item",
         },
         unit: {
           type: String,
