@@ -68,15 +68,8 @@ router.post("/", async (req, res) => {
     let user = await User.findOne({ _id: req.body.userId });
     if (!user) return res.status(404).send("The userId does not exist");
 
-    const recipe = new Recipe(
-      _.pick(req.body, [
-        "title",
-        "userId",
-        "avgRating",
-        "ingredients",
-        "updatedOn",
-      ])
-    );
+    const recipe = new Recipe(req.body);
+
     await recipe.save();
     res.send(recipe);
   } catch (err) {
