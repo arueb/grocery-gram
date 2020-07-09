@@ -9,11 +9,11 @@ const userSchema = new Schema({
   email: { type: String, max: 64, unique: true, required: true },
   username: { type: String, min: 3, max: 32, unique: true, required: true },
   password: { type: String, min: 3, max: 64, required: true },
-  listItems: [{
+  addedItems: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'
   }],
-  deletedItems: [{
+  removedItems: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'
   }],

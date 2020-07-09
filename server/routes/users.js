@@ -16,8 +16,8 @@ router.post("/", async (req, res) => {
       .send("A user with this email address is already registered.");
 
   user = new User(_.pick(req.body, ["username", "email", "password"]));
-  user.listItems = [];
-  user.deletedItems = [];
+  user.addedItems = [];
+  user.removedItems = [];
   user.itemCounts = [];
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
