@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
 
+// create new user
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -27,6 +28,7 @@ router.post("/", async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 
+// get all users
 router.get("/", async (req, res) => {
   try {
     const users = await User.find().sort("username");
@@ -36,6 +38,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// get user with given id
 router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id); 

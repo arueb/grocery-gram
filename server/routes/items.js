@@ -5,8 +5,25 @@ const _ = require("lodash");
 const { Item, validate } = require("../models/item");
 
 router.get("/", async (req, res) => {
-  const items = await Item.find().sort('name');
-  res.send(items);
+  try {
+    const items = await Item.find().sort('name');
+    res.send(items);
+  }
+  catch (err) {
+    res.status(500).send("Something failed.");
+  }  
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) return res.status(404).send("The item with the given ID was not found.");
+
+    res.send(item);
+  }
+  catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    res.status(500).send("Something failed.");
+  }
 });
 
 // router.post("/", async (req, res) => {

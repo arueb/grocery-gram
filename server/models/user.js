@@ -9,7 +9,12 @@ const userSchema = new Schema({
   email: { type: String, max: 64, unique: true, required: true },
   username: { type: String, min: 3, max: 32, unique: true, required: true },
   password: { type: String, min: 3, max: 64, required: true },
-  date: { type: Date, default: Date.now },
+  listItems: [{
+    // type: mongoose.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item'
+  }],
+  date: { type: Date, default: Date.now },   
 });
 
 userSchema.methods.generateAuthToken = function () {
