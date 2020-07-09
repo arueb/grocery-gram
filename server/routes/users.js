@@ -45,7 +45,10 @@ router.patch("/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { addedItems: req.body.addedItems, removedItems: req.body.removedItems },
+      {
+        addedItems: req.body.addedItems,
+        removedItems: req.body.removedItems
+      },
       // { removedItems: req.body.removedItems },
       { new: true }
     );
