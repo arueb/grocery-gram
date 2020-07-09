@@ -28,13 +28,20 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const users = await User.find().sort('username')
-  res.send(users);
+  try {
+    const users = await User.find().sort('username')
+    res.send(users);
+  }
+  catch (err) {
+    res.status(500).send('Something failed');
+  }
 });
 
-// router.get("/:id", async (req, res) => {
-//   const users = await User.find().sort('username')
-//   res.send(users);
-// });
+router.get("/:id", async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).send('The user with the given ID was not found.');
+  
+  res.send(user);
+});
 
 module.exports = router;
