@@ -29,19 +29,23 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find().sort('username')
+    const users = await User.find().sort("username");
     res.send(users);
-  }
-  catch (err) {
-    res.status(500).send('Something failed');
+  } catch (err) {
+    res.status(500).send("Something failed");
   }
 });
 
 router.get("/:id", async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (!user) return res.status(404).send('The user with the given ID was not found.');
+  try {
+    const user = await User.findById(req.params.id); 
+    if (!user) return res.status(404).send("The user with the given ID was not found.");
   
-  res.send(user);
+    res.send(user);     
+  }
+  catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    res.status(500).send("Something failed.");
+  }
 });
 
 module.exports = router;
