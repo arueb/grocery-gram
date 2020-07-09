@@ -1,10 +1,7 @@
 const express = require("express");
 const users = require("../routes/users");
-<<<<<<< HEAD
 const recipes = require("../routes/recipes");
-=======
 const items = require("../routes/items");
->>>>>>> master
 const auth = require("../routes/auth");
 const headers = require("../middleware/headers");
 
