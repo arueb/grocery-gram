@@ -34,57 +34,89 @@ router.post("/", async (req, res) => {
   res
     .header("x-auth-token", token)
     .header("access-control-expose-headers", "x-auth-token")
-    .send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));
+    .send(
+      _.pick(user, [
+        "_id",
+        "username",
+        "email",
+        "addedItems",
+        "removedItems",
+        "itemCounts",
+      ])
+    );
 });
 
 // update given user's addedItems  to user's shopping list
 router.patch("/:id", async (req, res) => {
-
   // do I need to validate the request body to ensure it has 2 arrays of type array of objectID?
 
   try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        addedItems: req.body.addedItems,
-        removedItems: req.body.removedItems
-      },
-      // { removedItems: req.body.removedItems },
-      { new: true }
-    );
+    const user = Unit.findById(req.params.id);
     if (!user)
-    return res.status(404).send("The user with the given ID was not found.");
-    res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"])); 
+      return res.status(404).send("The user with the given ID was not found.");
+    if (req.body.addedItems)
+      user.addedItems = req.body.addedItems;
+    if (req.body.removedItems)
+      user.removedItems = req.body.removedItems;
+    // const user = await User.findByIdAndUpdate(
+    //   req.params.id,
+    //   {
+    //     if (req.body.addedItems) addedItems: req.body.addedItems,
+    //     removedItems: req.body.removedItems
+    //   },
+    //   // { removedItems: req.body.removedItems },
+    //   { new: true }
+    // );
+    // if (!user)
+    // return res.status(404).send("The user with the given ID was not found.");
+    // res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));
+  } catch (err) {
+    res.status(500).send("Something failed", err);
   }
-  catch (err) {
-    res.status(500).send("Something failed", err); 
-  }
-});   
-
-
+});
 
 // get all users
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find().sort("username");  
+    const users = await User.find().sort("username");
     // res.send(users);
-    res.send(_.map(users, _.partialRight(_.pick, [
-      "_id", "username", "email", "addedItems", "removedItems", "itemCounts"
-    ])));
+    res.send(
+      _.map(
+        users,
+        _.partialRight(_.pick, [
+          "_id",
+          "username",
+          "email",
+          "addedItems",
+          "removedItems",
+          "itemCounts",
+        ])
+      )
+    );
   } catch (err) {
-    res.status(500).send("Something failed");   
+    res.status(500).send("Something failed");
   }
 });
 
 // get user with given id
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id); 
-    if (!user) return res.status(404).send("The user with the given ID was not found.");
-  
-    res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));     
-  }
-  catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    const user = await User.findById(req.params.id);
+    if (!user)
+      return res.status(404).send("The user with the given ID was not found.");
+
+    res.send(
+      _.pick(user, [
+        "_id",
+        "username",
+        "email",
+        "addedItems",
+        "removedItems",
+        "itemCounts",
+      ])
+    );
+  } catch (err) {
+    // id isn't valid mongo ID (e.g. ID isn't 24 chars)
     res.status(500).send("Something failed.");
   }
 });
