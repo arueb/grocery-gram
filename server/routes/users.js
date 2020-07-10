@@ -34,30 +34,43 @@ router.post("/", async (req, res) => {
   res
     .header("x-auth-token", token)
     .header("access-control-expose-headers", "x-auth-token")
-    .send(_.pick(user, ["_id", "name", "email"]));
+    .send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));
 });
 
-// add an item to user's shopping list
-router.patch("/:id", /*auth,*/ async (req, res) => {
-// need to validate the request body to ensure it includes an item objectID??
+// update given user's addedItems  to user's shopping list
+router.patch("/:id", async (req, res) => {
+
+  // do I need to validate the request body to ensure it has 2 arrays of type array of objectID?
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        addedItems: req.body.addedItems,
+        removedItems: req.body.removedItems
+      },
+      // { removedItems: req.body.removedItems },
+      { new: true }
+    );
+    if (!user)
+    return res.status(404).send("The user with the given ID was not found.");
+    res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"])); 
+  }
+  catch (err) {
+    res.status(500).send("Something failed", err); 
+  }
 });   
 
-// Mosh example
-// router.put("/:id", auth, async (req, res) => {
-//   const { error } = validate(req.body);
-//   if (error) return res.status(400).send(error.details[0].message);
 
-//   const genre = await Genre.findByIdAndUpdate(
-//     req.params.id,
-//     { name: req.body.name },
-//     { new: true }
-//   );
 
 // get all users
 router.get("/", async (req, res) => {
   try {
     const users = await User.find().sort("username");  
-    res.send(users);
+    // res.send(users);
+    res.send(_.map(users, _.partialRight(_.pick, [
+      "_id", "username", "email", "addedItems", "removedItems", "itemCounts"
+    ])));
   } catch (err) {
     res.status(500).send("Something failed");   
   }
@@ -69,7 +82,7 @@ router.get("/:id", async (req, res) => {
     const user = await User.findById(req.params.id); 
     if (!user) return res.status(404).send("The user with the given ID was not found.");
   
-    res.send(user);     
+    res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));     
   }
   catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
     res.status(500).send("Something failed.");
