@@ -44,32 +44,44 @@ router.post("/", async (req, res) => {
         "itemCounts",
       ])
     );
-});
+});  
 
-// update given user's addedItems  to user's shopping list
+// update given user's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
-  // do I need to validate the request body to ensure it has 2 arrays of type array of objectID?
-
+  
   try {
-    const user = Unit.findById(req.params.id);
+    const user = await User.findById(req.params.id);  
     if (!user)
       return res.status(404).send("The user with the given ID was not found.");
-    if (req.body.addedItems)
-      user.addedItems = req.body.addedItems;
-    if (req.body.removedItems)
-      user.removedItems = req.body.removedItems;
-    // const user = await User.findByIdAndUpdate(
-    //   req.params.id,
-    //   {
-    //     if (req.body.addedItems) addedItems: req.body.addedItems,
-    //     removedItems: req.body.removedItems
-    //   },
-    //   // { removedItems: req.body.removedItems },
-    //   { new: true }
-    // );
-    // if (!user)
-    // return res.status(404).send("The user with the given ID was not found.");
-    // res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));
+    if (req.body.email) {
+      // validate req.body property with Joi
+      user.email = req.body.email; 
+    }
+    if (req.body.addedItems) {
+      // validate req.body property with Joi
+      user.addedItems = req.body.addedItems; 
+    }
+    if (req.body.removedItems) {
+      // validate req.body property with Joi
+      user.removedItems = req.body.removedItems; 
+    }  
+    if (req.body.itemCounts) {
+      // validate req.body property with Joi
+      user.itemCounts = req.body.itemCounts;
+    }  
+    
+    const result = await user.save(); 
+
+    res.send(
+      _.pick(user, [
+        "_id",
+        "username",
+        "email",
+        "addedItems",
+        "removedItems",
+        "itemCounts",
+      ])
+    );    
   } catch (err) {
     res.status(500).send("Something failed", err);
   }
