@@ -8,5 +8,6 @@ module.exports = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false // set this 7/10 to help findOneAndUpdate      
   });
 };
