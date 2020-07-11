@@ -51,26 +51,40 @@ router.patch("/:id", async (req, res) => {
   
   try {
     const user = await User.findById(req.params.id);  
+
     if (!user)
       return res.status(404).send("The user with the given ID was not found.");
-    if (req.body.email) {
-      // validate req.body property with Joi
-      user.email = req.body.email; 
-    }
-    if (req.body.addedItems) {
-      // validate req.body property with Joi
-      user.addedItems = req.body.addedItems; 
-    }
-    if (req.body.removedItems) {
-      // validate req.body property with Joi
-      user.removedItems = req.body.removedItems; 
-    }  
-    if (req.body.itemCounts) {
-      // validate req.body property with Joi
-      user.itemCounts = req.body.itemCounts;
-    }  
+
+    User.update(
+      { _id: req.params.id },
+      {
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          addedItems: req.body.addedItems,
+          removedItems: req.body.removedItems,
+          itemCounts: req.body.itemCounts
+        } 
+      });  
     
-    const result = await user.save(); 
+    // if (req.body.email) {
+    //   // validate req.body property with Joi
+    //   user.email = req.body.email; 
+    // }
+    // if (req.body.addedItems) {
+    //   // validate req.body property with Joi
+    //   user.addedItems = req.body.addedItems; 
+    // }
+    // if (req.body.removedItems) {
+    //   // validate req.body property with Joi
+    //   user.removedItems = req.body.removedItems; 
+    // }  
+    // if (req.body.itemCounts) {
+    //   // validate req.body property with Joi
+    //   user.itemCounts = req.body.itemCounts;
+    // }  
+    
+    // const result = await user.save();     
 
     res.send(
       _.pick(user, [
