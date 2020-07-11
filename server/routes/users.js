@@ -67,6 +67,7 @@ router.patch("/:id", async (req, res) => {
         .send("A user with this username is already registered.");
   }
   
+  // make requested updates to user
   try {
     const user = await User.findOneAndUpdate(    
       { _id: req.params.id },

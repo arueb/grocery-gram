@@ -5,6 +5,18 @@ const { Recipe, validate } = require("../models/recipe");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
 
+// get all recipes
+router.get("/", async (req, res) => {
+  try {
+    const recipes = await Recipe.find().sort("-updatedOn");
+    res.send(recipes);
+  }
+  catch (err) {
+    res.status(500).send("Something failed");
+  }
+});
+
+// get given recipe
 router.get("/:id", async (req, res) => {
   let recipe = await Recipe.findById(req.params.id);
   if (!recipe) return res.status(404).send("The recipeId could not be found.");
@@ -55,7 +67,7 @@ router.get("/:id", async (req, res) => {
 
     res.send(recipe);
   } catch (err) {
-    es.status(500).send("Something failed.", err);
+    res.status(500).send("Something failed.", err);
   }
 });
 
