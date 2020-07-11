@@ -17,17 +17,20 @@ const userSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'
   }],
-  itemCounts: [{
+  itemCounts: [
+    {
       itemID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Item'
-      },
+      }
+      ,
       count: {
         type: Number,
         min: 0,
         default: 0
       }
-  }],
+    }
+  ],
   date: { type: Date, default: Date.now },    
 });
 
