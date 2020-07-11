@@ -9,7 +9,6 @@ const userSchema = new Schema({
   email: { type: String, max: 64, unique: true, required: true },
   username: { type: String, min: 3, max: 32, unique: true, required: true },
   password: { type: String, min: 3, max: 64, required: true },
-<<<<<<< HEAD
   addedItems: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,21 +21,10 @@ const userSchema = new Schema({
       ref: "Item",
     },
   ],
-=======
-  addedItems: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item'
-  }],
-  removedItems: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item'
-  }],
->>>>>>> 07bd8147ef0e13d1bc0dce12b6f845f67c4790c2
   itemCounts: [
     {
       itemID: {
         type: mongoose.Schema.Types.ObjectId,
-<<<<<<< HEAD
         ref: "Item",
       },
       count: {
@@ -47,19 +35,6 @@ const userSchema = new Schema({
     },
   ],
   date: { type: Date, default: Date.now },
-=======
-        ref: 'Item'
-      }
-      ,
-      count: {
-        type: Number,
-        min: 0,
-        default: 0
-      }
-    }
-  ],
-  date: { type: Date, default: Date.now },    
->>>>>>> 07bd8147ef0e13d1bc0dce12b6f845f67c4790c2
 });
 
 userSchema.methods.generateAuthToken = function () {
