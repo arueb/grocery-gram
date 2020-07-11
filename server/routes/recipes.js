@@ -78,4 +78,24 @@ router.post("/", async (req, res) => {
   }
 });
 
+// update given recipe's properties with properties sent in request body
+router.patch("/:id", async (req, res) => {
+
+  // make requested updates to recipe
+  try {
+    const recipe = await Recipe.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
+
+    if (!recipe)
+      return res.status(404).send("The recipe with the given ID was not found.");
+
+    res.send(recipe);
+  } catch (err) {
+    res.status(500).send("Something failed", err);
+  }
+});
+
 module.exports = router;
