@@ -59,16 +59,10 @@ router.patch("/:id", async (req, res) => {
     if (!user)
       return res.status(404).send("The user with the given ID was not found.");    
 
-    res.send(
-      _.pick(user, [
-        "_id",
-        "username",
-        "email",
-        "addedItems",
-        "removedItems",
-        "itemCounts",
-      ])
-    );    
+      // Need to remove password key from output
+      user.password = undefined;
+
+      res.json(user);    
   } catch (err) {
     res.status(500).send("Something failed", err);
   }
