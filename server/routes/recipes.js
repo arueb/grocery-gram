@@ -81,6 +81,17 @@ router.post("/", async (req, res) => {
 // update given recipe's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
 
+  if (req.body.userId) {
+    try { 
+      const user = await User.findOne({ _id: req.body.userId });
+      if (!user)
+        return res.status(404).send("The userId does not exist");
+    }
+    catch (err) {
+      res.status(500).send("Something failed.", err);
+    }    
+  }
+
   // make requested updates to recipe
   try {
     const recipe = await Recipe.findOneAndUpdate(
