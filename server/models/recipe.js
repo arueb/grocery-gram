@@ -6,7 +6,11 @@ const Schema = mongoose.Schema;
 const recipeSchema = new Schema({
   title: { type: String, max: 128, required: true },
   userId: { type: String, max: 128, required: true },
-  avgRating: { type: Number, min: 0, max: 5 },
+  category: { type: String, max: 128, required: true },
+  avgRating: { type: Number, min: 0, max: 5, default: 0 },
+  numReviews: { type: Number, min: 0, default: 0 },
+  isPublished: { type: Boolean, default: false },
+  instructions: { type: String, max: 2048 },
   ingredients: [
     {
       type: new Schema({
@@ -41,10 +45,14 @@ const Recipe = mongoose.model("Recipe", recipeSchema);
 validateRecipe = (recipe) => {
   const schema = Joi.object({
     title: Joi.string().min(2).max(128).required(),
-    userId: Joi.string().max(64).required(),
+    userId: Joi.string().max(128).required(),
+    category: Joi.string().max(128).required(),
     avgRating: Joi.number().min(0).max(5),
+    numReviews: Joi.number().min(0),
+    isPublished: Joi.boolean(),
+    instructions: Joi.string().max(2048),
     ingredients: Joi.array(),
-    updatedOn: Joi.date(),
+    createdOn: Joi.date(),
   });
   return schema.validate(recipe);
 };
