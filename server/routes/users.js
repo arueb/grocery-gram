@@ -48,6 +48,8 @@ router.post("/", async (req, res) => {
 
 // update given user's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
+  const { error } = validate(req.body, true); // ignore required
+  if (error) return res.status(400).send(error.details[0].message);
 
   // for email change: ensure requested email is unique in db
   if (req.body.email) {
