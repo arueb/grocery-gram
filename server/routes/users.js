@@ -48,7 +48,26 @@ router.post("/", async (req, res) => {
 
 // update given user's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
+
+  // for email change: ensure requested email is unique in db
+  if (req.body.email) {
+    const user = await User.findOne({ email: req.body.email });
+    if (user)
+      return res
+        .status(400)
+        .send("A user with this email address is already registered.");
+  }
+
+  // for username change: ensure requested username is unique in db
+  if (req.body.username) {
+    const user = await User.findOne({ username: req.body.username });
+    if (user)
+      return res
+        .status(400)
+        .send("A user with this username is already registered.");
+  }
   
+  // make requested updates to user
   try {
     const user = await User.findOneAndUpdate(    
       { _id: req.params.id },
