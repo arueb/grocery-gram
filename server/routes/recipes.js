@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// get given recipe
+// get given recipe, ingredient item objects re
 router.get("/:id", async (req, res) => {
   let recipe = await Recipe.findById(req.params.id);
   if (!recipe) return res.status(404).send("The recipeId could not be found.");
@@ -93,6 +93,7 @@ router.post("/", async (req, res) => {
 // update given recipe's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
 
+  // if editing recipe's userId, first ensure it is present in db
   if (req.body.userId) {
     try { 
       const user = await User.findOne({ _id: req.body.userId });
