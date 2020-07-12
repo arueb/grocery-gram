@@ -53,6 +53,9 @@ validateUser = (user) => {
     email: Joi.string().email().min(5).max(64).required(),
     username: Joi.string().alphanum().min(3).max(32).required(),
     password: Joi.string().alphanum().min(3).max(64).required(),
+    addedItems: Joi.array(),
+    removedItems: Joi.array(),
+    itemCounts: Joi.array()
   });
   return schema.validate(user);
 };
