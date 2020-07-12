@@ -9,6 +9,7 @@ import NotFound from "./components/notFound";
 import RegisterForm from "./components/registerForm";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
+import RecipeForm from "./components/recipeFormDev";
 import auth from "./services/authService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -32,6 +33,7 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={Logout} />
             <Route path="/register" component={RegisterForm} />
+            <Route path="/my-recipes/test" component={RecipeForm} />
             <Route path="/my-recipes" component={MyRecipes} />
             {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />

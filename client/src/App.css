@@ -46,3 +46,18 @@
 .modal-form .right-col {
   padding: 4em 2em;
 }
+tr .hover-icon {
+  margin-right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+  cursor: pointer;
+  transition-delay: 0.2s;
+}
+tr:hover .hover-icon {
+  opacity: 1;
+  transition-delay: 0.2s;
+}
+
+.ingredients-form .form-group {
+  margin-bottom: 0;
+}
