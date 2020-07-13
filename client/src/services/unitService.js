@@ -12,8 +12,10 @@ export const units = [
   { _id: "11", name: "Pint" },
   { _id: "12", name: "Gallon" },
   { _id: "13", name: "Liter" },
+  { _id: "14", name: "Cup" },
 ];
 
 export function getUnits() {
   return units.sort((a, b) => (a.name > b.name ? 1 : -1));
+  //   .map(unit => { return unit.});
 }
