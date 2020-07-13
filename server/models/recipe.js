@@ -38,13 +38,13 @@ const recipeSchema = new Schema({
     required: true,
     default: Date.now,
   },
-});
+}); 
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
 
-validateRecipe = (recipe) => {
+validateRecipe = (recipe, ignoreRequiredFields = false) => {
   const schema = Joi.object({
-    title: Joi.string().min(2).max(128).required(),
+    title: Joi.string().min(2).max(128).required(), 
     userId: Joi.string().max(128).required(),
     category: Joi.string().max(128).required(),
     avgRating: Joi.number().min(0).max(5),
@@ -54,6 +54,14 @@ validateRecipe = (recipe) => {
     ingredients: Joi.array(),
     createdOn: Joi.date(),
   });
+
+  if (ignoreRequiredFields) {
+    const optionalSchema = schema.fork(
+      ["title", "userId", "category"],
+      (schema) => schema.optional()
+    );
+    return optionalSchema.validate(recipe);
+  }
   return schema.validate(recipe);
 };
 
