@@ -1,7 +1,50 @@
 import React, { Component } from "react";
+import {
+  getAllItems,
+  getAddedItems,
+  getRemovedItems,
+} from "../services/shoppingListService";
 
 class ShoppingList extends Component {
-  state = {};
+  state = {
+    allItems: [],
+    addedItems: [],
+    removedItems: [],
+    staples: [],
+    recipes: [],
+    errors: {},
+  };
+
+  async componentDidMount() {
+    const { data } = await getAllItems();
+    this.setState({
+      allItems: data,
+      // addedItems: getAddedItems(),
+      removedItems: getRemovedItems(),
+    });
+  }
+
+  handleAddItem = () => {
+    console.log("allItems", this.state.allItems);
+    console.log("addedItems", this.state.addedItems);
+    console.log("removedItems", this.state.removedItems);
+  };
+
+  handleRemoveItem = (itemId) => {
+    console.log("you removed itemId", itemId);
+    console.log("allItems", this.state.allItems);
+    console.log("addedItems", this.state.addedItems);
+    console.log("removedItems", this.state.removedItems);
+
+  };
+
+
+  // handleRemoveItem
+
+  // handleChooseStaple
+
+  // handleChooseRecipe
+
   render() {
     return (
       <React.Fragment>
@@ -16,24 +59,29 @@ class ShoppingList extends Component {
           <div className="col-md-5 order-md-4">
             <h4>THIS WILL BE A SEARCH BOX</h4>
             <div className="list-group lst-grp-hover lst-grp-striped">
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-            </div>  
+              {
+                // this.state.addedItems.map(item => (
+                this.state.allItems.map(item => (
+                  <li key={item._id}
+                    onClick={() => this.handleRemoveItem(item._id)}
+                    className="list-group-item border-0"
+                  >
+                    {item.name}<span className="sl-price">${item.price}</span>
+                  </li>
+                ))
+              }
+            </div>
             <div className="removed list-group lst-grp-hover">
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
+              {
+                this.state.removedItems.map(item => (
+                  <li key={item._id}
+                    onClick={() => this.handleAddItem()}
+                    className="list-group-item border-0"
+                  >
+                    {item.name}
+                  </li>
+                ))
+              }
             </div>
           </div>
           <div className="col-md-3 order-md-1">
