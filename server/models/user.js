@@ -53,7 +53,7 @@ const User = mongoose.model("User", userSchema);
 
 // call User.validate(user, true) for validating PATCH request
 validateUser = (user, ignoreRequiredFields = false) => {
-  const schema = Joi.object({
+    const schema = Joi.object({
     email: Joi.string().email().min(5).max(64).required(),
     username: Joi.string().alphanum().min(3).max(32).required(),
     password: Joi.string().alphanum().min(3).max(64).required(),
@@ -63,7 +63,7 @@ validateUser = (user, ignoreRequiredFields = false) => {
   });
 
   if (ignoreRequiredFields) {
-    const optionalSchema = schema.optionalKeys("email", "username", "password");
+    const optionalSchema = schema.fork(["email", "username", "password"], (schema) => schema.optional());
     return optionalSchema.validate(user);
   }
   return schema.validate(user);
