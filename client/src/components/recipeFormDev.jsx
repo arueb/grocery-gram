@@ -117,7 +117,7 @@ class RecipeForm extends Form {
           </tbody>
         </table>
         <button onClick={this.handleAddRow} className="btn btn-primary">
-          Add Igredient +
+          Add Ingredient +
         </button>
       </React.Fragment>
       //   </form>
