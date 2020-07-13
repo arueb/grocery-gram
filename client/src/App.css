@@ -62,9 +62,18 @@ tr:hover .hover-icon {
   margin-bottom: 0;
 }
 
-.page-heading {
+.sl-page-heading {
   margin-top: 3em;
   margin-bottom: 1em;
+}
+
+.sl-price {
+  float: right;
+}
+
+.my-row a {
+  text-decoration: none;
+  color: black;
 }
 
 .my-recipes-header {
@@ -76,9 +85,22 @@ tr:hover .hover-icon {
 }
 
 .pie {
-  margin-top: 8em;
+  margin-top: 6em;
 }
 
+.list-group.lst-grp-hover li:hover {
+  background: #d3d3d3;
+  cursor: pointer;
+}
 
-
+div.list-group.lst-grp-striped li:nth-of-type(odd){
+    background: #f1f1f1;
+}
+div.list-group.lst-grp-striped li:nth-of-type(even){
+    background: #ffffff;
+}
+div.list-group.lst-grp-hover li:hover {
+    background: #d3d3d3;
+    cursor: pointer;
+}
 
