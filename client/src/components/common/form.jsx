@@ -112,7 +112,7 @@ class Form extends Component {
       <Select
         name={name}
         label={label}
-        value={data[name]}
+        value={data[row][name]}
         options={options}
         onChange={(e) => this.handleChangeMultiRow(e, row)}
         error={errors[name]}
