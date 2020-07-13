@@ -3,7 +3,7 @@ import {
   getAllItems,
   getAddedItems,
   getRemovedItems,
-} from "../services/shoppingListService";
+} from "../services/itemsService";
 
 class ShoppingList extends Component {
   state = {
@@ -28,6 +28,7 @@ class ShoppingList extends Component {
     console.log("allItems", this.state.allItems);
     console.log("addedItems", this.state.addedItems);
     console.log("removedItems", this.state.removedItems);
+    console.log("state", this.state.user);
   };
 
   handleRemoveItem = (itemId) => {
@@ -35,7 +36,7 @@ class ShoppingList extends Component {
     console.log("allItems", this.state.allItems);
     console.log("addedItems", this.state.addedItems);
     console.log("removedItems", this.state.removedItems);
-
+    console.log("state", this.state.user);
   };
 
 
