@@ -26,35 +26,15 @@ class ShoppingList extends Component {
               <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
               <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
               <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-            </div>            
-            <table className="table table-borderless table-hover removed">
-              <tbody>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr className="my-row">
-                  <td>
-                    <a href="#"><del>Removed Item</del></a>
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+            </div>  
+            <div className="removed list-group lst-grp-hover">
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+            </div>
           </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>

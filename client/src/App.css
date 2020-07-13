@@ -71,9 +71,8 @@ tr:hover .hover-icon {
   float: right;
 }
 
-.my-row a {
-  text-decoration: none;
-  color: black;
+.removed {
+  text-decoration: line-through;
 }
 
 .my-recipes-header {
@@ -86,6 +85,10 @@ tr:hover .hover-icon {
 
 .pie {
   margin-top: 6em;
+}
+
+.list-group {
+  border-radius: 0;
 }
 
 .list-group.lst-grp-hover li:hover {
