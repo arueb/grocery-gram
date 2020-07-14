@@ -19,8 +19,6 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -30,9 +28,13 @@ jobs:
       run: npm install
       working-directory: client
 
-    - name: Build page
-      run: npm run build
+    - name: Start Server
+      run: npm start
       working-directory: client
+
+    - name: Run Tests
+      run: npm run test
+      working-directory: client    
 
   Deploy:
     # The type of runner that the job will run on
@@ -50,10 +52,6 @@ jobs:
     - name: Build page
       run: npm run build
       working-directory: client
-
-    - name: Run Tests
-      run: npm run test
-      working-directory: client    
     
     - name: Initialize Google Cloud SDK
       uses: zxyle/publish-gae-action@master
