@@ -1,6 +1,9 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
+import auth from "../services/authService";
+import http from "../services/httpService";
+import axios from "axios"
 
 const UPLOAD_LIST_PLACEHOLDER =
   process.env.REACT_APP_IMAGES_FOLDER + "images/image-uploader-blank.jpg";
@@ -23,10 +26,10 @@ class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
-      data: { 
+      data: {
         title: "",
         category: "",
-        publish: false,
+        publish: "on",
         instructions: "",
         filesToUpload: [UPLOAD_LIST_PLACEHOLDER],
       },
@@ -39,7 +42,7 @@ class RecipeForm extends Form {
   schema = {
     title: Joi.string().label("Recipe Name"),
     category: Joi.string().label("Recipe Category"),
-    publish: Joi.boolean().label("Recipe Published Slider"),
+    publish: Joi.string().label("Recipe Published Slider"),
     instructions: Joi.string().label("Recipe Instructions"),
     filesToUpload: Joi.array().label("Files"),
   };
@@ -56,7 +59,9 @@ class RecipeForm extends Form {
     this.setState({
       data: {
         ...this.state.data,
-        filesToUpload: updatedFiles.concat(URL.createObjectURL(e.target.files[0])),
+        filesToUpload: updatedFiles.concat(
+          URL.createObjectURL(e.target.files[0])
+        ),
       },
     });
   }
@@ -80,13 +85,54 @@ class RecipeForm extends Form {
 
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
-      return this.renderButton("Delete Recipe")
-    }    
+      return this.renderButton("Delete Recipe");
+    }
   }
+
+  doSubmit = async () => {
+    var formData = new FormData();
+    formData.append("name", "sampleFile",)
+    console.log("here comes formdata");
+    console.log(formData);    
+    formData.append("files", this.state.data.filesToUpload[0]);
+    console.log("Appended = " + this.state.data.filesToUpload[0]);
+    console.log("here comes formdata");
+    console.log(formData);
+    console.log("here comes more formdata");
+    for (var key of formData.entries()) {
+      console.log(key[0] + ', ' + key[1]);
+  }
+
+    axios.post('http://localhost:3001/api/img', formData, {
+      
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  };
+
+  onChangeHandler=event=>{
+
+    console.log(event.target)
+
+}
 
   render() {
     return (
       <section id="create-recipe-form">
+
+
+    <form ref='uploadForm' 
+      id='uploadForm' 
+      action='http://localhost:3001/api/img' 
+      method='post' 
+      encType="multipart/form-data"
+      onChange={this.onChangeHandler}>
+        <input type="file" name="sampleFile" />
+        <input type='submit' value='Upload!' />
+    </form> 
+
+
         <h1>Create a Recipe</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Recipe Name*")}
@@ -97,18 +143,21 @@ class RecipeForm extends Form {
               onClick={this.handleThumbnailRemove.bind(this)}
             />
           </div>
+          <label htmlFor="category">
+              Category
+            </label>
           <select
             name="category"
             //defaultValue={this.state.selectValue}
             onChange={this.handleChange}
           >
+            
             <option defaultValue disabled value="Orange">
               Orange
             </option>
             <option value="Radish">Radish</option>
             <option value="Cherry">Cherry</option>
           </select>
-          <p>yo</p>
 
           <div className="custom-control custom-switch">
             <input
@@ -125,12 +174,14 @@ class RecipeForm extends Form {
 
           <div className="form-group">
             <label htmlFor="exampleFormControlTextarea1">
-              Example textarea
+              Recipe Instructions
             </label>
             <textarea
+              name="instructions"
               className="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
+              onChange={this.handleChange}
             ></textarea>
           </div>
           {this.renderButton("Save Recipe")}
