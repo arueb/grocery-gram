@@ -87,7 +87,6 @@ tr:hover .hover-icon {
   margin-top: 6em;
 }
 
-<<<<<<< HEAD
 .react-autosuggest__container {
   position: relative;
 }
@@ -135,7 +134,6 @@ tr:hover .hover-icon {
   margin: 0;
   padding: 0;
 }
-=======
 .list-group {
   border-radius: 0;
 }
@@ -154,7 +152,6 @@ div.list-group.lst-grp-striped li:nth-of-type(even){
 div.list-group.lst-grp-hover li:hover {
     background: #d3d3d3;
     cursor: pointer;
->>>>>>> master
 }
 
 .react-autosuggest__suggestion {
@@ -172,7 +169,7 @@ div.list-group.lst-grp-hover li:hover {
 .react-autosuggest__suggestion:not(:first-child) {
   /*   border-top: 1px solid #ddd; */
 }
-h .react-autosuggest__suggestion--focused {
+.react-autosuggest__suggestion--focused {
   background-color: brown;
   color: #fff;
 }

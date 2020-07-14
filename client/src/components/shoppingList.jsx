@@ -1,8 +1,89 @@
 import React, { Component } from "react";
+import auth from "../services/authService";
+import { getUserData } from "../services/shoppingListService";
 
 class ShoppingList extends Component {
-  state = {};
+  state = {
+    items: [],
+    userAuth: {},
+    addedItemIds: [],
+    removedItemIds: [],
+    staples: [],
+    recipes: [],
+    errors: {},
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    console.log("items from sl GDSFP:", props.items);
+    return {items: props.items, userAuth: props.user }
+  }
+
+  async componentDidMount() {
+    // const userAuth = auth.getCurrentUser();
+    // const userAuth = this.state;
+    // const { data: user } = await getUserData(userAuth._id);
+    // const addedItemIds = user.addedItems;
+    // const addedItems = this.getItemsById(addedItemIds, items);
+    // const removedItemIds = user.removedItems;
+    // const removedItems = this.getItemsById(removedItemIds, items);
+    // this.setState({ addedItemIds, removedItemIds });
+  }
+
+  handleAddItem = () => {
+    // console.log("allItems", this.state.allItems);
+    // console.log("addedItems", this.state.addedItems);
+    // console.log("removedItems", this.state.removedItems);
+    // console.log("state", this.state.user);
+  };
+
+  handleRemoveItem = (itemId) => {
+    // console.log("you removed itemId", itemId);
+    // const fullItem = this.getItemById(itemId);
+    // console.log("fullItem", fullItem);
+    // console.log("allItems", this.state.allItems);
+    // console.log("addedItems", this.state.addedItems);
+    // console.log("removedItems", this.state.removedItems);
+    // console.log("state", this.state.user);
+  };
+
+  // handleRemoveItem
+
+  // handleChooseStaple
+
+  // handleChooseRecipe
+
+
+  
+  expandItemById = (itemId, itemsArr) => {
+    let i;
+    for (i = 0; i < itemsArr.length; i++) {
+      if (itemsArr[i]._id === itemId)
+        return itemsArr[i];
+    }
+    return null;
+  };
+
+  expandItems = (itemIds, allItems) => {
+    let expanded = [];
+    let i;
+    for (i = 0; i < itemIds.length; i++) {
+      const item = this.expandItemById(itemIds[i], allItems)
+      expanded.push(item);
+    }
+    return expanded;
+  };
+
   render() {
+    // const { items } = this.props;
+    const { items } = this.state;
+    const { user: userFromAppjs } = this.props;
+    console.log("userFromAppjs from sl render:", userFromAppjs);
+    console.log("items from sl render:", items);
+    const { addedItemIds, removedItemIds } = this.state;
+    const addedItems = this.expandItems(addedItemIds, items);
+    const removedItems = this.expandItems(removedItemIds, items);
+    console.log("addedItems:", addedItems);
+    console.log("removedItems:", removedItems);
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -16,24 +97,28 @@ class ShoppingList extends Component {
           <div className="col-md-5 order-md-4">
             <h4>THIS WILL BE A SEARCH BOX</h4>
             <div className="list-group lst-grp-hover lst-grp-striped">
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-            </div>  
+                {addedItems.map((item) => (
+                  <li
+                    key={item._id}
+                    onClick={() => this.handleRemoveItem(item._id)}
+                    className="list-group-item border-0 "
+                  >
+                    {item.name}
+                    <span className="sl-price">${item.price}</span>
+                  </li>
+                ))
+              }
+            </div>
             <div className="removed list-group lst-grp-hover">
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
+              {removedItems.map((item) => (
+                <li
+                  key={item._id}
+                  onClick={() => this.handleAddItem()}
+                  className="list-group-item border-0"
+                >
+                  {item.name}
+                </li>
+              ))}
             </div>
           </div>
           <div className="col-md-3 order-md-1">

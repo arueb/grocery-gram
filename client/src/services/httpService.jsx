@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 // import logger from "./logService";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-console.log("base url", process.env.REACT_APP_API_URL);
+// console.log("base url", process.env.REACT_APP_API_URL);
 
 axios.interceptors.response.use(null, (error) => {
   console.log("error in interceptor", error);
