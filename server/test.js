@@ -4,8 +4,8 @@ const express = require('express');
 const app = express();
  
 request(app)
-  .get('/items')
-  .expect(403, done)
+  .get('/NonExistantRoute')
+  .expect(404)
   .end(function(err, res) {
     if (err) throw err;
   });
