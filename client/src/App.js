@@ -24,6 +24,7 @@ class App extends Component {
   async componentDidMount() {
     const user = auth.getCurrentUser();
     const { data: allItems } = await getAllItems();
+    console.log("allItems from App.js CDM:", allItems);
     this.setState({
       user: user,
       allItems: allItems
@@ -32,8 +33,8 @@ class App extends Component {
 
   render() {
     const { user, allItems } = this.state;
-    // console.log("user from render", user);
-    // console.log("allItems from render", allItems);
+    console.log("props from App.js render", this.props);
+    console.log("allItems from App.js render", allItems);
     return (
       <React.Fragment>
         <ToastContainer />
@@ -50,7 +51,7 @@ class App extends Component {
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
             <Route
               path="/shopping-list"
-              render={(props) => <ShoppingList {...props} user={user} allItems={allItems}/>} 
+              render={(props) => <ShoppingList {...props} allItems={allItems}/>} 
             />
             <Route path="/not-found" component={NotFound} />
             <Redirect exact from="/" to="/shopping-list" />
