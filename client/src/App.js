@@ -38,7 +38,7 @@ class App extends Component {
             {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
-            <Route path="/shopping-list" component={ShoppingList} />
+            <Route path="/shopping-list" component={ShoppingList} user={user}/>
             <Route path="/not-found" component={NotFound} />
             <Redirect exact from="/" to="/shopping-list" />
             <Redirect to="/not-found" />

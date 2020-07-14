@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import {
-  getAllItems,
-  getAddedItems,
-  getRemovedItems,
-} from "../services/itemsService";
+import { getAllItems } from "../services/itemsService";
+import { getUserData } from "../services/shoppingListService";
 
 class ShoppingList extends Component {
   state = {
@@ -16,11 +13,20 @@ class ShoppingList extends Component {
   };
 
   async componentDidMount() {
-    const { data } = await getAllItems();
+    console.log("user", this.props.user);
+    const userId = "5f0b991975496e0bc3b4c526";
+
+    const { data: allItems } = await getAllItems();
+    const { data: user } = await getUserData(userId);
+    console.log("user: ", user);
+    const addedItemIds = user.addedItems;
+    const addedItems = this.getItemsById(addedItemIds, allItems);
+    const removedItemIds = user.removedItems;
+    const removedItems = this.getItemsById(removedItemIds, allItems);
     this.setState({
-      allItems: data,
-      // addedItems: getAddedItems(),
-      removedItems: getRemovedItems(),
+      allItems: allItems,
+      addedItems: addedItems,
+      removedItems: removedItems,
     });
   }
 
@@ -28,23 +34,45 @@ class ShoppingList extends Component {
     console.log("allItems", this.state.allItems);
     console.log("addedItems", this.state.addedItems);
     console.log("removedItems", this.state.removedItems);
-    console.log("state", this.state.user);
+    // console.log("state", this.state.user);
   };
 
   handleRemoveItem = (itemId) => {
     console.log("you removed itemId", itemId);
+    const fullItem = this.getItemById(itemId);
+    console.log("fullItem", fullItem);
     console.log("allItems", this.state.allItems);
     console.log("addedItems", this.state.addedItems);
     console.log("removedItems", this.state.removedItems);
-    console.log("state", this.state.user);
+    // console.log("state", this.state.user);
   };
-
 
   // handleRemoveItem
 
   // handleChooseStaple
 
   // handleChooseRecipe
+
+
+  
+  getItemById = (itemId, allItems) => {
+    let i;
+    for (i = 0; i < allItems.length; i++) {
+      if (allItems[i]._id === itemId)
+        return allItems[i];
+    }
+    return null;
+  };
+
+  getItemsById = (itemIds, allItems) => {
+    let items = [];
+    let i;
+    for (i = 0; i < itemIds.length; i++) {
+      const item = this.getItemById(itemIds[i], allItems)
+      items.push(item);
+    }
+    return items;
+  };
 
   render() {
     return (
@@ -60,29 +88,28 @@ class ShoppingList extends Component {
           <div className="col-md-5 order-md-4">
             <h4>THIS WILL BE A SEARCH BOX</h4>
             <div className="list-group lst-grp-hover lst-grp-striped">
-              {
-                // this.state.addedItems.map(item => (
-                this.state.allItems.map(item => (
-                  <li key={item._id}
+                {this.state.addedItems.map((item) => (
+                  <li
+                    key={item._id}
                     onClick={() => this.handleRemoveItem(item._id)}
                     className="list-group-item border-0"
                   >
-                    {item.name}<span className="sl-price">${item.price}</span>
+                    {item.name}
+                    <span className="sl-price">${item.price}</span>
                   </li>
                 ))
               }
             </div>
             <div className="removed list-group lst-grp-hover">
-              {
-                this.state.removedItems.map(item => (
-                  <li key={item._id}
-                    onClick={() => this.handleAddItem()}
-                    className="list-group-item border-0"
-                  >
-                    {item.name}
-                  </li>
-                ))
-              }
+              {this.state.removedItems.map((item) => (
+                <li
+                  key={item._id}
+                  onClick={() => this.handleAddItem()}
+                  className="list-group-item border-0"
+                >
+                  {item.name}
+                </li>
+              ))}
             </div>
           </div>
           <div className="col-md-3 order-md-1">
