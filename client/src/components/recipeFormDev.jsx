@@ -7,7 +7,7 @@ import { getQuantities } from "../services/qtyService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 
-class RecipeForm extends Form {
+class RecipeFormDev extends Form {
   state = {
     // ingredients: [{ qty: "", unit: "", item: "", notes: "" }],
     errors: {},
@@ -144,4 +144,4 @@ class RecipeForm extends Form {
   }
 }
 
-export default RecipeForm;
+export default RecipeFormDev;

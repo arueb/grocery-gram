@@ -10,7 +10,7 @@ import RegisterForm from "./components/registerForm";
 import RecipeForm from "./components/recipeForm";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
-import RecipeForm from "./components/recipeFormDev";
+import RecipeFormDev from "./components/recipeFormDev";
 import auth from "./services/authService";
 import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,7 +44,7 @@ class App extends Component {
             <Route
               path="/my-recipes/test"
               render={(props) => (
-                <RecipeForm {...props} user={user} items={items} />
+                <RecipeFormDev {...props} user={user} items={items} />
               )}
             />
             <Route path="/my-recipes/:id" component={RecipeForm} />
