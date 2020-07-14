@@ -24,8 +24,9 @@ class App extends Component {
 
   async componentDidMount() {
     const user = auth.getCurrentUser();
+    // console.log("user from App.js CDM:", user);
     const { data: items } = await item.getItems();
-    console.log("items from App.js CDM:", items);
+    // console.log("items from App.js CDM:", items);
     this.setState({ user, items });
   }
 
@@ -54,7 +55,7 @@ class App extends Component {
             <Route
               path="/shopping-list"
               render={(props) => (
-                <ShoppingList {...props} items={items} />
+                <ShoppingList {...props} user={user} items={items} />
               )} 
             />
             <Route path="/not-found" component={NotFound} />

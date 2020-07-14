@@ -5,6 +5,7 @@ import { getUserData } from "../services/shoppingListService";
 class ShoppingList extends Component {
   state = {
     items: [],
+    userAuth: {},
     addedItemIds: [],
     removedItemIds: [],
     staples: [],
@@ -14,17 +15,18 @@ class ShoppingList extends Component {
 
   static getDerivedStateFromProps(props, state) {
     console.log("items from sl GDSFP:", props.items);
-    return {items: props.items}
+    return {items: props.items, userAuth: props.user }
   }
 
   async componentDidMount() {
-    const userAuth = auth.getCurrentUser();
-    const { data: user } = await getUserData(userAuth._id);
-    const addedItemIds = user.addedItems;
+    // const userAuth = auth.getCurrentUser();
+    // const userAuth = this.state;
+    // const { data: user } = await getUserData(userAuth._id);
+    // const addedItemIds = user.addedItems;
     // const addedItems = this.getItemsById(addedItemIds, items);
-    const removedItemIds = user.removedItems;
+    // const removedItemIds = user.removedItems;
     // const removedItems = this.getItemsById(removedItemIds, items);
-    this.setState({ addedItemIds, removedItemIds });
+    // this.setState({ addedItemIds, removedItemIds });
   }
 
   handleAddItem = () => {
@@ -72,11 +74,14 @@ class ShoppingList extends Component {
   };
 
   render() {
-    const { items } = this.props;
+    // const { items } = this.props;
+    const { items } = this.state;
+    const { user: userFromAppjs } = this.props;
+    console.log("userFromAppjs from sl render:", userFromAppjs);
     console.log("items from sl render:", items);
     const { addedItemIds, removedItemIds } = this.state;
-    const addedItems = this.getItems(addedItemIds, items);
-    const removedItems = this.getItems(removedItemIds, items);
+    const addedItems = this.expandItems(addedItemIds, items);
+    const removedItems = this.expandItems(removedItemIds, items);
     console.log("addedItems:", addedItems);
     console.log("removedItems:", removedItems);
     return (
