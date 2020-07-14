@@ -9,29 +9,32 @@ const userSchema = new Schema({
   email: { type: String, max: 64, unique: true, required: true },
   username: { type: String, min: 3, max: 32, unique: true, required: true },
   password: { type: String, min: 3, max: 64, required: true },
-  addedItems: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item'
-  }],
-  removedItems: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item'
-  }],
+  addedItems: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Item",
+    },
+  ],
+  removedItems: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Item",
+    },
+  ],
   itemCounts: [
     {
       itemID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Item'
-      }
-      ,
+        ref: "Item",
+      },
       count: {
         type: Number,
         min: 0,
-        default: 0
-      }
-    }
+        default: 0,
+      },
+    },
   ],
-  date: { type: Date, default: Date.now },    
+  date: { type: Date, default: Date.now },
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -48,8 +51,9 @@ userSchema.methods.generateAuthToken = function () {
 
 const User = mongoose.model("User", userSchema);
 
-validateUser = (user) => {
-  const schema = Joi.object({
+// call User.validate(user, true) for validating PATCH request
+validateUser = (user, ignoreRequiredFields = false) => {
+    const schema = Joi.object({
     email: Joi.string().email().min(5).max(64).required(),
     username: Joi.string().alphanum().min(3).max(32).required(),
     password: Joi.string().alphanum().min(3).max(64).required(),
@@ -57,6 +61,11 @@ validateUser = (user) => {
     removedItems: Joi.array(),
     itemCounts: Joi.array()
   });
+
+  if (ignoreRequiredFields) {
+    const optionalSchema = schema.fork(["email", "username", "password"], (schema) => schema.optional());
+    return optionalSchema.validate(user);
+  }
   return schema.validate(user);
 };
 

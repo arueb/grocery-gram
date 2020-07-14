@@ -92,6 +92,8 @@ router.post("/", async (req, res) => {
 
 // update given recipe's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
+  const { error } = validate(req.body, true); // ignore required
+  if (error) return res.status(400).send(error.details[0].message);
 
   // if editing recipe's userId, first ensure it is present in db
   if (req.body.userId) {
