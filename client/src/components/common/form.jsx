@@ -20,9 +20,13 @@ class Form extends Component {
   };
 
   validateProperty = ({ name, value }) => {
+    console.log("validating property...");
     const obj = { [name]: value };
+    console.log("obj:", obj);
     const schema = { [name]: this.schema[name] };
+    console.log("schema", schema);
     const { error } = Joi.validate(obj, schema);
+    console.log("error:", error);
     return error ? error.details[0].message : null;
   };
 
@@ -46,17 +50,14 @@ class Form extends Component {
     this.setState({ data, errors });
   };
 
-  handleChangeMultiRow = async ({ currentTarget: input }, row) => {
+  handleChangeMultiRow = async ({ currentTarget: input }, row, valueField) => {
     const errors = { ...this.state.errors };
-    // const errorMessage = this.validateProperty(input);
+    const errorMessage = this.validateProperty(input);
 
-    // if (!errorMessage) delete errors[input.name];
-    console.log("row", row);
-    console.log("input", input);
-    const data = [...this.state.data];
-    console.log("data", data);
+    if (!errorMessage) delete errors[input.name];
+    const data = [...this.state[valueField]];
     data[row][input.name] = input.value;
-    this.setState({ data, errors });
+    this.setState({ valueField: data, errors });
   };
 
   renderButton(label) {
@@ -78,15 +79,17 @@ class Form extends Component {
     );
   }
 
-  renderMultiRowInput(name, label, row, type = "text") {
-    const { data, errors } = this.state;
+  renderMultiRowInput(name, label, row, valueField, type = "text") {
+    const { errors } = this.state;
+    const stateField = this.state[valueField];
+
     return (
       <Input
         type={type}
         name={name}
         label={label}
-        value={data[row][name]}
-        onChange={(e) => this.handleChangeMultiRow(e, row)}
+        value={stateField[row][name]}
+        onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
         error={errors[name]}
       />
     );
@@ -106,15 +109,17 @@ class Form extends Component {
     );
   }
 
-  renderMultiRowSelect(name, label, row, options) {
-    const { data, errors } = this.state;
+  renderMultiRowSelect(name, label, row, valueField, options) {
+    const { errors } = this.state;
+    const stateField = this.state[valueField];
+    // console.log("value of multirow select", data.ingredients[row][name]);
     return (
       <Select
         name={name}
         label={label}
-        value={data[row][name]}
+        value={stateField[row][name]}
         options={options}
-        onChange={(e) => this.handleChangeMultiRow(e, row)}
+        onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
         error={errors[name]}
       />
     );

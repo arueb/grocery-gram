@@ -11,9 +11,11 @@ import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeFormDev";
 import auth from "./services/authService";
-import { getAllItems } from "./services/itemsService";
+// import { getAllItems } from "./services/itemsService";
+import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import ItemSearch from './components/itemSearch';
 
 class App extends Component {
   state = {
@@ -23,18 +25,13 @@ class App extends Component {
 
   async componentDidMount() {
     const user = auth.getCurrentUser();
-    const { data: allItems } = await getAllItems();
-    console.log("allItems from App.js CDM:", allItems);
-    this.setState({
-      user: user,
-      allItems: allItems
-    });
+    const { data: items } = await item.getItems();
+    console.log("items:", items);
+    this.setState({ user, items });
   }
 
   render() {
-    const { user, allItems } = this.state;
-    console.log("props from App.js render", this.props);
-    console.log("allItems from App.js render", allItems);
+    const { user, items } = this.state;
     return (
       <React.Fragment>
         <ToastContainer />
@@ -44,14 +41,22 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={Logout} />
             <Route path="/register" component={RegisterForm} />
-            <Route path="/my-recipes/test" component={RecipeForm} />
+            {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
+            <Route
+              path="/my-recipes/test"
+              render={(props) => (
+                <RecipeForm {...props} user={user} items={items} />
+              )}
+            />
             <Route path="/my-recipes" component={MyRecipes} />
             {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
             <Route
               path="/shopping-list"
-              render={(props) => <ShoppingList {...props} allItems={allItems}/>} 
+              render={(props) => (
+                <ShoppingList {...props} items={items} />
+              )} 
             />
             <Route path="/not-found" component={NotFound} />
             <Redirect exact from="/" to="/shopping-list" />
