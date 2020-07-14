@@ -34,57 +34,103 @@ router.post("/", async (req, res) => {
   res
     .header("x-auth-token", token)
     .header("access-control-expose-headers", "x-auth-token")
-    .send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));
-});
-
-// update given user's addedItems  to user's shopping list
-router.patch("/:id", async (req, res) => {
-
-  // do I need to validate the request body to ensure it has 2 arrays of type array of objectID?
-
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        addedItems: req.body.addedItems,
-        removedItems: req.body.removedItems
-      },
-      // { removedItems: req.body.removedItems },
-      { new: true }
+    .send(
+      _.pick(user, [
+        "_id",
+        "username",
+        "email",
+        "addedItems",
+        "removedItems",
+        "itemCounts",
+      ])
     );
+});  
+
+// update given user's properties with properties sent in request body
+router.patch("/:id", async (req, res) => {
+  const { error } = validate(req.body, true); // ignore required
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // for email change: ensure requested email is unique in db
+  if (req.body.email) {
+    const user = await User.findOne({ email: req.body.email });
+    if (user)
+      return res
+        .status(400)
+        .send("A user with this email address is already registered.");
+  }
+
+  // for username change: ensure requested username is unique in db
+  if (req.body.username) {
+    const user = await User.findOne({ username: req.body.username });
+    if (user)
+      return res
+        .status(400)
+        .send("A user with this username is already registered.");
+  }
+  
+  // make requested updates to user
+  try {
+    const user = await User.findOneAndUpdate(    
+      { _id: req.params.id },
+      { $set: req.body },  
+      { new: true }    
+    ); 
+
     if (!user)
-    return res.status(404).send("The user with the given ID was not found.");
-    res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"])); 
-  }
-  catch (err) {
-    res.status(500).send("Something failed", err); 
-  }
-});   
+      return res.status(404).send("The user with the given ID was not found.");    
 
+      // Need to remove password key from output
+      user.password = undefined;
 
+      res.json(user);    
+  } catch (err) {
+    res.status(500).send("Something failed", err);
+  }
+});
 
 // get all users
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find().sort("username");  
+    const users = await User.find().sort("username");
     // res.send(users);
-    res.send(_.map(users, _.partialRight(_.pick, [
-      "_id", "username", "email", "addedItems", "removedItems", "itemCounts"
-    ])));
+    res.send(
+      _.map(
+        users,
+        _.partialRight(_.pick, [
+          "_id",
+          "username",
+          "email",
+          "addedItems",
+          "removedItems",
+          "itemCounts",
+        ])
+      )
+    );
   } catch (err) {
-    res.status(500).send("Something failed");   
+    res.status(500).send("Something failed");
   }
 });
 
 // get user with given id
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id); 
-    if (!user) return res.status(404).send("The user with the given ID was not found.");
-  
-    res.send(_.pick(user, ["_id", "username", "email", "addedItems", "removedItems", "itemCounts"]));     
-  }
-  catch (err) { // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    const user = await User.findById(req.params.id);
+    if (!user)
+      return res.status(404).send("The user with the given ID was not found.");
+
+    res.send(
+      _.pick(user, [
+        "_id",
+        "username",
+        "email",
+        "addedItems",
+        "removedItems",
+        "itemCounts",
+      ])
+    );
+  } catch (err) {
+    // id isn't valid mongo ID (e.g. ID isn't 24 chars)
     res.status(500).send("Something failed.");
   }
 });
