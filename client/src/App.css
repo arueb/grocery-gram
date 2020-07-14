@@ -87,7 +87,6 @@ tr:hover .hover-icon {
   margin-top: 6em;
 }
 
-<<<<<<< HEAD
 .react-autosuggest__container {
   position: relative;
 }
@@ -135,7 +134,7 @@ tr:hover .hover-icon {
   margin: 0;
   padding: 0;
 }
-=======
+
 .list-group {
   border-radius: 0;
 }
@@ -145,16 +144,15 @@ tr:hover .hover-icon {
   cursor: pointer;
 }
 
-div.list-group.lst-grp-striped li:nth-of-type(odd){
-    background: #f1f1f1;
+div.list-group.lst-grp-striped li:nth-of-type(odd) {
+  background: #f1f1f1;
 }
-div.list-group.lst-grp-striped li:nth-of-type(even){
-    background: #ffffff;
+div.list-group.lst-grp-striped li:nth-of-type(even) {
+  background: #ffffff;
 }
 div.list-group.lst-grp-hover li:hover {
-    background: #d3d3d3;
-    cursor: pointer;
->>>>>>> master
+  background: #d3d3d3;
+  cursor: pointer;
 }
 
 .react-autosuggest__suggestion {
@@ -172,6 +170,7 @@ div.list-group.lst-grp-hover li:hover {
 .react-autosuggest__suggestion:not(:first-child) {
   /*   border-top: 1px solid #ddd; */
 }
+
 h .react-autosuggest__suggestion--focused {
   background-color: brown;
   color: #fff;
