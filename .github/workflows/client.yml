@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: React Client Action
+name: Test then Deploy Client
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -13,7 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  test:
+  Test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,7 +34,7 @@ jobs:
       run: npm run build
       working-directory: client
 
-  deploy:
+  Deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     needs: test
