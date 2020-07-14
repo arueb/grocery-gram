@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import auth from "../services/authService";
-import { getUserData } from "../services/shoppingListService";
+//import auth from "../services/authService";
+//import { getUserData } from "../services/shoppingListService";
 
 class ShoppingList extends Component {
   state = {
