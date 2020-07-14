@@ -4,7 +4,7 @@ import { getUserData } from "../services/shoppingListService";
 
 class ShoppingList extends Component {
   state = {
-    allItems: [],
+    items: [],
     addedItemIds: [],
     removedItemIds: [],
     staples: [],
@@ -12,25 +12,19 @@ class ShoppingList extends Component {
     errors: {},
   };
 
-  constructor(props) {
-    super(props);
-    console.log("allItems from sl constructor:", props.allItems);
-    this.state = { allItems: props.allItems };
+  static getDerivedStateFromProps(props, state) {
+    console.log("items from sl GDSFP:", props.items);
+    return {items: props.items}
   }
 
   async componentDidMount() {
-    const allItems = this.state.allItems;
-    console.log("allItems from sl CDM:", allItems);
     const userAuth = auth.getCurrentUser();
     const { data: user } = await getUserData(userAuth._id);
     const addedItemIds = user.addedItems;
-    // const addedItems = this.getItemsById(addedItemIds, allItems);
+    // const addedItems = this.getItemsById(addedItemIds, items);
     const removedItemIds = user.removedItems;
-    // const removedItems = this.getItemsById(removedItemIds, allItems);
-    this.setState({
-      addedItemIds: addedItemIds,
-      removedItemIds: removedItemIds,
-    });
+    // const removedItems = this.getItemsById(removedItemIds, items);
+    this.setState({ addedItemIds, removedItemIds });
   }
 
   handleAddItem = () => {
@@ -58,32 +52,33 @@ class ShoppingList extends Component {
 
 
   
-  // getItemById = (itemId, allItems) => {
-  //   let i;
-  //   for (i = 0; i < allItems.length; i++) {
-  //     if (allItems[i]._id === itemId)
-  //       return allItems[i];
-  //   }
-  //   return null;
-  // };
+  getItemById = (itemId, allItems) => {
+    let i;
+    for (i = 0; i < allItems.length; i++) {
+      if (allItems[i]._id === itemId)
+        return allItems[i];
+    }
+    return null;
+  };
 
-  // getItems = (itemIds, allItems) => {
-  //   let items = [];
-  //   let i;
-  //   for (i = 0; i < itemIds.length; i++) {
-  //     const item = this.getItemById(itemIds[i], allItems)
-  //     items.push(item);
-  //   }
-  //   return items;
-  // };
+  getItems = (itemIds, allItems) => {
+    let items = [];
+    let i;
+    for (i = 0; i < itemIds.length; i++) {
+      const item = this.getItemById(itemIds[i], allItems)
+      items.push(item);
+    }
+    return items;
+  };
 
   render() {
-    const { allItems } = this.props;
-    // const { addedItemIds, removedItemIds } = this.state;
-    // const addedItems = this.getItems(addedItemIds, allItems);
-    // const removedItems = this.getItems(removedItemIds, allItems);
-    // console.log("addedItems:", addedItems);
-    // console.log("removedItems:", removedItems);
+    const { items } = this.props;
+    console.log("items from sl render:", items);
+    const { addedItemIds, removedItemIds } = this.state;
+    const addedItems = this.getItems(addedItemIds, items);
+    const removedItems = this.getItems(removedItemIds, items);
+    console.log("addedItems:", addedItems);
+    console.log("removedItems:", removedItems);
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -96,7 +91,7 @@ class ShoppingList extends Component {
         <div className="row">
           <div className="col-md-5 order-md-4">
             <h4>THIS WILL BE A SEARCH BOX</h4>
-            {/* <div className="list-group lst-grp-hover lst-grp-striped">
+            <div className="list-group lst-grp-hover lst-grp-striped">
                 {addedItems.map((item) => (
                   <li
                     key={item._id}
@@ -119,7 +114,7 @@ class ShoppingList extends Component {
                   {item.name}
                 </li>
               ))}
-            </div> */}
+            </div>
           </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>

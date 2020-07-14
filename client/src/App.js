@@ -11,22 +11,20 @@ import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeFormDev";
 import auth from "./services/authService";
-// import { getAllItems } from "./services/itemsService";
 import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import ItemSearch from './components/itemSearch';
 
 class App extends Component {
   state = {
     user: {},
-    allItems: []
+    items: []
   };
 
   async componentDidMount() {
     const user = auth.getCurrentUser();
     const { data: items } = await item.getItems();
-    console.log("items:", items);
+    console.log("items from App.js CDM:", items);
     this.setState({ user, items });
   }
 

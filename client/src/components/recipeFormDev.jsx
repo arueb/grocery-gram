@@ -1,7 +1,7 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
-import _ from "lodash";
+// import _ from "lodash";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
 import { FaTrash } from "react-icons/fa";
