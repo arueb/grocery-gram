@@ -52,23 +52,23 @@ class ShoppingList extends Component {
 
 
   
-  getItemById = (itemId, allItems) => {
+  expandItemById = (itemId, itemsArr) => {
     let i;
-    for (i = 0; i < allItems.length; i++) {
-      if (allItems[i]._id === itemId)
-        return allItems[i];
+    for (i = 0; i < itemsArr.length; i++) {
+      if (itemsArr[i]._id === itemId)
+        return itemsArr[i];
     }
     return null;
   };
 
-  getItems = (itemIds, allItems) => {
-    let items = [];
+  expandItems = (itemIds, allItems) => {
+    let expanded = [];
     let i;
     for (i = 0; i < itemIds.length; i++) {
-      const item = this.getItemById(itemIds[i], allItems)
-      items.push(item);
+      const item = this.expandItemById(itemIds[i], allItems)
+      expanded.push(item);
     }
-    return items;
+    return expanded;
   };
 
   render() {
