@@ -19,6 +19,8 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
+    - uses: actions/checkout@v1
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -28,8 +30,8 @@ jobs:
       run: npm install
       working-directory: client
 
-    - name: Start Server
-      run: npm start
+    - name: Build page
+      run: npm run build
       working-directory: client
 
     - name: Run Tests
