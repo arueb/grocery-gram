@@ -5,6 +5,8 @@ import _ from "lodash";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
 import { FaTrash } from "react-icons/fa";
+import ItemSearch from "../components/itemSearch";
+
 class RecipeForm extends Form {
   state = {
     // ingredients: [{ qty: "", unit: "", item: "", notes: "" }],
@@ -68,8 +70,9 @@ class RecipeForm extends Form {
 
   render() {
     const { ingredients } = this.state;
-    console.log("ingredients in render", ingredients);
-    console.log("ingredients.length", ingredients.length);
+    console.log("props", this.props);
+    // console.log("ingredients in render", ingredients);
+    // console.log("ingredients.length", ingredients.length);
     return (
       <React.Fragment>
         {this.renderInput("title", "Title")}
@@ -109,24 +112,19 @@ class RecipeForm extends Form {
                   {/* <td> {this.renderMultiRowInput("item", null, i)} </td> */}
                   {/* <td> {this.renderMultiRowInput("notes", null, i)} </td> */}
                   <td>
-                    {" "}
-                    {this.renderMultiRowInput(
+                    <ItemSearch items={this.props.items} />
+                    {/* {this.renderMultiRowInput(
                       "item",
                       null,
                       i,
                       "ingredients"
-                    )}{" "}
+                    )}{" "} */}
                   </td>
                   <td>
-                    {" "}
-                    {this.renderMultiRowInput(
-                      "notes",
-                      null,
-                      i,
-                      "ingredients"
-                    )}{" "}
+                    {this.renderMultiRowInput("notes", null, i, "ingredients")}
                   </td>
                   <td>
+                    {/* <ItemSearch items={this.props.items} /> */}
                     <FaTrash
                       className="hover-icon"
                       onClick={this.handleRemoveSpecificRow(i)}
@@ -140,6 +138,7 @@ class RecipeForm extends Form {
         <button onClick={this.handleAddRow} className="btn btn-primary">
           Add Ingredient +
         </button>
+        {/* <ItemSearch items={this.props.items} /> */}
       </React.Fragment>
     );
   }

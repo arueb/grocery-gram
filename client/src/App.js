@@ -11,19 +11,22 @@ import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeFormDev";
 import auth from "./services/authService";
+import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
   state = {};
 
-  componentDidMount() {
+  async componentDidMount() {
     const user = auth.getCurrentUser();
-    this.setState({ user });
+    const { data: items } = await item.getItems();
+    console.log("items:", items);
+    this.setState({ user, items });
   }
 
   render() {
-    const { user } = this.state;
+    const { user, items } = this.state;
     return (
       <React.Fragment>
         <ToastContainer />
@@ -33,7 +36,13 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={Logout} />
             <Route path="/register" component={RegisterForm} />
-            <Route path="/my-recipes/test" component={RecipeForm} />
+            {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
+            <Route
+              path="/my-recipes/test"
+              render={(props) => (
+                <RecipeForm {...props} user={user} items={items} />
+              )}
+            />
             <Route path="/my-recipes" component={MyRecipes} />
             {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />
