@@ -13,37 +13,36 @@ class ShoppingList extends Component {
   };
 
   async componentDidMount() {
-    console.log("user", this.props.user);
     const userId = "5f0b991975496e0bc3b4c526";
 
-    const { data: allItems } = await getAllItems();
-    const { data: user } = await getUserData(userId);
-    console.log("user: ", user);
-    const addedItemIds = user.addedItems;
-    const addedItems = this.getItemsById(addedItemIds, allItems);
-    const removedItemIds = user.removedItems;
-    const removedItems = this.getItemsById(removedItemIds, allItems);
-    this.setState({
-      allItems: allItems,
-      addedItems: addedItems,
-      removedItems: removedItems,
-    });
+    // const { data: allItems } = await getAllItems();
+    // const { data: user } = await getUserData(userId);
+    // console.log("user: ", user);
+    // const addedItemIds = user.addedItems;
+    // const addedItems = this.getItemsById(addedItemIds, allItems);
+    // const removedItemIds = user.removedItems;
+    // const removedItems = this.getItemsById(removedItemIds, allItems);
+    // this.setState({
+      // allItems: allItems,
+      // addedItems: addedItems,
+      // removedItems: removedItems,
+    // });
   }
 
   handleAddItem = () => {
-    console.log("allItems", this.state.allItems);
-    console.log("addedItems", this.state.addedItems);
-    console.log("removedItems", this.state.removedItems);
+    // console.log("allItems", this.state.allItems);
+    // console.log("addedItems", this.state.addedItems);
+    // console.log("removedItems", this.state.removedItems);
     // console.log("state", this.state.user);
   };
 
   handleRemoveItem = (itemId) => {
-    console.log("you removed itemId", itemId);
-    const fullItem = this.getItemById(itemId);
-    console.log("fullItem", fullItem);
-    console.log("allItems", this.state.allItems);
-    console.log("addedItems", this.state.addedItems);
-    console.log("removedItems", this.state.removedItems);
+    // console.log("you removed itemId", itemId);
+    // const fullItem = this.getItemById(itemId);
+    // console.log("fullItem", fullItem);
+    // console.log("allItems", this.state.allItems);
+    // console.log("addedItems", this.state.addedItems);
+    // console.log("removedItems", this.state.removedItems);
     // console.log("state", this.state.user);
   };
 
@@ -75,6 +74,9 @@ class ShoppingList extends Component {
   };
 
   render() {
+    const { user, allItems } = this.props;
+    console.log("user from sl-render", user);
+    console.log("allItems from sl-render", allItems);
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -92,7 +94,7 @@ class ShoppingList extends Component {
                   <li
                     key={item._id}
                     onClick={() => this.handleRemoveItem(item._id)}
-                    className="list-group-item border-0"
+                    className="list-group-item border-0 "
                   >
                     {item.name}
                     <span className="sl-price">${item.price}</span>

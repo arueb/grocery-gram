@@ -11,19 +11,29 @@ import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeFormDev";
 import auth from "./services/authService";
+import { getAllItems } from "./services/itemsService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
-  state = {};
+  state = {
+    user: {},
+    allItems: []
+  };
 
-  componentDidMount() {
+  async componentDidMount() {
     const user = auth.getCurrentUser();
-    this.setState({ user });
+    const { data: allItems } = await getAllItems();
+    this.setState({
+      user: user,
+      allItems: allItems
+    });
   }
 
   render() {
-    const { user } = this.state;
+    const { user, allItems } = this.state;
+    // console.log("user from render", user);
+    // console.log("allItems from render", allItems);
     return (
       <React.Fragment>
         <ToastContainer />
@@ -38,7 +48,10 @@ class App extends Component {
             {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
-            <Route path="/shopping-list" component={ShoppingList} user={user}/>
+            <Route
+              path="/shopping-list"
+              render={(props) => <ShoppingList {...props} user={user} allItems={allItems}/>} 
+            />
             <Route path="/not-found" component={NotFound} />
             <Redirect exact from="/" to="/shopping-list" />
             <Redirect to="/not-found" />
