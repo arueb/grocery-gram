@@ -8,28 +8,28 @@ import { getColor } from "../services/itemService";
 var AutosuggestHighlightMatch = require("autosuggest-highlight/match");
 var AutosuggestHighlightParse = require("autosuggest-highlight/parse");
 
-const people = [
-  {
-    first: "Charlie",
-    last: "Brown",
-    twitter: "dancounsell",
-  },
-  {
-    first: "Charlotte",
-    last: "White",
-    twitter: "mtnmissy",
-  },
-  {
-    first: "Chloe",
-    last: "Jones",
-    twitter: "ladylexy",
-  },
-  {
-    first: "Cooper",
-    last: "King",
-    twitter: "steveodom",
-  },
-];
+// const people = [
+//   {
+//     first: "Charlie",
+//     last: "Brown",
+//     twitter: "dancounsell",
+//   },
+//   {
+//     first: "Charlotte",
+//     last: "White",
+//     twitter: "mtnmissy",
+//   },
+//   {
+//     first: "Chloe",
+//     last: "Jones",
+//     twitter: "ladylexy",
+//   },
+//   {
+//     first: "Cooper",
+//     last: "King",
+//     twitter: "steveodom",
+//   },
+// ];
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 function escapeRegexCharacters(str) {
@@ -40,7 +40,7 @@ function escapeRegexCharacters(str) {
 function getSuggestions(value, data) {
   const escapedValue = escapeRegexCharacters(value.trim());
   console.log("in getSuggestions -  data:", data);
-  console.log("people", people);
+  //   console.log("people", people);
   if (escapedValue === "") {
     return [];
   }
@@ -82,22 +82,33 @@ function renderSuggestion(suggestion, { query }) {
 class ItemSearch extends Component {
   constructor() {
     super();
-
     this.state = {
       value: "",
       suggestions: [],
     };
   }
 
+  componentDidMount() {
+    const { initialValue, row } = this.props;
+    console.log("mounting component for row: ", row);
+    console.log("initialValue:", initialValue);
+    this.setState({ value: initialValue });
+  }
+
   onChange = (event, { newValue, method }) => {
+    //   console.log(this.p)
     this.setState({
       value: newValue,
+      //   value: this.props.initialValue,
     });
+    console.log("this.props.action", this.props.action);
+    this.props.action(newValue, this.props.row);
+    // this.props.action();
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
     const items = [...this.props.items];
-    console.log("my items array:", items);
+    // console.log("my items array:", items);
     this.setState({
       suggestions: getSuggestions(value, items),
     });
@@ -112,8 +123,9 @@ class ItemSearch extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: "Type 'c'",
+      placeholder: "Search items...",
       value,
+      //   value: this.props.initialValue,
       onChange: this.onChange,
       //   onChange: this.onChange.bind(this),
     };

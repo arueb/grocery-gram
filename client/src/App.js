@@ -21,7 +21,7 @@ class App extends Component {
   async componentDidMount() {
     const user = auth.getCurrentUser();
     const { data: items } = await item.getItems();
-    console.log("items:", items);
+    // console.log("items:", items);
     this.setState({ user, items });
   }
 
@@ -38,7 +38,7 @@ class App extends Component {
             <Route path="/register" component={RegisterForm} />
             {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
             <Route
-              path="/my-recipes/test"
+              path="/my-recipes/:id"
               render={(props) => (
                 <RecipeForm {...props} user={user} items={items} />
               )}

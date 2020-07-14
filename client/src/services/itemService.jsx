@@ -7,7 +7,7 @@ function itemUrl(id) {
 }
 
 export function getItems() {
-  console.log("getting items...");
+  //   console.log("getting items...");
   return http.get(apiEndpoint);
 }
 
