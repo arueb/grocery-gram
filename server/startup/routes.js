@@ -3,6 +3,7 @@ const users = require("../routes/users");
 const recipes = require("../routes/recipes");
 const items = require("../routes/items");
 const auth = require("../routes/auth");
+const img = require("../routes/img");
 const headers = require("../middleware/headers");
 
 module.exports = (app) => {
@@ -12,4 +13,5 @@ module.exports = (app) => {
   app.use("/api/recipes", recipes);
   app.use("/api/auth", auth);
   app.use("/api/items", items);
+  app.use("/api/img", img);
 };

@@ -7,6 +7,7 @@ import MyRecipes from "./components/myRecipes";
 import ExploreRecipes from "./components/exploreRecipes";
 import NotFound from "./components/notFound";
 import RegisterForm from "./components/registerForm";
+import RecipeForm from "./components/recipeForm";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeFormDev";
@@ -46,8 +47,8 @@ class App extends Component {
                 <RecipeForm {...props} user={user} items={items} />
               )}
             />
+            <Route path="/my-recipes/:id" component={RecipeForm} />
             <Route path="/my-recipes" component={MyRecipes} />
-            {/* <Route path="/my-recipes/:id" component={RecipeForm} /> */}
             <Route path="/explore-recipes" component={ExploreRecipes} />
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
             <Route
