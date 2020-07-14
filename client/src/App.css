@@ -62,9 +62,17 @@ tr:hover .hover-icon {
   margin-bottom: 0;
 }
 
-.page-heading {
+.sl-page-heading {
   margin-top: 3em;
   margin-bottom: 1em;
+}
+
+.sl-price {
+  float: right;
+}
+
+.removed {
+  text-decoration: line-through;
 }
 
 .my-recipes-header {
@@ -76,9 +84,10 @@ tr:hover .hover-icon {
 }
 
 .pie {
-  margin-top: 8em;
+  margin-top: 6em;
 }
 
+<<<<<<< HEAD
 .react-autosuggest__container {
   position: relative;
 }
@@ -125,6 +134,27 @@ tr:hover .hover-icon {
 .react-autosuggest__suggestions-list {
   margin: 0;
   padding: 0;
+}
+=======
+.list-group {
+  border-radius: 0;
+}
+
+.list-group.lst-grp-hover li:hover {
+  background: #d3d3d3;
+  cursor: pointer;
+}
+
+div.list-group.lst-grp-striped li:nth-of-type(odd){
+    background: #f1f1f1;
+}
+div.list-group.lst-grp-striped li:nth-of-type(even){
+    background: #ffffff;
+}
+div.list-group.lst-grp-hover li:hover {
+    background: #d3d3d3;
+    cursor: pointer;
+>>>>>>> master
 }
 
 .react-autosuggest__suggestion {

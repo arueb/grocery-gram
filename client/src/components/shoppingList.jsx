@@ -5,7 +5,7 @@ class ShoppingList extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="row page-heading">
+        <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
             <h2>Shopping List</h2>
@@ -14,128 +14,50 @@ class ShoppingList extends Component {
         </div>
         <div className="row">
           <div className="col-md-5 order-md-4">
-            <h4>This will be a search box</h4>
-            <table className="table table-striped table-hover added">
-              <tbody>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-                <tr className="my-row">
-                  <td>Added Item</td>
-                  <td>$2.99</td>
-                </tr>
-              </tbody>
-            </table>
-            <table className="table table-borderless table-hover removed">
-              <tbody>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-                <tr className="my-row">
-                  <td>
-                    <del>Removed Item</del>
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+            <h4>THIS WILL BE A SEARCH BOX</h4>
+            <div className="list-group lst-grp-hover lst-grp-striped">
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
+            </div>  
+            <div className="removed list-group lst-grp-hover">
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+              <li className="list-group-item border-0">Removed Item</li>
+            </div>
           </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
-            <table className="table table-borderless table-hover my-staples">
-              <tbody>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A staple</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="list-group lst-grp-hover">
+              <li className="list-group-item border-0">A staple</li>
+              <li className="list-group-item border-0">A staple</li>
+              <li className="list-group-item border-0">A staple</li>
+              <li className="list-group-item border-0">A staple</li>
+              <li className="list-group-item border-0">A staple</li>
+              <li className="list-group-item border-0">A staple</li>
+            </div>
             <h5 className="my-recipes-header">My Recipes</h5>
-            <table className="table table-borderless table-hover my-recipes">
-              <tbody>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-                <tr className="my-row">
-                  <td>A recipe</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="list-group lst-grp-hover">
+              <li className="list-group-item border-0">A recipe</li>
+              <li className="list-group-item border-0">A recipe</li>
+              <li className="list-group-item border-0">A recipe</li>
+              <li className="list-group-item border-0">A recipe</li>
+              <li className="list-group-item border-0">A recipe</li>
+              <li className="list-group-item border-0">A recipe</li>
+            </div>
           </div>
           <div className="col-md-4 order-md-12">
-            <h5>Totals</h5>
+            <h5 className="totals">Totals</h5>
             <h6>10 items: $32.12</h6>
             <img
               src="pie_explode.jpg"
