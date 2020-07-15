@@ -17,16 +17,18 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
+  // state = {
+  //   user: {},
+  //   items: []
+  // };
   state = {
-    user: {},
-    items: []
+    user: null,
+    items: null
   };
 
   async componentDidMount() {
     const user = auth.getCurrentUser();
-    // console.log("user from App.js CDM:", user);
     const { data: items } = await item.getItems();
-    // console.log("items from App.js CDM:", items);
     this.setState({ user, items });
   }
 
