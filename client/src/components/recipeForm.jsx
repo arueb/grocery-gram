@@ -6,7 +6,7 @@ import Joi from "joi-browser";
 import axios from "axios"
 
 const UPLOAD_LIST_PLACEHOLDER =
-  process.env.REACT_APP_IMAGES_FOLDER + "images/image-uploader-blank.jpg";
+  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
 
 const ImagePreviews = (props) => (
   <div>
@@ -103,7 +103,7 @@ class RecipeForm extends Form {
       console.log(key[0] + ', ' + key[1]);
   }
 
-    axios.post('http://localhost:3001/api/img', formData, {
+    axios.post(process.env.REACT_APP_API_URL + "/img", formData, {
       
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -124,7 +124,7 @@ class RecipeForm extends Form {
 
     <form ref='uploadForm' 
       id='uploadForm' 
-      action='http://localhost:3001/api/img' 
+      action={ process.env.REACT_APP_API_URL + "/img" } 
       method='post' 
       encType="multipart/form-data"
       onChange={this.onChangeHandler}>
