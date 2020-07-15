@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "test",
   "main": "index.js",
+  "engines": {
+    "node": "12.x.x"
+  },
   "scripts": {
     "start": "node ./index.js",
     "debug": "nodemon --inspect ./index.js",
