@@ -17,10 +17,12 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
+
   // state = {
   //   user: {},
   //   items: []
   // };
+
   state = {
     user: null,
     items: null

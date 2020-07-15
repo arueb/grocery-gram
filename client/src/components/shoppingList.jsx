@@ -22,6 +22,11 @@ class ShoppingList extends Component {
   async expandShoppingLists() {
     const { items, user } = this.props;
 
+    if (!user) {
+      console.log('user not logged in...')
+      return;
+    }
+
     if (items && !this.state.userData) {
       const { data: userData } = await getUserData(user._id);
 
