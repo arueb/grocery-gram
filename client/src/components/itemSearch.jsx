@@ -2,34 +2,9 @@ import Autosuggest from "react-autosuggest";
 import React, { Component } from "react";
 import { getColor } from "../services/itemService";
 
-// import { AutosuggestHighlightParse } from "autosuggest-highlight/parse";
-// import { <AutosuggestHighlightMatch></AutosuggestHighlightMatch> } from "autosuggest-highlight/match";
-
-var AutosuggestHighlightMatch = require("autosuggest-highlight/match");
-var AutosuggestHighlightParse = require("autosuggest-highlight/parse");
-
-// const people = [
-//   {
-//     first: "Charlie",
-//     last: "Brown",
-//     twitter: "dancounsell",
-//   },
-//   {
-//     first: "Charlotte",
-//     last: "White",
-//     twitter: "mtnmissy",
-//   },
-//   {
-//     first: "Chloe",
-//     last: "Jones",
-//     twitter: "ladylexy",
-//   },
-//   {
-//     first: "Cooper",
-//     last: "King",
-//     twitter: "steveodom",
-//   },
-// ];
+// load autosuggest-highlight library functions
+const AutosuggestHighlightMatch = require("autosuggest-highlight/match");
+const AutosuggestHighlightParse = require("autosuggest-highlight/parse");
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 function escapeRegexCharacters(str) {
@@ -46,9 +21,7 @@ function getSuggestions(value, data) {
   }
 
   const regex = new RegExp("\\b" + escapedValue, "i");
-
-  return data.filter((person) => regex.test(getSuggestionValue(person)));
-  // return people.filter((person) => regex.test(getSuggestionValue(person)));
+  return data.filter((item) => regex.test(getSuggestionValue(item)));
 }
 
 function getSuggestionValue(suggestion) {
@@ -61,8 +34,6 @@ function renderSuggestion(suggestion, { query }) {
   const parts = AutosuggestHighlightParse(suggestionText, matches);
 
   return (
-    // <span className={"suggestion-content " + suggestion.twitter}>
-    // <span className={"suggestion-content " + suggestion.category}>
     <span className={"suggestion-content " + getColor(suggestion.category)}>
       <span className="name">
         {parts.map((part, index) => {
@@ -84,11 +55,12 @@ class ItemSearch extends Component {
     super();
     this.state = {
       value: "",
+      //   valueId: "",
       suggestions: [],
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { initialValue, row } = this.props;
     console.log("mounting component for row: ", row);
     console.log("initialValue:", initialValue);
@@ -96,14 +68,50 @@ class ItemSearch extends Component {
   }
 
   onChange = (event, { newValue, method }) => {
-    //   console.log(this.p)
     this.setState({
       value: newValue,
-      //   value: this.props.initialValue,
     });
-    console.log("this.props.action", this.props.action);
-    this.props.action(newValue, this.props.row);
-    // this.props.action();
+
+    this.props.updateIngredient(newValue, this.props.row);
+  };
+
+  onBlur = (event, { highlightedSuggestion }) => {
+    // TODO: test to make sure this is tab key event
+    if (this.state.suggestions.length) {
+      // there is a suggestion to use
+
+      // set the value (ingredient name) in local state
+      this.setState({ value: this.state.suggestions[0].name });
+
+      // validate the ingredient id
+      this.props.validateItem(
+        true,
+        this.props.row,
+        this.state.suggestions[0]._id
+      );
+    } else {
+      // there is no suggestion to use
+
+      // check if an item matching this name exists in master item list
+      const match = this.props.items.filter(
+        (item) => item.name === this.state.value
+      );
+
+      const isValidName = match.length;
+      if (isValidName) {
+        this.props.validateItem(isValidName, this.props.row, match[0]._id);
+      } else {
+        this.props.validateItem(isValidName, this.props.row, null);
+        this.setState({ value: "" });
+      }
+
+      //   if (isValidName) {
+      //     this.props.validateItem(isValidName, this.props.row, match[0]._id);
+      //   } else {
+      //     this.props.validateItem(isValidName, this.props.row, null);
+      //   }
+      //   if (!isValidName) this.setState({ value: "" });
+    }
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -120,14 +128,21 @@ class ItemSearch extends Component {
     });
   };
 
+  // update the ingredient in parent state
+  onSuggestionSelected = (
+    event,
+    { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }
+  ) => {
+    this.props.updateIngredient(suggestion._id, this.props.row);
+  };
+
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: "Search items...",
+      placeholder: "Search ingredients...",
       value,
-      //   value: this.props.initialValue,
       onChange: this.onChange,
-      //   onChange: this.onChange.bind(this),
+      onBlur: this.onBlur,
     };
 
     return (
@@ -138,6 +153,7 @@ class ItemSearch extends Component {
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         inputProps={inputProps}
+        onSuggestionSelected={this.onSuggestionSelected}
       />
     );
   }

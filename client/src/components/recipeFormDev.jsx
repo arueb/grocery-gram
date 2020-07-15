@@ -10,7 +10,6 @@ import ItemSearch from "../components/itemSearch";
 
 class RecipeForm extends Form {
   state = {
-    // ingredients: [{ qty: "", unit: "", item: "", notes: "" }],
     errors: {},
     units: [],
     quantities: [],
@@ -29,72 +28,43 @@ class RecipeForm extends Form {
     title: Joi.string().label("Title"),
   };
 
+  // populates recipe in state if valid recipe id
   async populateRecipe() {
     try {
       const recipeId = this.props.match.params.id;
-      console.log("recipeId", recipeId);
-      if (recipeId === "test") return; /// CHANGE THIS TO "new"
+      //   console.log("recipeId", recipeId);
+      if (recipeId === "test") return; /// TODO:  Change this "new" instead of test
 
       const { data: recipe } = await getRecipe(recipeId);
-      console.log("recipe", recipe[0]);
-      console.log("ingredients view:", this.mapToViewModel(recipe));
-      this.setState({ ingredients: this.mapToViewModel(recipe) });
+      this.setState({
+        recipeId: recipe[0]._id,
+        ingredients: recipe[0].ingredients,
+        // ingredients: this.mapToViewModel(recipe),
+      });
+
+      const data = { ...this.state.data };
+      data.title = recipe[0].title;
+      this.setState({ data });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
     }
   }
 
-  mapToViewModel(recipe) {
-    return recipe[0].ingredients;
-  }
-
-  // recipe[0].ingredients.map((i) => {
-  //   return {
-  //     item: i.item,
-  //     qty: i.qty,
-  //     notes: i.notes,
-  //     unt: i.unit,
-  //   };
-  // });
-
-  //   ingredients: [
-  //     ...recipe[0].ingredients.map((i) => {
-  //       return {
-  //         item: i.item,
-  //         qty: i.qty,
-  //         notes: i.notes,
-  //         unt: i.unit,
-  //       };
-  //     }),
-  //   ],
-  // _id: movie._id,
-  // title: movie.title,
-  // genreId: movie.genre._id,
-  // numberInStock: movie.numberInStock,
-  // dailyRentalRate: movie.dailyRentalRate,
-  //     };
-  //   }
-
   async componentDidMount() {
-    this.testHandler = this.testHandler.bind(this);
+    // Bind the this context to the handler functions
+    this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
+    this.handleValidation = this.handleValidation.bind(this);
+
+    // load the recipe (unless new)
     await this.populateRecipe();
+
+    // load the units and quantitiy options for select boxes into local state
     this.setState({ units: getUnits(), quantities: getQuantities() });
   }
 
-  //   handleChange = (idx) => (e) => {
-  //     console.log("handling change");
-  //     const { name, value } = e.target;
-  //     const rows = [...this.state.rows];
-  //     rows[idx] = {
-  //       [name]: value,
-  //     };
-  //     this.setState({
-  //       rows,
-  //     });
-  //   };
-
-  handleAddRow = async () => {
+  // handle adding a new row to the ingredients table
+  handleAddRow = () => {
     const ingredient = {
       qty: "",
       unit: "",
@@ -105,34 +75,39 @@ class RecipeForm extends Form {
     this.setState({ ingredients });
   };
 
-  //   handleRemoveRow = () => {
-  //     this.setState({
-  //       rows: this.state.rows.slice(0, -1),
-  //     });
-  //   };
-
+  // handle deleting a row from the ingredients table
   handleRemoveSpecificRow = (idx) => () => {
     const ingredients = [...this.state.ingredients];
     ingredients.splice(idx, 1);
     this.setState({ ingredients });
   };
 
-  testHandler(value, row) {
+  // handle updating ingredients from child itemSearch component
+  // updates itemId
+  handleIngredientUpdate(value, row) {
     const ingredients = [...this.state.ingredients];
     ingredients[row].itemId = value;
-    console.log("ingredients:", ingredients);
     this.setState({ ingredients });
-    // this.setState({
-    //   testProp: row + ": " + value,
-    // });
+  }
+
+  // updates the id property of ingredients in state
+  // either updates the id from the itemSearch component or clears it out if item is invalid
+  // updates itemId
+  handleValidation(isValidName, row, id) {
+    const ingredients = [...this.state.ingredients]; // clone ingredients from state
+
+    if (!isValidName) {
+      ingredients[row].itemId = "";
+    } else {
+      ingredients[row].itemId = id;
+    }
+
+    this.setState({ ingredients });
   }
 
   render() {
     const { ingredients } = this.state;
-    console.log("props", this.props);
 
-    // console.log("ingredients in render", ingredients);
-    // console.log("ingredients.length", ingredients.length);
     return (
       <React.Fragment>
         {this.renderInput("title", "Title")}
@@ -151,49 +126,54 @@ class RecipeForm extends Form {
               console.log("RecipeForm rendering row: ", i);
               console.log("itemid for row" + i + ":", ingredients[i].itemId);
               return (
-                <tr key={i}>
-                  {/* <td> {this.renderMultiRowInput("qty", null, i)} </td> */}
-                  <td>
-                    {this.renderMultiRowSelect(
-                      "qty",
-                      null,
-                      i,
-                      "ingredients",
-                      this.state.quantities
-                    )}
-                  </td>
-                  <td>
-                    {this.renderMultiRowSelect(
-                      "unit",
-                      null,
-                      i,
-                      "ingredients",
-                      this.state.units
-                    )}
-                  </td>
-                  {/* <td> {this.renderMultiRowInput("item", null, i)} </td> */}
-                  {/* <td> {this.renderMultiRowInput("notes", null, i)} </td> */}
-                  <td>
-                    <ItemSearch
-                      //   ingredients={this.state.ingredients}
-                      items={this.props.items}
-                      action={this.testHandler}
-                      row={i}
-                      initialValue={ingredients[i].itemId}
-                    />
-                    {this.renderMultiRowInput("itemId", null, i, "ingredients")}{" "}
-                  </td>
-                  <td>
-                    {this.renderMultiRowInput("notes", null, i, "ingredients")}
-                  </td>
-                  <td>
-                    {/* <ItemSearch items={this.props.items} /> */}
-                    <FaTrash
-                      className="hover-icon"
-                      onClick={this.handleRemoveSpecificRow(i)}
-                    />
-                  </td>
-                </tr>
+                (this.state.recipeId ||
+                  this.props.match.params.id === "test") && (
+                  <tr key={i}>
+                    <td>
+                      {this.renderMultiRowSelect(
+                        "qty",
+                        null,
+                        i,
+                        "ingredients",
+                        this.state.quantities
+                      )}
+                    </td>
+                    <td>
+                      {this.renderMultiRowSelect(
+                        "unit",
+                        null,
+                        i,
+                        "ingredients",
+                        this.state.units
+                      )}
+                    </td>
+                    <td>
+                      <ItemSearch
+                        items={this.props.items}
+                        updateIngredient={this.handleIngredientUpdate}
+                        validateItem={this.handleValidation}
+                        row={i}
+                        initialValue={
+                          ingredients[i].item ? ingredients[i].item.name : ""
+                        }
+                      />
+                    </td>
+                    <td>
+                      {this.renderMultiRowInput(
+                        "notes",
+                        null,
+                        i,
+                        "ingredients"
+                      )}
+                    </td>
+                    <td>
+                      <FaTrash
+                        className="hover-icon"
+                        onClick={this.handleRemoveSpecificRow(i)}
+                      />
+                    </td>
+                  </tr>
+                )
               );
             })}
           </tbody>
@@ -201,7 +181,6 @@ class RecipeForm extends Form {
         <button onClick={this.handleAddRow} className="btn btn-primary">
           Add Ingredient +
         </button>
-        {/* <ItemSearch items={this.props.items} /> */}
       </React.Fragment>
     );
   }
