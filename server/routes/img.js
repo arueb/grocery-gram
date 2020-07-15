@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
     if (err)
       return res.status(500).send(err);
 
-    res.send('File uploaded!');
+    res.send('File uploaded.');
   });
 });
 
