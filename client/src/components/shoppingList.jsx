@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getUserData } from "../services/shoppingListService";
+import { getUserData, updateShoppingList } from "../services/shoppingListService";
 
 class ShoppingList extends Component {
   state = {
@@ -11,8 +11,8 @@ class ShoppingList extends Component {
     errors: {},
   };
 
-  async componentDidUpdate() { 
-      await this.expandShoppingLists();
+  async componentDidUpdate() {
+    await this.expandShoppingLists();
   }
 
   async componentDidMount() {
@@ -23,7 +23,7 @@ class ShoppingList extends Component {
     const { items, user } = this.props;
 
     if (!user) {
-      console.log('user not logged in...')
+      console.log("User not logged in...");
       return;
     }
 
@@ -34,32 +34,10 @@ class ShoppingList extends Component {
       const addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
+      // sort both lists by category
       this.setState({ addedItems, removedItems, userData });
     }
   }
-
-  handleAddItem = () => {
-    // console.log("allItems", this.state.allItems);
-    // console.log("addedItems", this.state.addedItems);
-    // console.log("removedItems", this.state.removedItems);
-    // console.log("state", this.state.user);
-  };
-
-  handleRemoveItem = (itemId) => {
-    // console.log("you removed itemId", itemId);
-    // const fullItem = this.getItemById(itemId);
-    // console.log("fullItem", fullItem);
-    // console.log("allItems", this.state.allItems);
-    // console.log("addedItems", this.state.addedItems);
-    // console.log("removedItems", this.state.removedItems);
-    // console.log("state", this.state.user);
-  };
-
-  // handleRemoveItem
-
-  // handleChooseStaple
-
-  // handleChooseRecipe
 
   expandItemById = (itemId, itemsArr) => {
     for (let i = 0; i < itemsArr.length; i++) {
@@ -76,6 +54,73 @@ class ShoppingList extends Component {
     }
     return expanded;
   };
+
+  sortItemsByCategoryAndAlpha = () => {}
+
+  handleAddItem = (itemId) => {
+    console.log("adding item", itemId);
+    console.log("items", this.props.items);
+    console.log("addedItems", this.state.addedItems);
+    console.log("removedItems", this.state.removedItems);
+    console.log("user", this.props.user);
+  };
+
+  handleRemoveItem = async (itemId) => {
+    console.log("removing item", itemId);
+    console.log("items", this.props.items);
+    console.log("addedItems", this.state.addedItems);
+    console.log("removedItems", this.state.removedItems);
+    console.log("user", this.props.user);
+
+    // optimistic update
+
+    // store current state in case we need to revert
+    const prevAddedItems = this.state.addedItems;
+    const prevRemovedItems = this.state.removedItems;
+
+    // take item out of addedItems and create new addedItemIds array
+    const newAddedItems = [];
+    const newAddedItemIds = [];
+    let removedItem;
+    this.state.addedItems.forEach((item) => {
+      if (item._id !== itemId) {
+        newAddedItems.push(item);
+        newAddedItemIds.push(item._id);
+      }
+      else
+        removedItem = item;
+    });
+
+    // add item to beginning of removedItems and create new removedItemIds array
+    const newRemovedItems = [removedItem, ...this.state.removedItems];
+    const newRemovedItemIds = newRemovedItems.map(item => item._id);
+    
+    // sort addedItems lists by category, then by alpha
+
+    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems })
+
+    // handle the user in backend & if it fails revert state back
+    try {
+      await updateShoppingList(this.props.user._id, newAddedItemIds, newRemovedItemIds);
+      
+    }
+    catch (err) {
+      // revert state back to original
+      this.setState({
+        addedItems: prevAddedItems,
+        removedItems: prevRemovedItems,
+      });
+      
+    }
+
+
+
+
+  };
+
+  // handleChooseStaple
+
+  // handleChooseRecipe
 
   render() {
     const { addedItems, removedItems } = this.state;
@@ -113,7 +158,7 @@ class ShoppingList extends Component {
                 : removedItems.map((item) => (
                     <li
                       key={item._id}
-                      onClick={() => this.handleAddItem()}
+                      onClick={() => this.handleAddItem(item._id)}
                       className="list-group-item border-0"
                     >
                       {item.name}
@@ -145,7 +190,7 @@ class ShoppingList extends Component {
             <h5 className="totals">Totals</h5>
             <h6>10 items: $32.12</h6>
             <img
-              src="pie_explode.jpg"
+              src={window.location.origin + "/pie_explode.jpg"}
               alt="Girl in a jacket"
               width="300"
               height="300"
