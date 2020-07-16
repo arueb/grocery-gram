@@ -17,15 +17,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
-
-  // state = {
-  //   user: {},
-  //   items: []
-  // };
-
   state = {
     user: null,
-    items: null
+    items: null,
   };
 
   async componentDidMount() {
@@ -47,7 +41,7 @@ class App extends Component {
             <Route path="/register" component={RegisterForm} />
             {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
             <Route
-              path="/my-recipes/test"
+              path="/my-recipes-dev/:id"
               render={(props) => (
                 <RecipeFormDev {...props} user={user} items={items} />
               )}
@@ -60,7 +54,7 @@ class App extends Component {
               path="/shopping-list"
               render={(props) => (
                 <ShoppingList {...props} user={user} items={items} />
-              )} 
+              )}
             />
             <Route path="/not-found" component={NotFound} />
             <Redirect exact from="/" to="/shopping-list" />

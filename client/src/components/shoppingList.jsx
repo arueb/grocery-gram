@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash"
 import { getUserData, updateShoppingList } from "../services/shoppingListService";
+import { getColor } from "../services/itemService";
 
 class ShoppingList extends Component {
   state = {
@@ -177,7 +178,10 @@ class ShoppingList extends Component {
                     <li
                       key={item._id}
                       onClick={() => this.handleRemoveItem(item._id)}
-                      className="list-group-item border-0 "
+                      style={{ borderTop: 0, borderBottom: 0,borderRight: 0,
+                        borderLeft: `15px solid ${getColor(item.category)}`
+                      }}
+                      className="list-group-item"
                     >
                       {item.name}
                       <span className="sl-price">${item.price}</span>
@@ -191,7 +195,10 @@ class ShoppingList extends Component {
                     <li
                       key={item._id}
                       onClick={() => this.handleAddBackItem(item._id)}
-                      className="list-group-item border-0"
+                      style={{ borderTop: 0, borderBottom: 0, borderRight: 0,
+                        borderLeft: "15px solid #fff"
+                      }}
+                      className="list-group-item"
                     >
                       {item.name}
                     </li>
