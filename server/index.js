@@ -2,15 +2,19 @@ const express = require("express");
 const fileUpload = require('express-fileupload');
 //var bodyParser = require('body-parser')
 //var multer = require('multer')
-
+const cors = require('cors');
 const app = express();
 
 // default options
 app.use(fileUpload());
 
+
 //app.use(bodyParser.raw({
-//  type: 'multipart/form-data'
-//}));
+  //  type: 'multipart/form-data'
+  //}));
+  
+// enable cors for PATCH requests
+app.options('*', cors());
 
 require("./startup/db")();
 require("./startup/routes")(app);

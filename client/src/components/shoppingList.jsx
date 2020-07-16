@@ -1,8 +1,163 @@
 import React, { Component } from "react";
+import _ from "lodash"
+import { getUserData, updateShoppingList } from "../services/shoppingListService";
 
 class ShoppingList extends Component {
-  state = {};
+  state = {
+    userData: null,
+    addedItems: null,
+    removedItems: null,
+    staples: [],
+    recipes: [],
+    errors: {},
+  };
+
+  async componentDidUpdate() {
+    await this.expandShoppingLists();
+  }
+
+  async componentDidMount() {
+    await this.expandShoppingLists();
+  }
+
+  async expandShoppingLists() {
+    const { items, user } = this.props;
+
+    if (!user) {
+      console.log("User not logged in...");
+      return;
+    }
+
+    if (items && !this.state.userData) {
+      const { data: userData } = await getUserData(user._id);
+
+      const addedItemIds = userData.addedItems;
+      const addedItems = this.expandItems(addedItemIds, items);
+      const removedItemIds = userData.removedItems;
+      const removedItems = this.expandItems(removedItemIds, items);
+      // sort both lists by category
+      this.setState({ addedItems, removedItems, userData });
+    }
+  }
+
+  expandItemById = (itemId, itemsArr) => {
+    for (let i = 0; i < itemsArr.length; i++) {
+      if (itemsArr[i]._id === itemId) return itemsArr[i];
+    }
+    return null;
+  };
+
+  expandItems = (itemIds, allItems) => {
+    let expanded = [];
+    for (const itemId of itemIds) {
+      const item = this.expandItemById(itemId, allItems);
+      expanded.push(item);
+    }
+    return expanded;
+  };
+
+  sortItems = (items) => {
+    return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
+  };
+
+  handleAddItemSearchBox = () => {}
+
+  handleAddBackItem = async (itemId) => {
+    // optimistic update
+    // store current state in case we need to revert
+    const prevAddedItems = this.state.addedItems;
+    const prevRemovedItems = this.state.removedItems;
+
+    // take item out of removedItems and create new removedItemIds array
+    const newRemovedItems = [];
+    const newRemovedItemIds = [];
+    let addBackItem;
+    this.state.removedItems.forEach((item) => {
+      if (item._id !== itemId) {
+        newRemovedItems.push(item);
+        newRemovedItemIds.push(item._id);
+      } else addBackItem = item;
+    });
+
+    // push item to end of addedItems and create new addedItemIds array
+    let newAddedItems = [...this.state.addedItems, addBackItem];
+    const newAddedItemIds = newAddedItems.map((item) => item._id);
+
+    // sort by category, then name
+    newAddedItems = this.sortItems(newAddedItems);
+
+    // first set the state which forces a re-render
+    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
+
+    // handle user in backend & on failure revert state
+    try {
+      await updateShoppingList(
+        this.props.user._id,
+        newAddedItemIds,
+        newRemovedItemIds
+      );
+    } catch (err) {
+      // revert state back to original
+      this.setState({
+        addedItems: prevAddedItems,
+        removedItems: prevRemovedItems,
+      });
+      console.log("Something went wrong.", err);
+    }
+  };
+
+  handleRemoveItem = async (itemId) => {
+    // optimistic update
+    // store current state in case we need to revert
+    const prevAddedItems = this.state.addedItems;
+    const prevRemovedItems = this.state.removedItems;
+
+    // take item out of addedItems and create new addedItemIds array
+    let newAddedItems = [];
+    const newAddedItemIds = [];
+    let removedItem;
+    this.state.addedItems.forEach((item) => {
+      if (item._id !== itemId) {
+        newAddedItems.push(item);
+        newAddedItemIds.push(item._id);
+      } else removedItem = item;
+    });
+
+    // add item to beginning of removedItems and create new removedItemIds array
+    const newRemovedItems = [removedItem, ...this.state.removedItems];
+    const newRemovedItemIds = newRemovedItems.map((item) => item._id);
+
+    // sort by category, then name
+    newAddedItems = this.sortItems(newAddedItems);
+
+    // first set the state which forces a re-render
+    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
+
+        // handle user in backend & on failure revert state
+    try {
+      await updateShoppingList(
+        this.props.user._id,
+        newAddedItemIds,
+        newRemovedItemIds
+      );
+    } catch (err) {
+      // revert state back to original
+      this.setState({
+        addedItems: prevAddedItems,
+        removedItems: prevRemovedItems,
+      });
+      console.log("Something went wrong.", err);
+    }
+  };
+
+  // handleChooseStaple
+
+  // handleChooseRecipe
+
   render() {
+    const { addedItems, removedItems } = this.state;
+    // console.log("props", this.props);
+    // console.log("state", this.state);
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -16,24 +171,31 @@ class ShoppingList extends Component {
           <div className="col-md-5 order-md-4">
             <h4>THIS WILL BE A SEARCH BOX</h4>
             <div className="list-group lst-grp-hover lst-grp-striped">
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-              <li className="list-group-item border-0">Added Item<span className="sl-price">$2.99</span></li>
-            </div>  
+              {!addedItems
+                ? null
+                : addedItems.map((item) => (
+                    <li
+                      key={item._id}
+                      onClick={() => this.handleRemoveItem(item._id)}
+                      className="list-group-item border-0 "
+                    >
+                      {item.name}
+                      <span className="sl-price">${item.price}</span>
+                    </li>
+                  ))}
+            </div>
             <div className="removed list-group lst-grp-hover">
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
-              <li className="list-group-item border-0">Removed Item</li>
+              {!removedItems
+                ? null
+                : removedItems.map((item) => (
+                    <li
+                      key={item._id}
+                      onClick={() => this.handleAddBackItem(item._id)}
+                      className="list-group-item border-0"
+                    >
+                      {item.name}
+                    </li>
+                  ))}
             </div>
           </div>
           <div className="col-md-3 order-md-1">
@@ -60,7 +222,7 @@ class ShoppingList extends Component {
             <h5 className="totals">Totals</h5>
             <h6>10 items: $32.12</h6>
             <img
-              src="pie_explode.jpg"
+              src={window.location.origin + "/pie_explode.jpg"}
               alt="Girl in a jacket"
               width="300"
               height="300"

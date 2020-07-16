@@ -21,10 +21,14 @@
     "react-scripts": "3.4.1",
     "react-toastify": "^6.0.8"
   },
+  "engines": {
+    "node": "12.x.x"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
+    "old_test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
