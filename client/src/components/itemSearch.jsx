@@ -74,6 +74,7 @@ class ItemSearch extends Component {
 
   // performs validation when itemSearch field loses focus
   onBlur = (event, { highlightedSuggestion }) => {
+    console.log("onBlur event triggered");
     // TODO: test to make sure this is tab key event
     if (this.state.suggestions.length && highlightedSuggestion) {
       // const suggestionId = highlightedSuggestion._id;
@@ -85,7 +86,10 @@ class ItemSearch extends Component {
 
       // update the ingredient id
       //   this.props.update(this.state.suggestions[0]._id, this.props.row);
-      this.props.update(this.state.suggestionId, this.props.row);
+      console.log("suggestionId:", this.state.suggestionId);
+      console.log("highlightedSuggestion:", highlightedSuggestion._id);
+      this.props.update(highlightedSuggestion._id, this.props.row);
+      //   this.props.update(this.state.suggestionId, this.props.row);
     } else {
       // there is no suggestion to use
 
@@ -96,11 +100,16 @@ class ItemSearch extends Component {
 
       const isValidName = match.length;
       if (isValidName) {
+        console.log("match:", match[0]._id);
         this.props.update(match[0]._id, this.props.row);
       } else {
         this.props.update("", this.props.row);
         this.setState({ value: "" });
       }
+    }
+
+    if (this.props.clearOnBlur) {
+      this.setState({ value: "" });
     }
   };
 
@@ -125,6 +134,9 @@ class ItemSearch extends Component {
   ) => {
     this.props.update(suggestion._id, this.props.row);
     console.log("set focus to notes field");
+    if (this.props.clearOnBlur) {
+      this.setState({ value: "" });
+    }
   };
 
   render() {
