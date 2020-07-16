@@ -8,7 +8,7 @@ class ShoppingList extends Component {
     userData: null,
     addedItems: null,
     removedItems: null,
-    addedCats: null,
+    catCounts: null,
     staples: [],
     recipes: [],
     errors: {},
@@ -58,16 +58,38 @@ class ShoppingList extends Component {
     return expanded;
   };
 
-  tallyCategories = () => {
-    
-  }
+  // tallyCategories = () => {
+  //   const counts = [];
+  //   this.state.addedItems.forEach((item) => {
+  //     if (item) {
+  //       item.count++
+  //     }
+  //   });
+  // }
 
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
-  handleAddItemFromSearchBox = (itemId) => {
-
+  handleAddItemFromSearchBox = async (item) => {
+    // optimistic update, so save original state
+    const prevAddedItems = [...this.state.addedItems];
+    let newAddedItems = [...this.state.addedItems, item];
+    newAddedItems = this.sortItems(newAddedItems);
+    let newAddedItemIds = [...this.state.userData.addedItems, item._id];
+    this.setState({ addedItems: newAddedItems });
+    try {
+      await updateShoppingList(
+        this.props.user._id,
+        newAddedItemIds,
+        this.state.userData.removedItems
+      );
+    }
+    catch (err) {
+      // revert state back to original
+      this.setState({ addedItems: prevAddedItems });
+      console.log("Something went wrong.", err);
+    }
   }
 
   handleAddBackItem = async (itemId) => {
@@ -90,7 +112,7 @@ class ShoppingList extends Component {
     if (action === "addBack") {
       currExtractFromItems = this.state.removedItems;
       currAddToItems = this.state.addedItems;
-    } // remove: extract from added, add into removed
+    } // removeItem: extract from added, add into removed
     else if (action === "removeItem") {
       currExtractFromItems = this.state.addedItems;
       currAddToItems = this.state.removedItems;
