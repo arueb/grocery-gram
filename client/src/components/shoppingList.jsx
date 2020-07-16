@@ -71,12 +71,14 @@ class ShoppingList extends Component {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
+  // wondering whether I should setState on userData too? 
+  // I don't think it's necessary since I'm componentDidUpdate will 
   handleAddItemFromSearchBox = async (item) => {
     // optimistic update, so save original state
     const prevAddedItems = [...this.state.addedItems];
     let newAddedItems = [...this.state.addedItems, item];
     newAddedItems = this.sortItems(newAddedItems);
-    let newAddedItemIds = [...this.state.userData.addedItems, item._id];
+    const newAddedItemIds = newAddedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
     try {
       await updateShoppingList(
@@ -261,7 +263,7 @@ class ShoppingList extends Component {
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
 
               
-              {!addedItems
+              {/* {!addedItems
                 ? null
                 : addedItems.map((item) => (
                   <li
@@ -275,7 +277,7 @@ class ShoppingList extends Component {
                   >
                     {item.name}
                   </li>
-                ))}
+                ))} */}
 
 
 
