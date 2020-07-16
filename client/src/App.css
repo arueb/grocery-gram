@@ -76,7 +76,7 @@ tr:hover .hover-icon {
 }
 
 .my-recipes-header {
-  margin-top: 3em;
+  margin-top: 2em;
 }
 
 .added {
@@ -204,3 +204,7 @@ td.delete {
 /* .itemList{
     padding-bottom:
 } */
+
+.shop-list {
+  margin-bottom: 2em;
+}

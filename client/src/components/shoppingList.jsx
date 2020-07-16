@@ -90,12 +90,14 @@ class ShoppingList extends Component {
     let newAddedItems = [...this.state.addedItems, item];
     newAddedItems = this.sortItems(newAddedItems);
     const newAddedItemIds = newAddedItems.map((item) => item._id);
+    const removedItemIds = this.state.removedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
     try {
       await updateShoppingList(
         this.props.user._id,
         newAddedItemIds,
-        this.state.userData.removedItems
+        // this.state.userData.removedItems
+        removedItemIds
       );
     } catch (err) {
       // revert state back to original
@@ -227,7 +229,7 @@ class ShoppingList extends Component {
           <div className="col-md"></div>
         </div>
         <div className="row">
-          <div className="col-md-5 order-md-4">
+          <div className="col-md-5 order-md-4 shop-list">
             <div className="itemSearch pb-3">
               <ItemSearch
                 items={this.props.items}
