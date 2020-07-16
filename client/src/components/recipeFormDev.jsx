@@ -1,7 +1,6 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
-import _ from "lodash";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
 import { getRecipe } from "../services/recipeService";
@@ -52,9 +51,9 @@ class RecipeForm extends Form {
   }
 
   async componentDidMount() {
-    // Bind the this context to the handler functions
+    // Bind the this context to the handler function
     this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
-    this.handleValidation = this.handleValidation.bind(this);
+    // this.handleValidation = this.handleValidation.bind(this);
 
     // load the recipe (unless new)
     await this.populateRecipe();
@@ -90,41 +89,24 @@ class RecipeForm extends Form {
     this.setState({ ingredients });
   }
 
-  // updates the id property of ingredients in state
-  // either updates the id from the itemSearch component or clears it out if item is invalid
-  // updates itemId
-  handleValidation(isValidName, row, id) {
-    const ingredients = [...this.state.ingredients]; // clone ingredients from state
-
-    if (!isValidName) {
-      ingredients[row].itemId = "";
-    } else {
-      ingredients[row].itemId = id;
-    }
-
-    this.setState({ ingredients });
-  }
-
   render() {
     const { ingredients } = this.state;
 
     return (
       <React.Fragment>
         {this.renderInput("title", "Title")}
-        <table className="table table-bordered table-hover ingredients-form">
+        <table className="table table-hover ingredients-form">
           <thead>
             <tr>
-              <th className="text-center"> Qty </th>
-              <th className="text-center"> Unit </th>
-              <th className="text-center"> Item </th>
-              <th className="text-center"> Notes </th>
-              <th className="text-center"> </th>
+              <th className="pl-2"> Qty </th>
+              <th className="pl-2"> Unit </th>
+              <th className="pl-2"> Item </th>
+              <th className="pl-2"> Notes </th>
+              <th className=""> </th>
             </tr>
           </thead>
           <tbody>
             {[...Array(ingredients.length)].map((row, i) => {
-              console.log("RecipeForm rendering row: ", i);
-              console.log("itemid for row" + i + ":", ingredients[i].itemId);
               return (
                 (this.state.recipeId ||
                   this.props.match.params.id === "test") && (
@@ -150,8 +132,9 @@ class RecipeForm extends Form {
                     <td>
                       <ItemSearch
                         items={this.props.items}
-                        updateIngredient={this.handleIngredientUpdate}
-                        validateItem={this.handleValidation}
+                        // updateIngredient={this.handleIngredientUpdate}
+                        update={this.handleIngredientUpdate}
+                        // validateItem={this.handleValidation}
                         row={i}
                         initialValue={
                           ingredients[i].item ? ingredients[i].item.name : ""
@@ -166,7 +149,7 @@ class RecipeForm extends Form {
                         "ingredients"
                       )}
                     </td>
-                    <td>
+                    <td className="delete">
                       <FaTrash
                         className="hover-icon"
                         onClick={this.handleRemoveSpecificRow(i)}
