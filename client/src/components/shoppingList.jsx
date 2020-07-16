@@ -8,6 +8,7 @@ class ShoppingList extends Component {
     userData: null,
     addedItems: null,
     removedItems: null,
+    addedCats: null,
     staples: [],
     recipes: [],
     errors: {},
@@ -64,50 +65,75 @@ class ShoppingList extends Component {
   handleAddItemSearchBox = () => {}
 
   handleAddBackItem = async (itemId) => {
+
+
+
+  moveItemsInLists(itemId, action) = () => {
     // optimistic update
     // store current state in case we need to revert
     const prevAddedItems = this.state.addedItems;
     const prevRemovedItems = this.state.removedItems;
 
-    // take item out of removedItems and create new removedItemIds array
-    const newRemovedItems = [];
-    const newRemovedItemIds = [];
-    let addBackItem;
-    this.state.removedItems.forEach((item) => {
+    // addBack: extract from removed, add into added
+    if (action === "addBack") {
+      currExtractFromItems = this.state.removedItems;
+      currAddToItems = this.state.addedItems;
+    } // remove: extract from added, add into removed
+    else if (action === "removeItem") {
+      currExtractFromItems = this.state.addedItems;
+      currAddToItems = this.state.addedItems;
+    }
+
+    // extract item from currExtractFromItems 
+    const newExtractFromItems = [];
+    const newExtractFromItemIds = [];
+    let itemToAdd;
+    currExtractFromItems.forEach((item) => {
       if (item._id !== itemId) {
-        newRemovedItems.push(item);
-        newRemovedItemIds.push(item._id);
-      } else addBackItem = item;
+        newExtractFromItems.push(item);
+        newExtractFromItemIds.push(item._id);
+      } else itemToAdd = item;
     });
 
-    // push item to end of addedItems and create new addedItemIds array
-    let newAddedItems = [...this.state.addedItems, addBackItem];
-    const newAddedItemIds = newAddedItems.map((item) => item._id);
+    // push item to currAddToItems
+    let newAddToItems = [...currAddToItems, itemToAdd];
+    const newAddedItemIds = newAddToItems.map((item) => item._id);
 
     // sort by category, then name
-    newAddedItems = this.sortItems(newAddedItems);
+    newAddToItems = this.sortItems(newAddToItems);
 
     // first set the state which forces a re-render
     this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
+      
+  }
+ 
 
-    // handle user in backend & on failure revert state
-    try {
-      await updateShoppingList(
-        this.props.user._id,
-        newAddedItemIds,
-        newRemovedItemIds
-      );
-    } catch (err) {
-      // revert state back to original
-      this.setState({
-        addedItems: prevAddedItems,
-        removedItems: prevRemovedItems,
-      });
-      console.log("Something went wrong.", err);
-    }
-  };
+  //   // handle user in backend & on failure revert state
+  //   try {
+  //     await updateShoppingList(
+  //       this.props.user._id,
+  //       newAddedItemIds,
+  //       newRemovedItemIds
+  //     );
+  //   } catch (err) {
+  //     // revert state back to original
+  //     this.setState({
+  //       addedItems: prevAddedItems,
+  //       removedItems: prevRemovedItems,
+  //     });
+  //     console.log("Something went wrong.", err);
+  //   }
+  // };
+
+
+
 
   handleRemoveItem = async (itemId) => {
+
+
+
+
+
     // optimistic update
     // store current state in case we need to revert
     const prevAddedItems = this.state.addedItems;
