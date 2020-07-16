@@ -60,7 +60,7 @@ class ShoppingList extends Component {
   };
 
   tallyCategories = () => {
-    const counts = [];
+    // const counts = [];
     let counter = 0;
     this.state.addedItems.forEach((item) => {
       if (item) {
