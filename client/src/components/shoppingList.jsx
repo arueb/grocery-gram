@@ -40,10 +40,11 @@ class ShoppingList extends Component {
       const { data: userData } = await getUserData(user._id);
 
       const addedItemIds = userData.addedItems;
-      const addedItems = this.expandItems(addedItemIds, items);
+      let addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
-      this.sortItems(addedItems);
+      addedItems = this.sortItems(addedItems);
+      console.log("addedItems from expandSL:", addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -64,14 +65,16 @@ class ShoppingList extends Component {
     return expanded;
   };
 
-  // tallyCategories = () => {
-  //   const counts = [];
-  //   this.state.addedItems.forEach((item) => {
-  //     if (item) {
-  //       item.count++
-  //     }
-  //   });
-  // }
+  tallyCategories = () => {
+    // const counts = [];
+    let counter = 0;
+    this.state.addedItems.forEach((item) => {
+      if (item) {
+        counter++;
+      }
+    });
+    console.log("count = ", counter);
+  };
 
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
@@ -82,7 +85,6 @@ class ShoppingList extends Component {
     const prevAddedItems = [...this.state.addedItems];
     let newAddedItems = [...this.state.addedItems, item];
     newAddedItems = this.sortItems(newAddedItems);
-    // let newAddedItemIds = [...this.state.userData.addedItems, item._id];
     const newAddedItemIds = newAddedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
     try {
@@ -100,6 +102,8 @@ class ShoppingList extends Component {
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
+    console.log("addedItems from handleAddBack:", this.state.addedItems);
+    this.tallyCategories();
   };
 
   handleRemoveItem = async (itemId) => {
@@ -297,23 +301,21 @@ class ShoppingList extends Component {
               className="pie"
             ></img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
-              {!addedItems
+              {/* {!addedItems
                 ? null
-                : addedItems.map((item, i) => (
-                    <li
-                      key={i}
-                      // onClick={() => this.handleRemoveItem(item._id)}
-                      style={{
-                        borderTop: 0,
-                        borderBottom: 0,
-                        borderRight: 0,
-                        borderLeft: `15px solid ${getColor(item.category)}`,
-                      }}
-                      className="list-group-item"
-                    >
-                      {item.name}
-                    </li>
-                  ))}
+                : addedItems.map((item) => (
+                  <li
+                    key={item._id}
+                    // onClick={() => this.handleRemoveItem(item._id)}
+                    style={{
+                      borderTop: 0, borderBottom: 0, borderRight: 0,
+                      borderLeft: `15px solid ${getColor(item.category)}`
+                    }}
+                    className="list-group-item"
+                  >
+                    {item.name}
+                  </li>
+                ))} */}
 
               <li>
                 <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
