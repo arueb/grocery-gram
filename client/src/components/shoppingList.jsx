@@ -236,8 +236,26 @@ class ShoppingList extends Component {
               className="pie"
             ></img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
+              {!addedItems
+                ? null
+                : addedItems.map((item) => (
+                  <li
+                    key={item._id}
+                    // onClick={() => this.handleRemoveItem(item._id)}
+                    style={{
+                      borderTop: 0, borderBottom: 0, borderRight: 0,
+                      borderLeft: `15px solid ${getColor(item.category)}`
+                    }}
+                    className="list-group-item"
+                  >
+                    {item.name}
+                  </li>
+                ))}
+
+
+
               <li>
-                <span style={{ color: "red" }}>&#9632;</span> Fruit
+                <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
               </li>
               <li>
                 <span style={{ color: "blue" }}>&#9632;</span> Vegetables
