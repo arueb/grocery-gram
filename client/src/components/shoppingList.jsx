@@ -34,10 +34,11 @@ class ShoppingList extends Component {
       const { data: userData } = await getUserData(user._id);
 
       const addedItemIds = userData.addedItems;
-      const addedItems = this.expandItems(addedItemIds, items);
+      let addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
-      this.sortItems(addedItems);
+      addedItems = this.sortItems(addedItems);
+      console.log("addedItems from expandSL:", addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -58,14 +59,16 @@ class ShoppingList extends Component {
     return expanded;
   };
 
-  // tallyCategories = () => {
-  //   const counts = [];
-  //   this.state.addedItems.forEach((item) => {
-  //     if (item) {
-  //       item.count++
-  //     }
-  //   });
-  // }
+  tallyCategories = () => {
+    const counts = [];
+    let counter = 0;
+    this.state.addedItems.forEach((item) => {
+      if (item) {
+        counter++;
+      }
+    });
+    console.log('count = ', counter);
+  }
 
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
@@ -94,6 +97,8 @@ class ShoppingList extends Component {
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
+    console.log("addedItems from handleAddBack:", this.state.addedItems);
+    this.tallyCategories();
   }
 
   handleRemoveItem = async (itemId) => {
