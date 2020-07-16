@@ -97,9 +97,10 @@ class ShoppingList extends Component {
     
     // sort addedItems lists by category, then by alpha
 
+    // first set the state which forces a re-render
     this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems })
 
-    // handle the user in backend & if it fails revert state back
+    // then handle the user in backend & if it fails revert state
     try {
       await updateShoppingList(this.props.user._id, newAddedItemIds, newRemovedItemIds);
       
@@ -110,7 +111,7 @@ class ShoppingList extends Component {
         addedItems: prevAddedItems,
         removedItems: prevRemovedItems,
       });
-      
+      console.log("Something went wrong.", err);
     }
 
 
