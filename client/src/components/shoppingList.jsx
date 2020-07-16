@@ -71,8 +71,6 @@ class ShoppingList extends Component {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
-  // wondering whether I should setState on userData too? 
-  // I don't think it's necessary since I'm componentDidUpdate will 
   handleAddItemFromSearchBox = async (item) => {
     // optimistic update, so save original state
     const prevAddedItems = [...this.state.addedItems];
