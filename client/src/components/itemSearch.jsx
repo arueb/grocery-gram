@@ -134,6 +134,9 @@ class ItemSearch extends Component {
   ) => {
     this.props.update(suggestion._id, this.props.row);
     console.log("set focus to notes field");
+    if (this.props.clearOnBlur) {
+      this.setState({ value: "" });
+    }
   };
 
   render() {
