@@ -3,7 +3,7 @@ import http from "./httpService";
 const apiEndpoint = "/items";
 
 const categories = [
-  { name: "Fruit", hexColor: "###ff7675" },
+  { name: "Fruit", hexColor: "#ff7675" },
   { name: "Meat/Poultry", hexColor: "#e17055" },
   { name: "Grains", hexColor: "#ffeaa7" },
   { name: "Baking Products", hexColor: "##6c5ce7" },
