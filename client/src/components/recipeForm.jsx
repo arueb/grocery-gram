@@ -3,7 +3,7 @@ import Form from "./common/form";
 import Joi from "joi-browser";
 import auth from "../services/authService";
 import http from "../services/httpService";
-import axios from "axios"
+import axios from "axios";
 
 const UPLOAD_LIST_PLACEHOLDER =
   process.env.REACT_APP_IMAGES_FOLDER + "images/image-uploader-blank.jpg";
@@ -13,7 +13,11 @@ const ImagePreviews = (props) => (
     {props.items.map((item, index) => (
       <img
         key={item + index}
-        src={item}
+        src={
+          item === UPLOAD_LIST_PLACEHOLDER
+            ? UPLOAD_LIST_PLACEHOLDER
+            : URL.createObjectURL(item)
+        }
         alt={index}
         style={{ width: "50px", height: "50px" }}
         onClick={props.onClick}
@@ -59,9 +63,7 @@ class RecipeForm extends Form {
     this.setState({
       data: {
         ...this.state.data,
-        filesToUpload: updatedFiles.concat(
-          URL.createObjectURL(e.target.files[0])
-        ),
+        filesToUpload: updatedFiles.concat(e.target.files[0]),
       },
     });
   }
@@ -91,47 +93,38 @@ class RecipeForm extends Form {
 
   doSubmit = async () => {
     var formData = new FormData();
-    formData.append("name", "sampleFile",)
-    console.log("here comes formdata");
-    console.log(formData);    
-    formData.append("files", this.state.data.filesToUpload[0]);
-    console.log("Appended = " + this.state.data.filesToUpload[0]);
-    console.log("here comes formdata");
-    console.log(formData);
-    console.log("here comes more formdata");
-    for (var key of formData.entries()) {
-      console.log(key[0] + ', ' + key[1]);
-  }
+    formData.append("name", "sampleFile");
+    formData.append("sampleFile", this.state.data.filesToUpload[0]);
 
-    axios.post('http://localhost:3001/api/img', formData, {
-      
+    for (var key of formData.entries()) {
+      console.log(key[0] + ", " + key[1]);
+    }
+
+    axios.post(process.env.REACT_APP_API_URL + "/img", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        "Content-Type": "multipart/form-data",
+      },
     });
   };
 
-  onChangeHandler=event=>{
-
-    console.log(event.target)
-
-}
+  onChangeHandler = (event) => {
+    console.log(event.target);
+  };
 
   render() {
     return (
       <section id="create-recipe-form">
-
-
-    <form ref='uploadForm' 
-      id='uploadForm' 
-      action='http://localhost:3001/api/img' 
-      method='post' 
-      encType="multipart/form-data"
-      onChange={this.onChangeHandler}>
-        <input type="file" name="sampleFile" />
-        <input type='submit' value='Upload!' />
-    </form> 
-
+        <form
+          ref="uploadForm"
+          id="uploadForm"
+          action={process.env.REACT_APP_API_URL + "/img"}
+          method="post"
+          encType="multipart/form-data"
+          onChange={this.onChangeHandler}
+        >
+          <input type="file" name="sampleFile" />
+          <input type="submit" value="Upload!" />
+        </form>
 
         <h1>Create a Recipe</h1>
         <form onSubmit={this.handleSubmit}>
@@ -143,15 +136,12 @@ class RecipeForm extends Form {
               onClick={this.handleThumbnailRemove.bind(this)}
             />
           </div>
-          <label htmlFor="category">
-              Category
-            </label>
+          <label htmlFor="category">Category</label>
           <select
             name="category"
             //defaultValue={this.state.selectValue}
             onChange={this.handleChange}
           >
-            
             <option defaultValue disabled value="Orange">
               Orange
             </option>
