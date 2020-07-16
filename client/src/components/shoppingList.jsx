@@ -38,7 +38,6 @@ class ShoppingList extends Component {
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
       addedItems = this.sortItems(addedItems);
-      console.log("addedItems from expandSL:", addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -60,14 +59,24 @@ class ShoppingList extends Component {
   };
 
   tallyCategories = () => {
+    const { addedItems } = this.state;
     // const counts = [];
-    let counter = 0;
-    this.state.addedItems.forEach((item) => {
-      if (item) {
-        counter++;
+    // let counter = 0;
+    let cats = [];
+    for (let i = 0; i < addedItems.length; i++) {
+      console.log("cats:", cats);
+      const cat = addedItems[i].category;
+      if (!cats.includes(cat)) {
+        console.log("new category: ", cat);
       }
-    });
-    console.log('count = ', counter);
+    }
+    
+      // let catObj = {
+      //   name: item.category,
+
+      // }
+
+    // console.log('count = ', counter);
   }
 
   sortItems = (items) => {
@@ -97,8 +106,6 @@ class ShoppingList extends Component {
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
-    console.log("addedItems from handleAddBack:", this.state.addedItems);
-    this.tallyCategories();
   }
 
   handleRemoveItem = async (itemId) => {
@@ -192,7 +199,11 @@ class ShoppingList extends Component {
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
-            <h2>Shopping List</h2>
+            <h2>Shopping List
+              <button 
+              >Tally
+              </button>
+            </h2>
           </div>
           <div className="col-md"></div>
         </div>
