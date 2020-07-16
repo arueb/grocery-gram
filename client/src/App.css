@@ -169,8 +169,7 @@ div.list-group.lst-grp-hover li:hover {
 .react-autosuggest__suggestion:not(:first-child) {
   /*   border-top: 1px solid #ddd; */
 }
-
-h .react-autosuggest__suggestion--focused {
+.react-autosuggest__suggestion--focused {
   background-color: brown;
   color: #fff;
 }

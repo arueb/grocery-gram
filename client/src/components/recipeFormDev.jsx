@@ -7,7 +7,7 @@ import { getRecipe } from "../services/recipeService";
 import { FaTrash, FaRegHandScissors } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 
-class RecipeForm extends Form {
+class RecipeFormDev extends Form {
   state = {
     errors: {},
     units: [],
@@ -169,4 +169,4 @@ class RecipeForm extends Form {
   }
 }
 
-export default RecipeForm;
+export default RecipeFormDev;
