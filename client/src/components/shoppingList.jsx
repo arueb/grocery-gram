@@ -37,7 +37,7 @@ class ShoppingList extends Component {
       const addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
-      // sort both lists by category
+      this.sortItems(addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -58,11 +58,17 @@ class ShoppingList extends Component {
     return expanded;
   };
 
+  tallyCategories = () => {
+    
+  }
+
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
-  handleAddItemSearchBox = () => {}
+  handleAddItemFromSearchBox = (itemId) => {
+
+  }
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
