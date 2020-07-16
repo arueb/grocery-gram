@@ -132,9 +132,7 @@ class RecipeFormDev extends Form {
                     <td>
                       <ItemSearch
                         items={this.props.items}
-                        // updateIngredient={this.handleIngredientUpdate}
                         update={this.handleIngredientUpdate}
-                        // validateItem={this.handleValidation}
                         row={i}
                         initialValue={
                           ingredients[i].item ? ingredients[i].item.name : ""
