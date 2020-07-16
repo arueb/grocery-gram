@@ -20,13 +20,13 @@ class Form extends Component {
   };
 
   validateProperty = ({ name, value }) => {
-    console.log("validating property...");
+    // console.log("validating property...");
     const obj = { [name]: value };
-    console.log("obj:", obj);
+    // console.log("obj:", obj);
     const schema = { [name]: this.schema[name] };
-    console.log("schema", schema);
+    // console.log("schema", schema);
     const { error } = Joi.validate(obj, schema);
-    console.log("error:", error);
+    // console.log("error:", error);
     return error ? error.details[0].message : null;
   };
 
@@ -61,7 +61,7 @@ class Form extends Component {
   };
 
   renderButton(label) {
-    console.log(this.validate());
+    // console.log(this.validate());
     return <button className="btn btn-primary">{label}</button>;
   }
 

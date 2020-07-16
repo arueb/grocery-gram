@@ -92,13 +92,13 @@ tr:hover .hover-icon {
 }
 
 .react-autosuggest__input {
-  width: 240px;
-  height: 30px;
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
   padding: 10px 20px;
   font-family: Helvetica, sans-serif;
   font-weight: 300;
   font-size: 16px;
-  border: 1px solid #aaa;
+  border: 1px solid #ced4da;
   border-radius: 4px;
 }
 
@@ -118,9 +118,8 @@ tr:hover .hover-icon {
 .react-autosuggest__container--open .react-autosuggest__suggestions-container {
   display: block;
   position: absolute;
-  top: 56px;
-  width: 240px;
-
+  /* width: 240px; */
+  width: 100%;
   background-color: #fff;
   font-family: Helvetica, sans-serif;
   font-weight: 300;
@@ -134,6 +133,7 @@ tr:hover .hover-icon {
   margin: 0;
   padding: 0;
 }
+
 .list-group {
   border-radius: 0;
 }
@@ -143,15 +143,15 @@ tr:hover .hover-icon {
   cursor: pointer;
 }
 
-div.list-group.lst-grp-striped li:nth-of-type(odd){
-    background: #f1f1f1;
+div.list-group.lst-grp-striped li:nth-of-type(odd) {
+  background: #f1f1f1;
 }
-div.list-group.lst-grp-striped li:nth-of-type(even){
-    background: #ffffff;
+div.list-group.lst-grp-striped li:nth-of-type(even) {
+  background: #ffffff;
 }
 div.list-group.lst-grp-hover li:hover {
-    background: #d3d3d3;
-    cursor: pointer;
+  background: #d3d3d3;
+  cursor: pointer;
 }
 
 .react-autosuggest__suggestion {
@@ -181,26 +181,6 @@ div.list-group.lst-grp-hover li:hover {
   border-radius: 25px;
 }
 
-.fruit {
-  /*   background-image: url(https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/48.jpg); */
-  background-color: coral;
-}
-
-.cereal {
-  /*   background-image: url(https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/48.jpg); */
-  background-color: skyblue;
-}
-
-.meat {
-  /*   background-image: url(https://s3.amazonaws.com/uifaces/faces/twitter/mtnmissy/48.jpg); */
-  background-color: gold;
-}
-
-.steveodom {
-  /*   background-image: url(https://s3.amazonaws.com/uifaces/faces/twitter/steveodom/48.jpg); */
-  background-color: pink;
-}
-
 .name {
   /*   margin: 10px; */
   /*   margin-left: 68px;
@@ -214,4 +194,18 @@ div.list-group.lst-grp-hover li:hover {
 
 .react-autosuggest__suggestion--focused .highlight {
   color: #fff;
+}
+
+.table th,
+.table td {
+  border-top: initial;
+  padding: 0.4rem;
+}
+
+.table thead th {
+  border-bottom: initial;
+}
+
+td.delete {
+  padding-top: 0.75rem;
 }
