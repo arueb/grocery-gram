@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash"
 import { getUserData, updateShoppingList } from "../services/shoppingListService";
+import { getColor } from "../services/itemService";
 
 class ShoppingList extends Component {
   state = {
@@ -175,12 +176,12 @@ class ShoppingList extends Component {
                 ? null
                 : addedItems.map((item) => (
                     <li
-                      key={item._id}
-                      onClick={() => this.handleRemoveItem(item._id)}
-                      className="list-group-item border-0 "
+                    key={item._id}
+                    onClick={() => this.handleRemoveItem(item._id)}
+                    className={"list-group-item border-0 "+ getColor(item.category)}
                     >
                     {item.name}
-                    <span className=""> {item.category}</span>
+                    <span className=""> ({item.category})</span>
                       <span className="sl-price">${item.price}</span>
                     </li>
                   ))}
