@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import _ from "lodash"
-import { getUserData, updateShoppingList } from "../services/shoppingListService";
+import _ from "lodash";
+import {
+  getUserData,
+  updateShoppingList,
+} from "../services/shoppingListService";
 import { getColor } from "../services/itemService";
+import ItemSearch from "../components/itemSearch";
 
 class ShoppingList extends Component {
   state = {
@@ -19,6 +23,8 @@ class ShoppingList extends Component {
   }
 
   async componentDidMount() {
+    // Bind the this context to the handler function
+    this.handleUpdate = this.handleUpdate.bind(this);
     await this.expandShoppingLists();
   }
 
@@ -76,7 +82,8 @@ class ShoppingList extends Component {
     const prevAddedItems = [...this.state.addedItems];
     let newAddedItems = [...this.state.addedItems, item];
     newAddedItems = this.sortItems(newAddedItems);
-    let newAddedItemIds = [...this.state.userData.addedItems, item._id];
+    // let newAddedItemIds = [...this.state.userData.addedItems, item._id];
+    const newAddedItemIds = newAddedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
     try {
       await updateShoppingList(
@@ -84,17 +91,16 @@ class ShoppingList extends Component {
         newAddedItemIds,
         this.state.userData.removedItems
       );
-    }
-    catch (err) {
+    } catch (err) {
       // revert state back to original
       this.setState({ addedItems: prevAddedItems });
       console.log("Something went wrong.", err);
     }
-  }
+  };
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
-  }
+  };
 
   handleRemoveItem = async (itemId) => {
     this.moveItemsInLists(itemId, "removeItem");
@@ -117,7 +123,7 @@ class ShoppingList extends Component {
       currExtractFromItems = this.state.addedItems;
       currAddToItems = this.state.removedItems;
     }
-    // extract item from currExtractFromItems 
+    // extract item from currExtractFromItems
     let newExtractFromItems = [];
     const newExtractFromItemIds = [];
     let itemToAdd;
@@ -136,14 +142,16 @@ class ShoppingList extends Component {
     if (action === "addBack") {
       newAddToItems = this.sortItems(newAddToItems);
       this.setState({
-        addedItems: newAddToItems, 
-        removedItems: newExtractFromItems });
-    }
-    else { // removeItem
+        addedItems: newAddToItems,
+        removedItems: newExtractFromItems,
+      });
+    } else {
+      // removeItem
       newExtractFromItems = this.sortItems(newExtractFromItems);
       this.setState({
-        addedItems: newExtractFromItems, 
-        removedItems: newAddToItems });
+        addedItems: newExtractFromItems,
+        removedItems: newAddToItems,
+      });
     }
     // handle user shopping list in backend according to action
     // on failure revert state
@@ -152,8 +160,7 @@ class ShoppingList extends Component {
     if (action === "addBack") {
       newAddedItemIds = newAddToItemIds;
       newRemovedItemIds = newExtractFromItemIds;
-    }
-    else {
+    } else {
       newAddedItemIds = newExtractFromItemIds;
       newRemovedItemIds = newAddToItemIds;
     }
@@ -172,7 +179,24 @@ class ShoppingList extends Component {
       });
       console.log("Something went wrong.", err);
     }
-  };  
+  };
+
+  // handle updating ingredients from child itemSearch component
+  // updates itemId
+  handleUpdate(value, row = null) {
+    console.log("handling update");
+    console.log(value);
+    const items = [...this.props.items];
+    // console.log(items);
+    if (value) {
+      const item = this.expandItemById(value, items);
+      this.handleAddItemFromSearchBox(item);
+    }
+
+    // const ingredients = [...this.state.ingredients];
+    // ingredients[row].itemId = value;
+    // this.setState({ ingredients });
+  }
 
   // handleChooseStaple
 
@@ -193,16 +217,27 @@ class ShoppingList extends Component {
         </div>
         <div className="row">
           <div className="col-md-5 order-md-4">
-            <h4>THIS WILL BE A SEARCH BOX</h4>
+            <div className="itemSearch pb-3">
+              <ItemSearch
+                items={this.props.items}
+                update={this.handleUpdate}
+                clearOnBlur={true}
+                initialValue={""}
+              />
+            </div>
             <div className="list-group lst-grp-hover lst-grp-striped">
               {!addedItems
                 ? null
-                : addedItems.map((item) => (
+                : addedItems.map((item, i) => (
                     <li
-                      key={item._id}
+                      //   key={item._id}
+                      key={i}
                       onClick={() => this.handleRemoveItem(item._id)}
-                      style={{ borderTop: 0, borderBottom: 0,borderRight: 0,
-                        borderLeft: `15px solid ${getColor(item.category)}`
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: `15px solid ${getColor(item.category)}`,
                       }}
                       className="list-group-item"
                     >
@@ -214,12 +249,15 @@ class ShoppingList extends Component {
             <div className="removed list-group lst-grp-hover">
               {!removedItems
                 ? null
-                : removedItems.map((item) => (
+                : removedItems.map((item, i) => (
                     <li
-                      key={item._id}
+                      key={i}
                       onClick={() => this.handleAddBackItem(item._id)}
-                      style={{ borderTop: 0, borderBottom: 0, borderRight: 0,
-                        borderLeft: "15px solid #fff"
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: "15px solid #fff",
                       }}
                       className="list-group-item"
                     >
@@ -259,25 +297,23 @@ class ShoppingList extends Component {
               className="pie"
             ></img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
-
-              
               {!addedItems
                 ? null
-                : addedItems.map((item) => (
-                  <li
-                    key={item._id}
-                    // onClick={() => this.handleRemoveItem(item._id)}
-                    style={{
-                      borderTop: 0, borderBottom: 0, borderRight: 0,
-                      borderLeft: `15px solid ${getColor(item.category)}`
-                    }}
-                    className="list-group-item"
-                  >
-                    {item.name}
-                  </li>
-                ))}
-
-
+                : addedItems.map((item, i) => (
+                    <li
+                      key={i}
+                      // onClick={() => this.handleRemoveItem(item._id)}
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: `15px solid ${getColor(item.category)}`,
+                      }}
+                      className="list-group-item"
+                    >
+                      {item.name}
+                    </li>
+                  ))}
 
               <li>
                 <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
