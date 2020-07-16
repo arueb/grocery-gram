@@ -62,7 +62,7 @@ class ItemSearch extends Component {
   }
 
   async componentDidMount() {
-    const { initialValue, row } = this.props;
+    const { initialValue } = this.props;
     this.setState({ value: initialValue });
   }
 
@@ -76,7 +76,7 @@ class ItemSearch extends Component {
   onBlur = (event, { highlightedSuggestion }) => {
     // TODO: test to make sure this is tab key event
     if (this.state.suggestions.length && highlightedSuggestion) {
-      const suggestionId = highlightedSuggestion._id;
+      // const suggestionId = highlightedSuggestion._id;
       // there is a suggestion to use
 
       // set the value (ingredient name) in local state

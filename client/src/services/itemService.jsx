@@ -13,9 +13,9 @@ const categories = [
   { name: "Nuts", hexColor: "#fdcb6e" },
 ];
 
-function itemUrl(id) {
-  return `${apiEndpoint}/${id}`;
-}
+// function itemUrl(id) {
+//   return `${apiEndpoint}/${id}`;
+// }
 
 export function getItems() {
   //   console.log("getting items...");

@@ -4,7 +4,7 @@ import Joi from "joi-browser";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
 import { getRecipe } from "../services/recipeService";
-import { FaTrash, FaRegHandScissors } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 
 class RecipeFormDev extends Form {
