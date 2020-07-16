@@ -147,7 +147,8 @@ class ShoppingList extends Component {
                       onClick={() => this.handleRemoveItem(item._id)}
                       className="list-group-item border-0 "
                     >
-                      {item.name}
+                    {item.name}
+                    <span className=""> {item.category}</span>
                       <span className="sl-price">${item.price}</span>
                     </li>
                   ))}
