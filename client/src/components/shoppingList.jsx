@@ -60,6 +60,8 @@ class ShoppingList extends Component {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
+  handleAddItemSearchBox = () => {}
+
   handleAddBackItem = async (itemId) => {
     // optimistic update
     // store current state in case we need to revert
@@ -87,7 +89,7 @@ class ShoppingList extends Component {
     // first set the state which forces a re-render
     this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
 
-    // then handle the user in backend & if it fails revert state
+    // handle user in backend & on failure revert state
     try {
       await updateShoppingList(
         this.props.user._id,
@@ -131,7 +133,7 @@ class ShoppingList extends Component {
     // first set the state which forces a re-render
     this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
 
-    // then handle the user in backend & if it fails revert state
+        // handle user in backend & on failure revert state
     try {
       await updateShoppingList(
         this.props.user._id,
