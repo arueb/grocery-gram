@@ -4,7 +4,7 @@ const fileUpload = require("express-fileupload");
 
 // Based on example from https://github.com/richardgirges/express-fileupload/tree/master/example#basic-file-upload
 router.post('/', function(req, res) {
-  console.log(req);
+
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }

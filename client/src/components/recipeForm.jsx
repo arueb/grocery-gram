@@ -3,12 +3,12 @@ import Form from "./common/form";
 import Joi from "joi-browser";
 // import auth from "../services/authService";
 // import http from "../services/httpService";
-import axios from "axios"
+import axios from "axios";
 
 const UPLOAD_LIST_PLACEHOLDER =
   process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
 
-const ImagePreviews = (props) => (
+const ImagePreviews = React.forwardRef((props, ref) => (
   <div>
     {props.items.map((item, index) => (
       <img
@@ -23,23 +23,30 @@ const ImagePreviews = (props) => (
         onClick={props.onClick}
       />
     ))}
+    <img
+      key="imageUploadPlaceholder"
+      src={UPLOAD_LIST_PLACEHOLDER}
+      onClick={ref.click()}
+      alt="upload button"
+    />
   </div>
-);
+));
 
 class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        title: "",
-        category: "",
+        title: "Testing Recipe Name",
+        category: "Testing Food",
         publish: "on",
-        instructions: "",
+        instructions: "Testing Cook the food.",
         filesToUpload: [UPLOAD_LIST_PLACEHOLDER],
       },
       errors: {},
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
+    this.myRef = React.createRef();
   }
 
   // define schema for input validation in browser
@@ -53,13 +60,14 @@ class RecipeForm extends Form {
 
   handleThumbnailAdd(e) {
     let updatedFiles = this.state.data.filesToUpload;
-    if (
-      updatedFiles.length === 1 &&
-      updatedFiles[0] === UPLOAD_LIST_PLACEHOLDER
-    ) {
-      updatedFiles = [];
-    }
-
+    //    if (
+    //      updatedFiles.length === 1 &&
+    //      updatedFiles[0] === UPLOAD_LIST_PLACEHOLDER
+    //    ) {
+    //      updatedFiles = [];
+    //    }
+    //    console.log(UPLOAD_LIST_PLACEHOLDER);
+    //    console.log(e.target.files[0]);
     this.setState({
       data: {
         ...this.state.data,
@@ -73,9 +81,9 @@ class RecipeForm extends Form {
     var index = remainingFiles.indexOf(e.target.src);
     if (index !== -1) {
       remainingFiles.splice(index, 1);
-      if (remainingFiles.length === 0) {
-        remainingFiles = [UPLOAD_LIST_PLACEHOLDER];
-      }
+      //      if (remainingFiles.length === 0) {
+      //        remainingFiles = [UPLOAD_LIST_PLACEHOLDER];
+      //      }
       this.setState({
         data: {
           ...this.state.data,
@@ -101,7 +109,6 @@ class RecipeForm extends Form {
     }
 
     axios.post(process.env.REACT_APP_API_URL + "/img", formData, {
-      
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -112,31 +119,45 @@ class RecipeForm extends Form {
     console.log(event.target);
   };
 
+  onChangeFile(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    var file = event.target.files[0];
+    console.log(file);
+    this.setState({ file }); /// if you want to upload latter
+  }
+
+  focusTextInput() {
+    // Explicitly focus the text input using the raw DOM API
+    // Note: we're accessing "current" to get the DOM node
+    this.textInput.focus();
+  }
+  
   render() {
     return (
       <section id="create-recipe-form">
-        <form
-          ref="uploadForm"
-          id="uploadForm"
-          action={process.env.REACT_APP_API_URL + "/img"}
-          method="post"
-          encType="multipart/form-data"
-          onChange={this.onChangeHandler}
-        >
-          <input type="file" name="sampleFile" />
-          <input type="submit" value="Upload!" />
-        </form>
+        <input
+          id="myInput"
+          type="file"
+          ref={this.myRef}
+          style={{ display: "none" }}
+//          onChange={this.onChangeFile.bind(this)}
+        />
 
         <h1>Create a Recipe</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Recipe Name*")}
+
           <div>
             <input type="file" onChange={this.handleThumbnailAdd} />
             <ImagePreviews
               items={this.state.data.filesToUpload}
               onClick={this.handleThumbnailRemove.bind(this)}
+              focusTextInput={this.focusTextInput}
+              ref={this.myRef}
             />
           </div>
+
           <label htmlFor="category">Category</label>
           <select
             name="category"
