@@ -6,7 +6,7 @@ const categories = [
   { name: "Fruit", hexColor: "#ff7675" },
   { name: "Meat/Poultry", hexColor: "#e17055" },
   { name: "Grains", hexColor: "#ffeaa7" },
-  { name: "Baking Products", hexColor: "##6c5ce7" },
+  { name: "Baking Products", hexColor: "#6c5ce7" },
   { name: "Confections", hexColor: "#fd79a8" },
   { name: "Dairy", hexColor: "#a29bfe" },
   { name: "Cereal", hexColor: "#fab1a0" },

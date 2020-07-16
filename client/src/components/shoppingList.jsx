@@ -8,6 +8,7 @@ class ShoppingList extends Component {
     userData: null,
     addedItems: null,
     removedItems: null,
+    catCounts: null,
     staples: [],
     recipes: [],
     errors: {},
@@ -36,7 +37,7 @@ class ShoppingList extends Component {
       const addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
-      // sort both lists by category
+      this.sortItems(addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -57,84 +58,106 @@ class ShoppingList extends Component {
     return expanded;
   };
 
+  // tallyCategories = () => {
+  //   const counts = [];
+  //   this.state.addedItems.forEach((item) => {
+  //     if (item) {
+  //       item.count++
+  //     }
+  //   });
+  // }
+
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
-  handleAddItemSearchBox = () => {}
+  handleAddItemFromSearchBox = async (item) => {
+    // optimistic update, so save original state
+    const prevAddedItems = [...this.state.addedItems];
+    let newAddedItems = [...this.state.addedItems, item];
+    newAddedItems = this.sortItems(newAddedItems);
+    let newAddedItemIds = [...this.state.userData.addedItems, item._id];
+    this.setState({ addedItems: newAddedItems });
+    try {
+      await updateShoppingList(
+        this.props.user._id,
+        newAddedItemIds,
+        this.state.userData.removedItems
+      );
+    }
+    catch (err) {
+      // revert state back to original
+      this.setState({ addedItems: prevAddedItems });
+      console.log("Something went wrong.", err);
+    }
+  }
 
   handleAddBackItem = async (itemId) => {
-    // optimistic update
-    // store current state in case we need to revert
-    const prevAddedItems = this.state.addedItems;
-    const prevRemovedItems = this.state.removedItems;
-
-    // take item out of removedItems and create new removedItemIds array
-    const newRemovedItems = [];
-    const newRemovedItemIds = [];
-    let addBackItem;
-    this.state.removedItems.forEach((item) => {
-      if (item._id !== itemId) {
-        newRemovedItems.push(item);
-        newRemovedItemIds.push(item._id);
-      } else addBackItem = item;
-    });
-
-    // push item to end of addedItems and create new addedItemIds array
-    let newAddedItems = [...this.state.addedItems, addBackItem];
-    const newAddedItemIds = newAddedItems.map((item) => item._id);
-
-    // sort by category, then name
-    newAddedItems = this.sortItems(newAddedItems);
-
-    // first set the state which forces a re-render
-    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
-
-    // handle user in backend & on failure revert state
-    try {
-      await updateShoppingList(
-        this.props.user._id,
-        newAddedItemIds,
-        newRemovedItemIds
-      );
-    } catch (err) {
-      // revert state back to original
-      this.setState({
-        addedItems: prevAddedItems,
-        removedItems: prevRemovedItems,
-      });
-      console.log("Something went wrong.", err);
-    }
-  };
+    this.moveItemsInLists(itemId, "addBack");
+  }
 
   handleRemoveItem = async (itemId) => {
+    this.moveItemsInLists(itemId, "removeItem");
+  };
+
+  moveItemsInLists = async (itemId, action) => {
     // optimistic update
     // store current state in case we need to revert
     const prevAddedItems = this.state.addedItems;
     const prevRemovedItems = this.state.removedItems;
 
-    // take item out of addedItems and create new addedItemIds array
-    let newAddedItems = [];
-    const newAddedItemIds = [];
-    let removedItem;
-    this.state.addedItems.forEach((item) => {
+    let currExtractFromItems;
+    let currAddToItems;
+    // addBack: extract from removed, add into added
+    if (action === "addBack") {
+      currExtractFromItems = this.state.removedItems;
+      currAddToItems = this.state.addedItems;
+    } // removeItem: extract from added, add into removed
+    else if (action === "removeItem") {
+      currExtractFromItems = this.state.addedItems;
+      currAddToItems = this.state.removedItems;
+    }
+    // extract item from currExtractFromItems 
+    let newExtractFromItems = [];
+    const newExtractFromItemIds = [];
+    let itemToAdd;
+    currExtractFromItems.forEach((item) => {
       if (item._id !== itemId) {
-        newAddedItems.push(item);
-        newAddedItemIds.push(item._id);
-      } else removedItem = item;
+        newExtractFromItems.push(item);
+        newExtractFromItemIds.push(item._id);
+      } else itemToAdd = item;
     });
 
-    // add item to beginning of removedItems and create new removedItemIds array
-    const newRemovedItems = [removedItem, ...this.state.removedItems];
-    const newRemovedItemIds = newRemovedItems.map((item) => item._id);
+    // push item to currAddToItems
+    let newAddToItems = [itemToAdd, ...currAddToItems];
+    const newAddToItemIds = newAddToItems.map((item) => item._id);
 
-    // sort by category, then name
-    newAddedItems = this.sortItems(newAddedItems);
+    // sort and set state according to action, forces a re-render
+    if (action === "addBack") {
+      newAddToItems = this.sortItems(newAddToItems);
+      this.setState({
+        addedItems: newAddToItems, 
+        removedItems: newExtractFromItems });
+    }
+    else { // removeItem
+      newExtractFromItems = this.sortItems(newExtractFromItems);
+      this.setState({
+        addedItems: newExtractFromItems, 
+        removedItems: newAddToItems });
+    }
+    // handle user shopping list in backend according to action
+    // on failure revert state
+    let newAddedItemIds;
+    let newRemovedItemIds;
+    if (action === "addBack") {
+      newAddedItemIds = newAddToItemIds;
+      newRemovedItemIds = newExtractFromItemIds;
+    }
+    else {
+      newAddedItemIds = newExtractFromItemIds;
+      newRemovedItemIds = newAddToItemIds;
+    }
 
-    // first set the state which forces a re-render
-    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
-
-        // handle user in backend & on failure revert state
     try {
       await updateShoppingList(
         this.props.user._id,
@@ -149,7 +172,7 @@ class ShoppingList extends Component {
       });
       console.log("Something went wrong.", err);
     }
-  };
+  };  
 
   // handleChooseStaple
 
@@ -236,8 +259,28 @@ class ShoppingList extends Component {
               className="pie"
             ></img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
+
+              
+              {!addedItems
+                ? null
+                : addedItems.map((item) => (
+                  <li
+                    key={item._id}
+                    // onClick={() => this.handleRemoveItem(item._id)}
+                    style={{
+                      borderTop: 0, borderBottom: 0, borderRight: 0,
+                      borderLeft: `15px solid ${getColor(item.category)}`
+                    }}
+                    className="list-group-item"
+                  >
+                    {item.name}
+                  </li>
+                ))}
+
+
+
               <li>
-                <span style={{ color: "red" }}>&#9632;</span> Fruit
+                <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
               </li>
               <li>
                 <span style={{ color: "blue" }}>&#9632;</span> Vegetables
