@@ -92,7 +92,7 @@ tr:hover .hover-icon {
 }
 
 .react-autosuggest__input {
-  width: 240px;
+  width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
   padding: 10px 20px;
   font-family: Helvetica, sans-serif;

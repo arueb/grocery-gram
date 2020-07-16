@@ -130,7 +130,7 @@ class ItemSearch extends Component {
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: "Search ingredients...",
+      placeholder: "Search ...",
       value,
       onChange: this.onChange,
       onBlur: this.onBlur,
