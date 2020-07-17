@@ -201,10 +201,38 @@ td.delete {
   padding-top: 0.75rem;
 }
 
-/* .itemList{
-    padding-bottom:
-} */
-
 .shop-list {
   margin-bottom: 2em;
+}
+
+.is-active {
+  color: red;
+}
+
+/* Strikethrough */
+@keyframes strike {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.strike {
+  position: relative;
+  padding-right: 2%;
+}
+.strike::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: -3%;
+  width: 0;
+  height: 1px;
+  background: black;
+  animation-name: strike;
+  animation-duration: 0.2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
