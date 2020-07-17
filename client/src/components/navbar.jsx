@@ -4,7 +4,7 @@ import { FaGgCircle, FaUserCircle, FaSignOutAlt, FaUser } from "react-icons/fa";
 
 const Navbar = ({ user }) => {
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-info">
+    <nav className="navbar navbar-expand-md navbar-dark bg-info sticky-top py-1">
       <div className="container">
         <Link to="/" className="navbar-brand">
           {<FaGgCircle size={50} />}

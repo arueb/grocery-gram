@@ -1,3 +1,19 @@
+/*
+####################################################
+M E D I A  Q U E R I E S
+####################################################
+*/
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Bootstrap 4 breakpoints
+*/
+
+/* 
+Extra small devices (portrait phones, less than 576px) 
+No media query since this is the default in Bootstrap because it is "mobile first"
+*/
+
 .App {
   text-align: center;
 }
@@ -230,9 +246,81 @@ td.delete {
   width: 0;
   height: 1px;
   background: black;
+  /* animation: strike 3s 0.1s ease-in; */
   animation-name: strike;
   animation-duration: 0.2s;
-  animation-timing-function: linear;
+  animation-timing-function: ease-in;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+  animation-delay: 0.05s;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries
+*/
+
+/* Set width to make card deck cards 100% width */
+@media (max-width: 575px) {
+  .ingredients-form {
+    margin: 0 -15px;
+  }
+
+  .ingredients-form thead {
+    display: none;
+  }
+  .ingredients-form td {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+  }
+
+  .ingredients-form .qty,
+  .ingredients-form .unit {
+    width: 50%;
+    padding-top: 1em;
+  }
+  .ingredients-form .qty {
+    padding-right: 0.5rem;
+  }
+  .ingredients-form .unit {
+    padding-left: 0.5rem;
+  }
+
+  .ingredients-form .item {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .ingredients-form .notes {
+    width: 85%;
+    padding-bottom: 1em;
+    padding-right: 0.5rem;
+  }
+  .ingredients-form .delete {
+    padding-left: 0.5rem;
+    padding-top: 0.6rem;
+  }
+  .ingredients-form tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .ingredients-form .btn {
+    margin-left: 15px;
+  }
 }
