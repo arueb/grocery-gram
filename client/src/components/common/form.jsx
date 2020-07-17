@@ -65,13 +65,14 @@ class Form extends Component {
     return <button className="btn btn-primary">{label}</button>;
   }
 
-  renderInput(name, label, type = "text") {
+  renderInput(name, label, type = "text", placeholder = "") {
     const { data, errors } = this.state;
     return (
       <Input
         type={type}
         name={name}
         label={label}
+        placeholder={placeholder}
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
@@ -79,7 +80,14 @@ class Form extends Component {
     );
   }
 
-  renderMultiRowInput(name, label, row, valueField, type = "text") {
+  renderMultiRowInput(
+    name,
+    label,
+    row,
+    valueField,
+    type = "text",
+    placeholder = ""
+  ) {
     const { errors } = this.state;
     const stateField = this.state[valueField];
 
@@ -88,6 +96,7 @@ class Form extends Component {
         type={type}
         name={name}
         label={label}
+        placeholder={placeholder}
         value={stateField[row][name]}
         onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
         error={errors[name]}
@@ -109,14 +118,15 @@ class Form extends Component {
     );
   }
 
-  renderMultiRowSelect(name, label, row, valueField, options) {
+  renderMultiRowSelect(name, label, row, valueField, options, placeholder) {
     const { errors } = this.state;
     const stateField = this.state[valueField];
-    // console.log("value of multirow select", data.ingredients[row][name]);
+
     return (
       <Select
         name={name}
         label={label}
+        // placeholder={placeholder}
         value={stateField[row][name]}
         options={options}
         onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
