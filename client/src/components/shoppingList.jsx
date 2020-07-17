@@ -66,16 +66,27 @@ class ShoppingList extends Component {
 
   tallyCategories = () => {
     const { addedItems } = this.state;
-    // const counts = [];
-    // let counter = 0;
+    let catCounts = [];
     let cats = [];
     for (let i = 0; i < addedItems.length; i++) {
-      console.log("cats:", cats);
-      const cat = addedItems[i].category;
-      if (!cats.includes(cat)) {
-        console.log("new category: ", cat);
+      console.log("before possible add to cats:", cats);
+      const catName = addedItems[i].category;
+      if (!cats.includes(catName)) {
+        cats.push(catName);
+        console.log("new category: ", catName);
+        let catObj = {
+          category: catName,
+          count: 1,
+          cost: addedItems[i].price
+        }
+        catCounts.push(catObj);
       }
+      else {
+
+      }
+      console.log("after possible add to cats:", cats);
     }
+    console.log("catCounts:", catCounts);
   }
     
 
@@ -108,7 +119,6 @@ class ShoppingList extends Component {
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
-    this.tallyCategories();
   };
 
   handleRemoveItem = async (itemId) => {
@@ -222,6 +232,7 @@ class ShoppingList extends Component {
           <div className="col-md">
             <h2>Shopping List
               <button 
+                onClick={() => this.tallyCategories()}
               >Tally
               </button>
             </h2>
