@@ -23,14 +23,19 @@ class ShoppingList extends Component {
 
   async componentDidUpdate() {
     await this.expandShoppingLists();
-    this.handleUpdatePieChart(); // BUG - causes infinite loop
   }
 
   async componentDidMount() {
+    this.setState({ totalNumItems: 0 })
+    this.setState({ totalPriceItems: 0 })
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
     await this.expandShoppingLists();
-    this.handleUpdatePieChart();
+    // a setTimeout hack to get pie chart to render on mount
+    // because addedItems aren't available immediately
+    setTimeout(() => {
+      this.handleUpdatePieChart();
+    }, 200);
   }
 
   async expandShoppingLists() {
@@ -87,26 +92,31 @@ class ShoppingList extends Component {
         newAddedItemIds,
         removedItemIds
       );
+      this.handleUpdatePieChart();
     } catch (err) {
       // revert state back to original
       this.setState({ addedItems: prevAddedItems });
+      this.handleUpdatePieChart();
       console.log("Something went wrong.", err);
     }
   };
 
   handleAddBackItem = async (itemId) => {
-    this.moveItemsInLists(itemId, "addBack");
+    await this.moveItemsInLists(itemId, "addBack");
     this.handleUpdatePieChart();
   };
 
   handleRemoveItem = async (itemId) => {
+    // this.handleUpdatePieChart();
     console.log("clicked an item");
     this.setState({ activeId: itemId });
 
     setTimeout(() => {
       this.moveItemsInLists(itemId, "removeItem");
+      this.handleUpdatePieChart();
       this.setState({ activeId: null });
     }, 300);
+    
   };
 
   moveItemsInLists = async (itemId, action) => {
@@ -196,9 +206,10 @@ class ShoppingList extends Component {
     }
   }  
 
-  calcCategories = () => {
-    console.log("doing calcCategories..");
+  handleUpdatePieChart = () => {
+    // create array of category objects for use in pie chart
     const { addedItems } = this.state;
+    if (!addedItems) return;
     let catStats = [];
     let cats = [];
     for (let i = 0; i < addedItems.length; i++) {
@@ -221,48 +232,15 @@ class ShoppingList extends Component {
         catObj.cost += addedItems[i].price;
       }
     }
-    this.setState({ catStats });
-  }
-
-  calcTotals = () => {
-    console.log("doing calcTotals!");
-    const { catStats } = this.state;
-    let totalNumItems = 0;
-    // let totalPriceItems = 0;
-    for (const cat of catStats) {
-      console.log("cat:", cat);
-      totalNumItems += cat.count;
+    // calculate item totals
+    let totalNumItems = addedItems.length;
+    let totalPriceItems = 0;
+    for (let i = 0; i < addedItems.length; i++) {
+      console.log('i=', i);
+      totalPriceItems += addedItems[i].price;
     }
-    console.log("total:", totalNumItems);
-    this.setState({ totalNumItems })
-  }
-
-  handleUpdatePieChart = () => {
-    // this should go in componentDidMount
-    const { addedItems, catStats } = this.state;
-    if (!addedItems) return;
-    if (!catStats) console.log("no catstats yet");
-    if (!catStats) {
-    // if (addedItems) {
-      console.log("we have addedItems but we do not have catStats");
-      console.log("doing handleUpdatePieChart");
-      this.calcCategories();
-      const { catStats } = this.state;
-      console.log("catStats:", catStats);
-      this.calcTotals();
-      this.setState({ catStats });
-      // draw pie chart
-    }
-    else { // we have catStats 
-      // tread carefully
-      console.log("in handleUpdatePieChart - have addedItems & catStats!");
-    }
-
-  };
-
-
-
-  // 
+    this.setState({ catStats, totalNumItems, totalPriceItems });
+  } 
 
   // updateMyStaples
 
@@ -274,19 +252,14 @@ class ShoppingList extends Component {
 
   render() {
     const { addedItems, removedItems, totalNumItems,
-            totalPriceItems } = this.state;
+            totalPriceItems, catStats } = this.state;
 
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
-            <h2>Shopping List
-              {/* <button 
-                onClick={() => this.handleUpdatePieChart()}
-              >Do Pie Chart
-              </button> */}
-            </h2>
+            <h2>Shopping List</h2>
           </div>
           <div className="col-md"></div>
         </div>
@@ -371,41 +344,29 @@ class ShoppingList extends Component {
           <div className="col-md-4 order-md-12">
             <h5 className="totals">Totals</h5>
             <h6>
-              {!totalNumItems
-                ? "???"
-                : totalNumItems
-              } items: $
+              {totalNumItems + " "}
+               items: $
               <span>
-                {!totalPriceItems
-                  ? "???"
-                  : totalPriceItems
-                }
+                { totalPriceItems }
               </span> 
             </h6>
+            <ul>
+              {!catStats
+                ? null
+                : catStats.map((cat) => (
+                  <li>{cat.category}: {cat.count}</li>
+                ))
+              }
+            </ul>
             <img
               src={window.location.origin + "/pie_explode.jpg"}
               alt="Girl in a jacket"
               width="300"
               height="300"
               className="pie"
-            ></img>
+            >              
+            </img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
-              {/* {!addedItems
-                ? null
-                : addedItems.map((item) => (
-                  <li
-                    key={item._id}
-                    // onClick={() => this.handleRemoveItem(item._id)}
-                    style={{
-                      borderTop: 0, borderBottom: 0, borderRight: 0,
-                      borderLeft: `15px solid ${getColor(item.category)}`
-                    }}
-                    className="list-group-item"
-                  >
-                    {item.name}
-                  </li>
-                ))} */}
-
               <li>
                 <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
               </li>
