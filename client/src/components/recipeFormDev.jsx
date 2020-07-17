@@ -32,7 +32,7 @@ class RecipeFormDev extends Form {
     try {
       const recipeId = this.props.match.params.id;
       //   console.log("recipeId", recipeId);
-      if (recipeId === "test") return; /// TODO:  Change this "new" instead of test
+      if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
 
       const { data: recipe } = await getRecipe(recipeId);
       this.setState({
@@ -95,76 +95,144 @@ class RecipeFormDev extends Form {
     return (
       <React.Fragment>
         {this.renderInput("title", "Title")}
-        <table className="table table-hover ingredients-form">
-          <thead>
-            <tr>
-              <th className="pl-2"> Qty </th>
-              <th className="pl-2"> Unit </th>
-              <th className="pl-2"> Item </th>
-              <th className="pl-2"> Notes </th>
-              <th className=""> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {[...Array(ingredients.length)].map((row, i) => {
-              return (
-                (this.state.recipeId ||
-                  this.props.match.params.id === "test") && (
-                  <tr key={i}>
-                    <td>
-                      {this.renderMultiRowSelect(
-                        "qty",
-                        null,
-                        i,
-                        "ingredients",
-                        this.state.quantities
-                      )}
-                    </td>
-                    <td>
-                      {this.renderMultiRowSelect(
-                        "unit",
-                        null,
-                        i,
-                        "ingredients",
-                        this.state.units
-                      )}
-                    </td>
-                    <td>
-                      <ItemSearch
-                        items={this.props.items}
-                        update={this.handleIngredientUpdate}
-                        row={i}
-                        initialValue={
-                          ingredients[i].item ? ingredients[i].item.name : ""
-                        }
-                      />
-                    </td>
-                    <td>
-                      {this.renderMultiRowInput(
-                        "notes",
-                        null,
-                        i,
-                        "ingredients"
-                      )}
-                    </td>
-                    <td className="delete">
-                      <FaTrash
-                        className="hover-icon"
-                        onClick={this.handleRemoveSpecificRow(i)}
-                      />
-                    </td>
-                  </tr>
-                )
-              );
-            })}
-          </tbody>
-        </table>
-        <button onClick={this.handleAddRow} className="btn btn-primary">
-          Add Ingredient +
-        </button>
+        <section className="ingredients-form">
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th className="pl-2"> Qty </th>
+                <th className="pl-2"> Unit </th>
+                <th className="pl-2"> Item </th>
+                <th className="pl-2"> Notes </th>
+                <th className=""> </th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(ingredients.length)].map((row, i) => {
+                return (
+                  (this.state.recipeId ||
+                    this.props.match.params.id === "test") && (
+                    <tr key={i}>
+                      {/* </tr><tr key={i}>    */}
+                      <td className="qty">
+                        {this.renderMultiRowSelect(
+                          "qty",
+                          null,
+                          // row,
+                          i,
+                          "ingredients",
+                          this.state.quantities
+                        )}
+                      </td>
+                      <td className="unit">
+                        {this.renderMultiRowSelect(
+                          "unit",
+                          null,
+                          // row,
+                          i,
+                          "ingredients",
+                          this.state.units
+                        )}
+                      </td>
+                      <td className="item">
+                        <ItemSearch
+                          items={this.props.items}
+                          update={this.handleIngredientUpdate}
+                          row={i}
+                          initialValue={
+                            ingredients[i].item ? ingredients[i].item.name : ""
+                          }
+                        />
+                      </td>
+                      <td className="notes">
+                        {this.renderMultiRowInput(
+                          "notes",
+                          null,
+                          i,
+                          "ingredients",
+                          "text",
+                          "Notes"
+                        )}
+                      </td>
+                      <td className="delete">
+                        <FaTrash
+                          className="hover-icon"
+                          onClick={this.handleRemoveSpecificRow(i)}
+                          // onClick={this.handleRemoveSpecificRow(i)} ********
+                        />
+                      </td>
+                    </tr>
+                  )
+                );
+              })}
+            </tbody>
+          </table>
+          <button onClick={this.handleAddRow} className="btn btn-dark">
+            Add Ingredient +
+          </button>
+        </section>
       </React.Fragment>
     );
   }
 }
 
 export default RecipeFormDev;
+
+// <tbody>
+// {[...Array(ingredients.length)].map((row, i) => {
+//   return (
+//     (this.state.recipeId ||
+//       this.props.match.params.id === "test") && (
+//       <tr key={i}>
+//         {/* </tr><tr key={i}>    */}
+//         <td>
+//           {this.renderMultiRowSelect(
+//             "qty",
+//             null,
+//             // row,
+//             i,
+//             "ingredients",
+//             this.state.quantities
+//           )}
+//         </td>
+//         <td>
+//           {this.renderMultiRowSelect(
+//             "unit",
+//             null,
+//             // row,
+//             i,
+//             "ingredients",
+//             this.state.units
+//           )}
+//         </td>
+//         <td>
+//           <ItemSearch
+//             items={this.props.items}
+//             update={this.handleIngredientUpdate}
+//             row={i}
+//             initialValue={
+//               ingredients[i].item ? ingredients[i].item.name : ""
+//             }
+//           />
+//         </td>
+//         <td>
+//           {this.renderMultiRowInput(
+//             "notes",
+//             null,
+//             i,
+//             "ingredients",
+//             "text",
+//             "Notes"
+//           )}
+//         </td>
+//         <td className="delete">
+//           <FaTrash
+//             className="hover-icon"
+//             onClick={this.handleRemoveSpecificRow(i)}
+//             // onClick={this.handleRemoveSpecificRow(i)} ********
+//           />
+//         </td>
+//       </tr>
+//     )
+//   );
+// })}
+// </tbody>
