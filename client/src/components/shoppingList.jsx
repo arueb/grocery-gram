@@ -12,7 +12,7 @@ class ShoppingList extends Component {
     userData: null,
     addedItems: null,
     removedItems: null,
-    catCounts: null,
+    catStats: null,
     activeId: null,
     staples: [],
     recipes: [],
@@ -21,6 +21,7 @@ class ShoppingList extends Component {
 
   async componentDidUpdate() {
     await this.expandShoppingLists();
+    // this.calcCategories(); // ?? does this go here ??
   }
 
   async componentDidMount() {
@@ -65,33 +66,6 @@ class ShoppingList extends Component {
     return expanded;
   };
 
-  tallyCategories = () => {
-    const { addedItems } = this.state;
-    let catCounts = [];
-    let cats = [];
-    for (let i = 0; i < addedItems.length; i++) {
-      console.log("before possible add to cats:", cats);
-      const catName = addedItems[i].category;
-      if (!cats.includes(catName)) {
-        cats.push(catName);
-        console.log("new category: ", catName);
-        let catObj = {
-          category: catName,
-          count: 1,
-          cost: addedItems[i].price
-        }
-        catCounts.push(catObj);
-      }
-      else {
-
-      }
-      console.log("after possible add to cats:", cats);
-    }
-    console.log("catCounts:", catCounts);
-  }
-    
-
-
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
@@ -108,7 +82,6 @@ class ShoppingList extends Component {
       await updateShoppingList(
         this.props.user._id,
         newAddedItemIds,
-        // this.state.userData.removedItems
         removedItemIds
       );
     } catch (err) {
@@ -217,7 +190,49 @@ class ShoppingList extends Component {
       const item = this.expandItemById(value, items);
       this.handleAddItemFromSearchBox(item);
     }
+  }  
+
+  calcCategories = () => {
+    const { addedItems } = this.state;
+    let catStats = [];
+    let cats = [];
+    for (let i = 0; i < addedItems.length; i++) {
+      const catName = addedItems[i].category;
+      if (!cats.includes(catName)) {
+        cats.push(catName);
+        let catObj = {
+          category: catName,
+          count: 1,
+          cost: addedItems[i].price
+        }
+        catStats.push(catObj);
+      }
+      else {
+        const catArr = catStats.filter((cat) => {
+          return cat.category === catName
+        });
+        let catObj = catArr[0];
+        catObj.count++;
+        catObj.cost += addedItems[i].price;
+      }
+    }
+    this.setState({ catStats });
   }
+
+  handleUpdatePieChart = () => {
+    this.calcCategories();
+    const { catStats } = this.state;
+    console.log("catStats:", catStats);
+
+  };
+
+
+
+  // 
+
+  // updateMyStaples
+
+  // updateMyRecipes
 
   // handleChooseStaple
 
@@ -225,8 +240,7 @@ class ShoppingList extends Component {
 
   render() {
     const { addedItems, removedItems } = this.state;
-    // console.log("props", this.props);
-    // console.log("state", this.state);
+
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -234,8 +248,8 @@ class ShoppingList extends Component {
           <div className="col-md">
             <h2>Shopping List
               <button 
-                onClick={() => this.tallyCategories()}
-              >Tally
+                onClick={() => this.handlePieChart()}
+              >Do Pie Chart
               </button>
             </h2>
           </div>
