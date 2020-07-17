@@ -228,7 +228,7 @@ class ShoppingList extends Component {
     console.log("doing calcTotals!");
     const { catStats } = this.state;
     let totalNumItems = 0;
-    let totalPriceItems = 0;
+    // let totalPriceItems = 0;
     for (const cat of catStats) {
       console.log("cat:", cat);
       totalNumItems += cat.count;
@@ -273,7 +273,8 @@ class ShoppingList extends Component {
   // handleChooseRecipe
 
   render() {
-    const { addedItems, removedItems } = this.state;
+    const { addedItems, removedItems, totalNumItems,
+            totalPriceItems } = this.state;
 
     return (
       <React.Fragment>
@@ -281,10 +282,10 @@ class ShoppingList extends Component {
           <div className="col-md-3"></div>
           <div className="col-md">
             <h2>Shopping List
-              <button 
+              {/* <button 
                 onClick={() => this.handleUpdatePieChart()}
               >Do Pie Chart
-              </button>
+              </button> */}
             </h2>
           </div>
           <div className="col-md"></div>
@@ -369,7 +370,18 @@ class ShoppingList extends Component {
           </div>
           <div className="col-md-4 order-md-12">
             <h5 className="totals">Totals</h5>
-            <h6>{this.state.totalNumItems} items: $32.12</h6>
+            <h6>
+              {!totalNumItems
+                ? "???"
+                : totalNumItems
+              } items: $
+              <span>
+                {!totalPriceItems
+                  ? "???"
+                  : totalPriceItems
+                }
+              </span> 
+            </h6>
             <img
               src={window.location.origin + "/pie_explode.jpg"}
               alt="Girl in a jacket"
