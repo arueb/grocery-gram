@@ -13,6 +13,7 @@ class ShoppingList extends Component {
     addedItems: null,
     removedItems: null,
     catCounts: null,
+    activeId: null,
     staples: [],
     recipes: [],
     errors: {},
@@ -107,7 +108,13 @@ class ShoppingList extends Component {
   };
 
   handleRemoveItem = async (itemId) => {
-    this.moveItemsInLists(itemId, "removeItem");
+    console.log("clicked an item");
+    this.setState({ activeId: itemId });
+
+    setTimeout(() => {
+      this.moveItemsInLists(itemId, "removeItem");
+      this.setState({ activeId: null });
+    }, 500);
   };
 
   moveItemsInLists = async (itemId, action) => {
@@ -185,8 +192,7 @@ class ShoppingList extends Component {
     }
   };
 
-  // handle updating ingredients from child itemSearch component
-  // updates itemId
+  // handle update from itemSearch
   handleUpdate(value, row = null) {
     console.log("handling update");
     console.log(value);
@@ -196,10 +202,6 @@ class ShoppingList extends Component {
       const item = this.expandItemById(value, items);
       this.handleAddItemFromSearchBox(item);
     }
-
-    // const ingredients = [...this.state.ingredients];
-    // ingredients[row].itemId = value;
-    // this.setState({ ingredients });
   }
 
   // handleChooseStaple
@@ -236,7 +238,8 @@ class ShoppingList extends Component {
                     <li
                       //   key={item._id}
                       key={i}
-                      onClick={() => this.handleRemoveItem(item._id)}
+                      //   onClick={() => this.handleRemoveItem(item._id)}
+                      onClick={this.handleRemoveItem.bind(this, item._id)}
                       style={{
                         borderTop: 0,
                         borderBottom: 0,
@@ -245,7 +248,13 @@ class ShoppingList extends Component {
                       }}
                       className="list-group-item"
                     >
-                      {item.name}
+                      <span
+                        className={
+                          this.state.activeId === item._id ? "strike" : ""
+                        }
+                      >
+                        {item.name}
+                      </span>
                       <span className="sl-price">${item.price}</span>
                     </li>
                   ))}
