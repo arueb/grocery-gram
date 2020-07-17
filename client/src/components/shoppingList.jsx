@@ -114,7 +114,7 @@ class ShoppingList extends Component {
     setTimeout(() => {
       this.moveItemsInLists(itemId, "removeItem");
       this.setState({ activeId: null });
-    }, 500);
+    }, 300);
   };
 
   moveItemsInLists = async (itemId, action) => {
