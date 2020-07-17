@@ -13,6 +13,8 @@ class ShoppingList extends Component {
     addedItems: null,
     removedItems: null,
     catStats: null,
+    totalNumItems: null,
+    totalPriceItems: null,
     activeId: null,
     staples: [],
     recipes: [],
@@ -21,13 +23,14 @@ class ShoppingList extends Component {
 
   async componentDidUpdate() {
     await this.expandShoppingLists();
-    // this.calcCategories(); // ?? does this go here ??
+    this.handleUpdatePieChart(); // BUG - causes infinite loop
   }
 
   async componentDidMount() {
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
     await this.expandShoppingLists();
+    this.handleUpdatePieChart();
   }
 
   async expandShoppingLists() {
@@ -93,6 +96,7 @@ class ShoppingList extends Component {
 
   handleAddBackItem = async (itemId) => {
     this.moveItemsInLists(itemId, "addBack");
+    this.handleUpdatePieChart();
   };
 
   handleRemoveItem = async (itemId) => {
@@ -193,6 +197,7 @@ class ShoppingList extends Component {
   }  
 
   calcCategories = () => {
+    console.log("doing calcCategories..");
     const { addedItems } = this.state;
     let catStats = [];
     let cats = [];
@@ -219,10 +224,39 @@ class ShoppingList extends Component {
     this.setState({ catStats });
   }
 
-  handleUpdatePieChart = () => {
-    this.calcCategories();
+  calcTotals = () => {
+    console.log("doing calcTotals!");
     const { catStats } = this.state;
-    console.log("catStats:", catStats);
+    let totalNumItems = 0;
+    let totalPriceItems = 0;
+    for (const cat of catStats) {
+      console.log("cat:", cat);
+      totalNumItems += cat.count;
+    }
+    console.log("total:", totalNumItems);
+    this.setState({ totalNumItems })
+  }
+
+  handleUpdatePieChart = () => {
+    // this should go in componentDidMount
+    const { addedItems, catStats } = this.state;
+    if (!addedItems) return;
+    if (!catStats) console.log("no catstats yet");
+    if (!catStats) {
+    // if (addedItems) {
+      console.log("we have addedItems but we do not have catStats");
+      console.log("doing handleUpdatePieChart");
+      this.calcCategories();
+      const { catStats } = this.state;
+      console.log("catStats:", catStats);
+      this.calcTotals();
+      this.setState({ catStats });
+      // draw pie chart
+    }
+    else { // we have catStats 
+      // tread carefully
+      console.log("in handleUpdatePieChart - have addedItems & catStats!");
+    }
 
   };
 
@@ -248,7 +282,7 @@ class ShoppingList extends Component {
           <div className="col-md">
             <h2>Shopping List
               <button 
-                onClick={() => this.handlePieChart()}
+                onClick={() => this.handleUpdatePieChart()}
               >Do Pie Chart
               </button>
             </h2>
@@ -335,7 +369,7 @@ class ShoppingList extends Component {
           </div>
           <div className="col-md-4 order-md-12">
             <h5 className="totals">Totals</h5>
-            <h6>10 items: $32.12</h6>
+            <h6>{this.state.totalNumItems} items: $32.12</h6>
             <img
               src={window.location.origin + "/pie_explode.jpg"}
               alt="Girl in a jacket"
@@ -364,10 +398,10 @@ class ShoppingList extends Component {
                 <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
               </li>
               <li>
-                <span style={{ color: "blue" }}>&#9632;</span> Vegetables
+                <span style={{ color: getColor("Baking Products") }}>&#9632;</span> Baking Products
               </li>
               <li>
-                <span style={{ color: "orange" }}>&#9632;</span> Meat/Poultry
+                <span style={{ color: getColor("Meat/Poultry") }}>&#9632;</span> Meat/Poultry
               </li>
             </ul>
           </div>
