@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/navbar";
-// import Footer from "./components/footer";
+import Footer from "./components/footer";
 import ShoppingList from "./components/shoppingList";
 import MyRecipes from "./components/myRecipes";
 import ExploreRecipes from "./components/exploreRecipes";
@@ -62,7 +62,7 @@ class App extends Component {
             <Redirect to="/not-found" />
           </Switch>
         </main>
-        {/* <Footer /> */}
+        <Footer />
       </React.Fragment>
     );
   }

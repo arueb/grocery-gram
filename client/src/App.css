@@ -13,6 +13,10 @@ Bootstrap 4 breakpoints
 Extra small devices (portrait phones, less than 576px) 
 No media query since this is the default in Bootstrap because it is "mobile first"
 */
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+}
 
 .App {
   text-align: center;
@@ -251,6 +255,28 @@ td.delete {
   animation-delay: 0.05s;
 }
 
+footer .social-icons a {
+  padding-right: ;
+}
+
+.flex-center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.footer-copyright {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(0, 0, 0, 0.2);
+}
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }
