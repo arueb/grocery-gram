@@ -12,7 +12,9 @@ class ShoppingList extends Component {
     userData: null,
     addedItems: null,
     removedItems: null,
-    catCounts: null,
+    catStats: null,
+    totalNumItems: null,
+    totalPriceItems: null,
     activeId: null,
     staples: [],
     recipes: [],
@@ -24,9 +26,16 @@ class ShoppingList extends Component {
   }
 
   async componentDidMount() {
+    this.setState({ totalNumItems: 0 })
+    this.setState({ totalPriceItems: 0 })
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
     await this.expandShoppingLists();
+    // a setTimeout hack to get pie chart to render on mount
+    // because addedItems aren't available immediately
+    setTimeout(() => {
+      this.handleUpdatePieChart();
+    }, 300);
   }
 
   async expandShoppingLists() {
@@ -45,7 +54,6 @@ class ShoppingList extends Component {
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
       addedItems = this.sortItems(addedItems);
-      console.log("addedItems from expandSL:", addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -66,17 +74,6 @@ class ShoppingList extends Component {
     return expanded;
   };
 
-  tallyCategories = () => {
-    // const counts = [];
-    let counter = 0;
-    this.state.addedItems.forEach((item) => {
-      if (item) {
-        counter++;
-      }
-    });
-    console.log("count = ", counter);
-  };
-
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
@@ -87,34 +84,39 @@ class ShoppingList extends Component {
     let newAddedItems = [...this.state.addedItems, item];
     newAddedItems = this.sortItems(newAddedItems);
     const newAddedItemIds = newAddedItems.map((item) => item._id);
+    const removedItemIds = this.state.removedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
     try {
       await updateShoppingList(
         this.props.user._id,
         newAddedItemIds,
-        this.state.userData.removedItems
+        removedItemIds
       );
+      this.handleUpdatePieChart();
     } catch (err) {
       // revert state back to original
       this.setState({ addedItems: prevAddedItems });
+      this.handleUpdatePieChart();
       console.log("Something went wrong.", err);
     }
   };
 
   handleAddBackItem = async (itemId) => {
-    this.moveItemsInLists(itemId, "addBack");
-    console.log("addedItems from handleAddBack:", this.state.addedItems);
-    this.tallyCategories();
+    await this.moveItemsInLists(itemId, "addBack");
+    this.handleUpdatePieChart();
   };
 
   handleRemoveItem = async (itemId) => {
+    // this.handleUpdatePieChart();
     console.log("clicked an item");
     this.setState({ activeId: itemId });
 
     setTimeout(() => {
       this.moveItemsInLists(itemId, "removeItem");
+      this.handleUpdatePieChart();
       this.setState({ activeId: null });
     }, 300);
+    
   };
 
   moveItemsInLists = async (itemId, action) => {
@@ -202,16 +204,56 @@ class ShoppingList extends Component {
       const item = this.expandItemById(value, items);
       this.handleAddItemFromSearchBox(item);
     }
-  }
+  }  
+
+  handleUpdatePieChart = () => {
+    // create array of category objects for use in pie chart
+    const { addedItems } = this.state;
+    if (!addedItems) return;
+    let catStats = [];
+    let cats = [];
+    for (let i = 0; i < addedItems.length; i++) {
+      const catName = addedItems[i].category;
+      if (!cats.includes(catName)) {
+        cats.push(catName);
+        let catObj = {
+          category: catName,
+          count: 1,
+          cost: addedItems[i].price
+        }
+        catStats.push(catObj);
+      }
+      else {
+        const catArr = catStats.filter((cat) => {
+          return cat.category === catName
+        });
+        let catObj = catArr[0];
+        catObj.count++;
+        catObj.cost += addedItems[i].price;
+      }
+    }
+    // calculate item totals
+    let totalNumItems = addedItems.length;
+    let totalPriceItems = 0;
+    for (let i = 0; i < addedItems.length; i++) {
+      console.log('i=', i);
+      totalPriceItems += addedItems[i].price;
+    }
+    this.setState({ catStats, totalNumItems, totalPriceItems });
+  } 
+
+  // updateMyStaples
+
+  // updateMyRecipes
 
   // handleChooseStaple
 
   // handleChooseRecipe
 
   render() {
-    const { addedItems, removedItems } = this.state;
-    // console.log("props", this.props);
-    // console.log("state", this.state);
+    const { addedItems, removedItems, totalNumItems,
+            totalPriceItems, catStats } = this.state;
+
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -222,7 +264,7 @@ class ShoppingList extends Component {
           <div className="col-md"></div>
         </div>
         <div className="row">
-          <div className="col-md-5 order-md-4">
+          <div className="col-md-5 order-md-4 shop-list">
             <div className="itemSearch pb-3">
               <ItemSearch
                 items={this.props.items}
@@ -301,39 +343,38 @@ class ShoppingList extends Component {
           </div>
           <div className="col-md-4 order-md-12">
             <h5 className="totals">Totals</h5>
-            <h6>10 items: $32.12</h6>
+            <h6>
+              {totalNumItems + " "}
+               items: $
+              <span>
+                { totalPriceItems }
+              </span> 
+            </h6>
+            <ul>
+              {!catStats
+                ? null
+                : catStats.map((cat) => (
+                  <li>{cat.category}: {cat.count}</li>
+                ))
+              }
+            </ul>
             <img
               src={window.location.origin + "/pie_explode.jpg"}
               alt="Girl in a jacket"
               width="300"
               height="300"
               className="pie"
-            ></img>
+            >              
+            </img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
-              {/* {!addedItems
-                ? null
-                : addedItems.map((item) => (
-                  <li
-                    key={item._id}
-                    // onClick={() => this.handleRemoveItem(item._id)}
-                    style={{
-                      borderTop: 0, borderBottom: 0, borderRight: 0,
-                      borderLeft: `15px solid ${getColor(item.category)}`
-                    }}
-                    className="list-group-item"
-                  >
-                    {item.name}
-                  </li>
-                ))} */}
-
               <li>
                 <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
               </li>
               <li>
-                <span style={{ color: "blue" }}>&#9632;</span> Vegetables
+                <span style={{ color: getColor("Baking Products") }}>&#9632;</span> Baking Products
               </li>
               <li>
-                <span style={{ color: "orange" }}>&#9632;</span> Meat/Poultry
+                <span style={{ color: getColor("Meat/Poultry") }}>&#9632;</span> Meat/Poultry
               </li>
             </ul>
           </div>

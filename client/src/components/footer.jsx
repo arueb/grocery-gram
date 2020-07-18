@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  FaGgCircle,
+  // FaGgCircle,
   FaFacebook,
   FaTwitter,
   FaInstagram,
@@ -20,24 +20,24 @@ const Footer = () => {
           <div className="col-md-12 py-3">
             <div className="mb-5 flex-center social-icons">
               {/* <!-- Facebook --> */}
-              <a className="fb-ic mr-3">
+              <a href="/shopping-list" className="fb-ic mr-3">
                 {/* <i className="fab fa-facebook-f fa-lg white-text mr-md-5 mr-3 fa-2x"> */}
                 <FaFacebook color="white" size={size} />
               </a>
               {/* <!-- Twitter --> */}
-              <a className="tw-ic mr-3">
+              <a href="/shopping-list" className="tw-ic mr-3">
                 <FaTwitter color="white" size={size} />
               </a>
               {/* <!-- Google +--> */}
-              <a className="gplus-ic mr-3">
+              <a href="/shopping-list" className="gplus-ic mr-3">
                 <FaInstagram color="white" size={size} />
               </a>
               {/* <!--Linkedin --> */}
-              <a className="li-ic mr-3">
+              <a href="/shopping-list" className="li-ic mr-3">
                 <FaLinkedin color="white" size={size} />
               </a>
               {/* <!--Instagram--> */}
-              <a className="ins-ic">
+              <a href="/shopping-list" className="ins-ic">
                 <FaPinterest color="white" size={size} />
               </a>
               {/* <!--Pinterest--> */}
@@ -53,7 +53,7 @@ const Footer = () => {
       {/* <!-- Footer Elements --> */}
 
       {/* <!-- Copyright --> */}
-      <div class="footer-copyright text-center py-3">
+      <div className="footer-copyright text-center py-3">
         © 2020 Copyright:
         <a href="https://mdbootstrap.com/"> Code Blue Team</a>
       </div>
