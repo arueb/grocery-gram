@@ -5,6 +5,8 @@ const Multer = require('multer');
 const CLOUD_BUCKET = 'grocerygramapi_bucket';
 const {format} = require('util');
 const shortid = require('shortid');
+var sizeOf = require('buffer-image-size');
+const sharp = require('sharp');
 
 // Imports the Google Cloud client library
 const {Storage} = require('@google-cloud/storage');
@@ -27,11 +29,16 @@ const bucket = storage.bucket(CLOUD_BUCKET);
 // Modified from GCloud Example: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/appengine/storage/standard/app.js
 // Process the file upload and upload to Google Cloud Storage.
 router.post('/', multer.single('file'), (req, res, next) => {
-//  console.log(req);
+  //console.log(req.file);
+
   if (!req.file) {
     res.status(400).send('No file uploaded.');
     return;
   }
+
+  var dimensions = sizeOf(req.file.buffer);
+  req.file.width = dimensions.width;
+  req.file.height = dimensions.height;
 
   // Create a new blob in the bucket and upload the file data.
   const blob = bucket.file(shortid.generate() + "_" + Date.now() + "." + req.file.originalname.split('.').pop());
@@ -47,7 +54,21 @@ router.post('/', multer.single('file'), (req, res, next) => {
     // The public URL can be used to directly access the file via HTTP.
     const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
     console.log("File uploaded to " + publicUrl);
-    res.status(200).send(publicUrl);
+
+    const roundedCornerResizer =
+  sharp()
+    .resize(200, 200)
+    .composite([{
+      input: req.file.buffer,
+      blend: 'dest-in'
+    }])
+    .png();
+
+    res.status(200).json({
+      fullUrl: publicUrl,
+      fullHeight: req.file.height,
+      fullWidth: req.file.width
+    });
   });
 
   blobStream.end(req.file.buffer);

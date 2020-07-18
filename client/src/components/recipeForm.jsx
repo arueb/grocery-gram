@@ -103,6 +103,7 @@ class RecipeForm extends Form {
     let imageUrls = []; 
 
     for (const imageFile of this.state.data.filesToUpload) {
+      
       var formData = new FormData();
       formData.append("name", "file");
       formData.append("file", imageFile);
@@ -123,13 +124,13 @@ class RecipeForm extends Form {
     console.log(event.target);
   };
 
-  onChangeFile(event) {
-    event.stopPropagation();
-    event.preventDefault();
-    var file = event.target.files[0];
-    console.log(file);
-    this.setState({ file }); /// if you want to upload latter
-  }
+//  onChangeFile(event) {
+//    event.stopPropagation();
+//    event.preventDefault();
+//    var file = event.target.files[0];
+//    console.log(file);
+//    this.setState({ file }); /// if you want to upload latter
+//  }
 
   //  focusTextInput() {
   // Explicitly focus the text input using the raw DOM API
