@@ -2,17 +2,16 @@ import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
 // import auth from "../services/authService";
-// import http from "../services/httpService";
-import axios from "axios";
+import http from "../services/httpService";
 
 const UPLOAD_LIST_PLACEHOLDER =
   process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
 
-const FileInput = React.forwardRef((props, ref) => (
-  <input type="file" ref={ref} />
-));
+//const FileInput = React.forwardRef((props, ref) => (
+//  <input type="file" ref={ref} />
+//));
 
-const fileInputRef = React.createRef();
+//const fileInputRef = React.createRef();
 
 class RecipeForm extends Form {
   constructor(props) {
@@ -28,7 +27,7 @@ class RecipeForm extends Form {
       errors: {},
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
-    //    this.fileInput = React.createRef();
+    this.fileInput = React.createRef();
   }
 
   ImagePreviews = (props) => (
@@ -101,27 +100,23 @@ class RecipeForm extends Form {
 
   doSubmit = async () => {
 
-    let imageUrls = [];
+    let imageUrls = []; 
 
     for (const imageFile of this.state.data.filesToUpload) {
       var formData = new FormData();
-      formData.append("name", "sampleFile");
-      formData.append("sampleFile", imageFile);
+      formData.append("name", "file");
+      formData.append("file", imageFile);
 
-      const imageUrl = await
+      const imageUrl = await http.post(process.env.REACT_APP_API_URL + "/img", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      imageUrls.push(imageUrl.data);
     }
 
-
-
-    for (var key of formData.entries()) {
-      console.log(key[0] + ", " + key[1]);
-    }
-
-    axios.post(process.env.REACT_APP_API_URL + "/img", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    console.log(imageUrls)
   };
 
   onChangeHandler = (event) => {
@@ -136,11 +131,11 @@ class RecipeForm extends Form {
     this.setState({ file }); /// if you want to upload latter
   }
 
-  focusTextInput() {
-    // Explicitly focus the text input using the raw DOM API
-    // Note: we're accessing "current" to get the DOM node
-    this.textInput.focus();
-  }
+  //  focusTextInput() {
+  // Explicitly focus the text input using the raw DOM API
+  // Note: we're accessing "current" to get the DOM node
+  //  this.textInput.focus();
+  //}
 
   triggerInputFile = () => {
     this.fileInput.click();

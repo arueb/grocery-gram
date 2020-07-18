@@ -1,10 +1,60 @@
 const express = require("express");
 const router = express.Router();
-const fileUpload = require("express-fileupload");
+//const fileUpload = require("express-fileupload");
+const Multer = require('multer');
+const CLOUD_BUCKET = 'grocerygramapi_bucket';
+const {format} = require('util');
+const shortid = require('shortid');
 
+// Imports the Google Cloud client library
+const {Storage} = require('@google-cloud/storage');
+
+// Creates a client from a Google service account key.
+const storage = new Storage({keyFilename: "gcloud_storage.json"});
+
+// Multer is required to process file uploads and make them available via
+// req.files.
+const multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+  },
+});
+
+// A bucket is a container for objects (files).
+const bucket = storage.bucket(CLOUD_BUCKET);
+
+// Modified from GCloud Example: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/appengine/storage/standard/app.js
+// Process the file upload and upload to Google Cloud Storage.
+router.post('/', multer.single('file'), (req, res, next) => {
+//  console.log(req);
+  if (!req.file) {
+    res.status(400).send('No file uploaded.');
+    return;
+  }
+
+  // Create a new blob in the bucket and upload the file data.
+  const blob = bucket.file(shortid.generate() + "_" + Date.now() + "." + req.file.originalname.split('.').pop());
+  const blobStream = blob.createWriteStream({
+    resumable: false,
+  });
+
+  blobStream.on('error', (err) => {
+    next(err);
+  });
+
+  blobStream.on('finish', () => {
+    // The public URL can be used to directly access the file via HTTP.
+    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+    console.log("File uploaded to " + publicUrl);
+    res.status(200).send(publicUrl);
+  });
+
+  blobStream.end(req.file.buffer);
+});
+/*
 // Based on example from https://github.com/richardgirges/express-fileupload/tree/master/example#basic-file-upload
-router.post('/', function(req, res) {
-
+router.post('/', async function(req, res) {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -12,44 +62,23 @@ router.post('/', function(req, res) {
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
   let sampleFile = req.files.sampleFile;
 
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('./public/images/filename.jpg', function(err) {
-    if (err)
-      return res.status(500).send(err);
+  console.log(sampleFile);
 
-    res.send('File uploaded.');
+  // Uploads a local file to the bucket
+  await storage.bucket(CLOUD_BUCKET).upload(sampleFile, {
+    // Support for HTTP requests made with `Accept-Encoding: gzip`
+    gzip: true,
+    // By setting the option `destination`, you can change the name of the
+    // object you are uploading to a bucket.
+    metadata: {
+      // Enable long-lived HTTP caching headers
+      // Use only if the contents of the file will never change
+      // (If the contents will change, use cacheControl: 'no-cache')
+      cacheControl: 'public, max-age=31536000',
+    },
   });
+
+  res.send("file uploaded?");
 });
-
-
-
-//async (req, res) => {
-//  console.log(req)
-//  upload(req, res, function (err) {
- //   if (err instanceof multer.MulterError) {
- //     return res.status(500).json(err)
- ////   } else if (err) {
-  //    return res.status(500).json(err)
-//    }
-//    return res.status(200).send(req.file)
-//  })
-  /*
-  console.log("hiya");
-  console.log(req);
-  if (!req.body.file || Object.keys(req.body.file).length === 0) {
-    return res.status(400).send("No files were uploaded.");
-  }
-  console.log("hiya2");
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let sampleFile = req.body.file;
-
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv("./public/images/filename.jpg", function (err) {
-    if (err) return res.status(500).send(err);
-
-    res.send("File uploaded!");
-  });
-  */
-//});
-
+*/
 module.exports = router;
