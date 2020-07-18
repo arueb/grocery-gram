@@ -1,12 +1,19 @@
 import React, { Component } from "react";
-import _ from "lodash"
-import { getUserData, updateShoppingList } from "../services/shoppingListService";
+import _ from "lodash";
+import {
+  getUserData,
+  updateShoppingList,
+} from "../services/shoppingListService";
+import { getColor } from "../services/itemService";
+import ItemSearch from "../components/itemSearch";
 
 class ShoppingList extends Component {
   state = {
     userData: null,
     addedItems: null,
     removedItems: null,
+    catCounts: null,
+    activeId: null,
     staples: [],
     recipes: [],
     errors: {},
@@ -17,6 +24,8 @@ class ShoppingList extends Component {
   }
 
   async componentDidMount() {
+    // Bind the this context to the handler function
+    this.handleUpdate = this.handleUpdate.bind(this);
     await this.expandShoppingLists();
   }
 
@@ -32,10 +41,11 @@ class ShoppingList extends Component {
       const { data: userData } = await getUserData(user._id);
 
       const addedItemIds = userData.addedItems;
-      const addedItems = this.expandItems(addedItemIds, items);
+      let addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
-      // sort both lists by category
+      addedItems = this.sortItems(addedItems);
+      console.log("addedItems from expandSL:", addedItems);
       this.setState({ addedItems, removedItems, userData });
     }
   }
@@ -56,84 +66,116 @@ class ShoppingList extends Component {
     return expanded;
   };
 
+  tallyCategories = () => {
+    // const counts = [];
+    let counter = 0;
+    this.state.addedItems.forEach((item) => {
+      if (item) {
+        counter++;
+      }
+    });
+    console.log("count = ", counter);
+  };
+
   sortItems = (items) => {
     return _.orderBy(items, ["category", "name"], ["asc", "asc"]);
   };
 
-  handleAddItemSearchBox = () => {}
-
-  handleAddBackItem = async (itemId) => {
-    // optimistic update
-    // store current state in case we need to revert
-    const prevAddedItems = this.state.addedItems;
-    const prevRemovedItems = this.state.removedItems;
-
-    // take item out of removedItems and create new removedItemIds array
-    const newRemovedItems = [];
-    const newRemovedItemIds = [];
-    let addBackItem;
-    this.state.removedItems.forEach((item) => {
-      if (item._id !== itemId) {
-        newRemovedItems.push(item);
-        newRemovedItemIds.push(item._id);
-      } else addBackItem = item;
-    });
-
-    // push item to end of addedItems and create new addedItemIds array
-    let newAddedItems = [...this.state.addedItems, addBackItem];
-    const newAddedItemIds = newAddedItems.map((item) => item._id);
-
-    // sort by category, then name
+  handleAddItemFromSearchBox = async (item) => {
+    // optimistic update, so save original state
+    const prevAddedItems = [...this.state.addedItems];
+    let newAddedItems = [...this.state.addedItems, item];
     newAddedItems = this.sortItems(newAddedItems);
-
-    // first set the state which forces a re-render
-    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
-
-    // handle user in backend & on failure revert state
+    const newAddedItemIds = newAddedItems.map((item) => item._id);
+    this.setState({ addedItems: newAddedItems });
     try {
       await updateShoppingList(
         this.props.user._id,
         newAddedItemIds,
-        newRemovedItemIds
+        this.state.userData.removedItems
       );
     } catch (err) {
       // revert state back to original
-      this.setState({
-        addedItems: prevAddedItems,
-        removedItems: prevRemovedItems,
-      });
+      this.setState({ addedItems: prevAddedItems });
       console.log("Something went wrong.", err);
     }
+  };
+
+  handleAddBackItem = async (itemId) => {
+    this.moveItemsInLists(itemId, "addBack");
+    console.log("addedItems from handleAddBack:", this.state.addedItems);
+    this.tallyCategories();
   };
 
   handleRemoveItem = async (itemId) => {
+    console.log("clicked an item");
+    this.setState({ activeId: itemId });
+
+    setTimeout(() => {
+      this.moveItemsInLists(itemId, "removeItem");
+      this.setState({ activeId: null });
+    }, 300);
+  };
+
+  moveItemsInLists = async (itemId, action) => {
     // optimistic update
     // store current state in case we need to revert
     const prevAddedItems = this.state.addedItems;
     const prevRemovedItems = this.state.removedItems;
 
-    // take item out of addedItems and create new addedItemIds array
-    let newAddedItems = [];
-    const newAddedItemIds = [];
-    let removedItem;
-    this.state.addedItems.forEach((item) => {
+    let currExtractFromItems;
+    let currAddToItems;
+    // addBack: extract from removed, add into added
+    if (action === "addBack") {
+      currExtractFromItems = this.state.removedItems;
+      currAddToItems = this.state.addedItems;
+    } // removeItem: extract from added, add into removed
+    else if (action === "removeItem") {
+      currExtractFromItems = this.state.addedItems;
+      currAddToItems = this.state.removedItems;
+    }
+    // extract item from currExtractFromItems
+    let newExtractFromItems = [];
+    const newExtractFromItemIds = [];
+    let itemToAdd;
+    currExtractFromItems.forEach((item) => {
       if (item._id !== itemId) {
-        newAddedItems.push(item);
-        newAddedItemIds.push(item._id);
-      } else removedItem = item;
+        newExtractFromItems.push(item);
+        newExtractFromItemIds.push(item._id);
+      } else itemToAdd = item;
     });
 
-    // add item to beginning of removedItems and create new removedItemIds array
-    const newRemovedItems = [removedItem, ...this.state.removedItems];
-    const newRemovedItemIds = newRemovedItems.map((item) => item._id);
+    // push item to currAddToItems
+    let newAddToItems = [itemToAdd, ...currAddToItems];
+    const newAddToItemIds = newAddToItems.map((item) => item._id);
 
-    // sort by category, then name
-    newAddedItems = this.sortItems(newAddedItems);
+    // sort and set state according to action, forces a re-render
+    if (action === "addBack") {
+      newAddToItems = this.sortItems(newAddToItems);
+      this.setState({
+        addedItems: newAddToItems,
+        removedItems: newExtractFromItems,
+      });
+    } else {
+      // removeItem
+      newExtractFromItems = this.sortItems(newExtractFromItems);
+      this.setState({
+        addedItems: newExtractFromItems,
+        removedItems: newAddToItems,
+      });
+    }
+    // handle user shopping list in backend according to action
+    // on failure revert state
+    let newAddedItemIds;
+    let newRemovedItemIds;
+    if (action === "addBack") {
+      newAddedItemIds = newAddToItemIds;
+      newRemovedItemIds = newExtractFromItemIds;
+    } else {
+      newAddedItemIds = newExtractFromItemIds;
+      newRemovedItemIds = newAddToItemIds;
+    }
 
-    // first set the state which forces a re-render
-    this.setState({ addedItems: newAddedItems, removedItems: newRemovedItems });
-
-        // handle user in backend & on failure revert state
     try {
       await updateShoppingList(
         this.props.user._id,
@@ -149,6 +191,18 @@ class ShoppingList extends Component {
       console.log("Something went wrong.", err);
     }
   };
+
+  // handle update from itemSearch
+  handleUpdate(value, row = null) {
+    console.log("handling update");
+    console.log(value);
+    const items = [...this.props.items];
+    // console.log(items);
+    if (value) {
+      const item = this.expandItemById(value, items);
+      this.handleAddItemFromSearchBox(item);
+    }
+  }
 
   // handleChooseStaple
 
@@ -169,17 +223,38 @@ class ShoppingList extends Component {
         </div>
         <div className="row">
           <div className="col-md-5 order-md-4">
-            <h4>THIS WILL BE A SEARCH BOX</h4>
+            <div className="itemSearch pb-3">
+              <ItemSearch
+                items={this.props.items}
+                update={this.handleUpdate}
+                clearOnBlur={true}
+                initialValue={""}
+              />
+            </div>
             <div className="list-group lst-grp-hover lst-grp-striped">
               {!addedItems
                 ? null
-                : addedItems.map((item) => (
+                : addedItems.map((item, i) => (
                     <li
-                      key={item._id}
-                      onClick={() => this.handleRemoveItem(item._id)}
-                      className="list-group-item border-0 "
+                      //   key={item._id}
+                      key={i}
+                      //   onClick={() => this.handleRemoveItem(item._id)}
+                      onClick={this.handleRemoveItem.bind(this, item._id)}
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: `15px solid ${getColor(item.category)}`,
+                      }}
+                      className="list-group-item"
                     >
-                      {item.name}
+                      <span
+                        className={
+                          this.state.activeId === item._id ? "strike" : ""
+                        }
+                      >
+                        {item.name}
+                      </span>
                       <span className="sl-price">${item.price}</span>
                     </li>
                   ))}
@@ -187,11 +262,17 @@ class ShoppingList extends Component {
             <div className="removed list-group lst-grp-hover">
               {!removedItems
                 ? null
-                : removedItems.map((item) => (
+                : removedItems.map((item, i) => (
                     <li
-                      key={item._id}
+                      key={i}
                       onClick={() => this.handleAddBackItem(item._id)}
-                      className="list-group-item border-0"
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: "15px solid #fff",
+                      }}
+                      className="list-group-item"
                     >
                       {item.name}
                     </li>
@@ -229,8 +310,24 @@ class ShoppingList extends Component {
               className="pie"
             ></img>
             <ul style={{ fontSize: "20px", listStyleType: "none" }}>
+              {/* {!addedItems
+                ? null
+                : addedItems.map((item) => (
+                  <li
+                    key={item._id}
+                    // onClick={() => this.handleRemoveItem(item._id)}
+                    style={{
+                      borderTop: 0, borderBottom: 0, borderRight: 0,
+                      borderLeft: `15px solid ${getColor(item.category)}`
+                    }}
+                    className="list-group-item"
+                  >
+                    {item.name}
+                  </li>
+                ))} */}
+
               <li>
-                <span style={{ color: "red" }}>&#9632;</span> Fruit
+                <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
               </li>
               <li>
                 <span style={{ color: "blue" }}>&#9632;</span> Vegetables
