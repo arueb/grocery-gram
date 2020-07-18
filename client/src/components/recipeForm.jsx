@@ -8,29 +8,11 @@ import axios from "axios";
 const UPLOAD_LIST_PLACEHOLDER =
   process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
 
-const ImagePreviews = React.forwardRef((props, ref) => (
-  <div>
-    {props.items.map((item, index) => (
-      <img
-        key={item + index}
-        src={
-          item === UPLOAD_LIST_PLACEHOLDER
-            ? UPLOAD_LIST_PLACEHOLDER
-            : URL.createObjectURL(item)
-        }
-        alt={index}
-        style={{ width: "50px", height: "50px" }}
-        onClick={props.onClick}
-      />
-    ))}
-    <img
-      key="imageUploadPlaceholder"
-      src={UPLOAD_LIST_PLACEHOLDER}
-      onClick={ref.click()}
-      alt="upload button"
-    />
-  </div>
+const FileInput = React.forwardRef((props, ref) => (
+  <input type="file" ref={ref} />
 ));
+
+const fileInputRef = React.createRef();
 
 class RecipeForm extends Form {
   constructor(props) {
@@ -41,13 +23,34 @@ class RecipeForm extends Form {
         category: "Testing Food",
         publish: "on",
         instructions: "Testing Cook the food.",
-        filesToUpload: [UPLOAD_LIST_PLACEHOLDER],
+        filesToUpload: [],
       },
       errors: {},
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
-    this.myRef = React.createRef();
+    //    this.fileInput = React.createRef();
   }
+
+  ImagePreviews = (props) => (
+    <div>
+      {props.items.map((item, index) => (
+        <img
+          key={item + index}
+          src={URL.createObjectURL(item)}
+          alt={index}
+          style={{ width: "50px", height: "50px" }}
+          onClick={null}
+        />
+      ))}
+      <img
+        key="imageUploadPlaceholder"
+        src={UPLOAD_LIST_PLACEHOLDER}
+        onClick={props.fileInputClick}
+        alt="upload button"
+        style={{ width: "50px", height: "50px" }}
+      />
+    </div>
+  );
 
   // define schema for input validation in browser
   schema = {
@@ -59,6 +62,10 @@ class RecipeForm extends Form {
   };
 
   handleThumbnailAdd(e) {
+    if(e.target.files.length === 0) {
+      return;
+    }
+
     let updatedFiles = this.state.data.filesToUpload;
     //    if (
     //      updatedFiles.length === 1 &&
@@ -132,16 +139,18 @@ class RecipeForm extends Form {
     // Note: we're accessing "current" to get the DOM node
     this.textInput.focus();
   }
-  
+
+  triggerInputFile = () => this.fileInput.click()
+
   render() {
     return (
       <section id="create-recipe-form">
         <input
           id="myInput"
           type="file"
-          ref={this.myRef}
+          ref={fileInput => this.fileInput = fileInput}
+          onChange={this.handleThumbnailAdd}
           style={{ display: "none" }}
-//          onChange={this.onChangeFile.bind(this)}
         />
 
         <h1>Create a Recipe</h1>
@@ -149,12 +158,11 @@ class RecipeForm extends Form {
           {this.renderInput("title", "Recipe Name*")}
 
           <div>
-            <input type="file" onChange={this.handleThumbnailAdd} />
-            <ImagePreviews
+            <h2>Recipe Images:</h2>
+            <this.ImagePreviews
               items={this.state.data.filesToUpload}
               onClick={this.handleThumbnailRemove.bind(this)}
-              focusTextInput={this.focusTextInput}
-              ref={this.myRef}
+              fileInputClick={this.triggerInputFile}
             />
           </div>
 
