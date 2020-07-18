@@ -35,7 +35,7 @@ class ShoppingList extends Component {
     // because addedItems aren't available immediately
     setTimeout(() => {
       this.handleUpdatePieChart();
-    }, 300);
+    }, 500);
   }
 
   async expandShoppingLists() {
