@@ -321,6 +321,43 @@ class ShoppingList extends Component {
                   ))}
             </div>
           </div>
+          <div className="col-md-4 order-md-12">
+            <h5 className="totals">Totals</h5>
+            <h6>
+              {totalNumItems + " "}
+               items: $
+              <span>
+                {totalPriceItems}
+              </span>
+            </h6>
+            <ul>
+              {!catStats
+                ? null
+                : catStats.map((cat) => (
+                  <li>{cat.category}: {cat.count}</li>
+                ))
+              }
+            </ul>
+            <img
+              src={window.location.origin + "/pie_explode.jpg"}
+              alt="Girl in a jacket"
+              width="300"
+              height="300"
+              className="pie"
+            >
+            </img>
+            <ul style={{ fontSize: "20px", listStyleType: "none" }}>
+              <li>
+                <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
+              </li>
+              <li>
+                <span style={{ color: getColor("Baking Products") }}>&#9632;</span> Baking Products
+              </li>
+              <li>
+                <span style={{ color: getColor("Meat/Poultry") }}>&#9632;</span> Meat/Poultry
+              </li>
+            </ul>
+          </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover">
@@ -340,44 +377,7 @@ class ShoppingList extends Component {
               <li className="list-group-item border-0">A recipe</li>
               <li className="list-group-item border-0">A recipe</li>
             </div>
-          </div>
-          <div className="col-md-4 order-md-12">
-            <h5 className="totals">Totals</h5>
-            <h6>
-              {totalNumItems + " "}
-               items: $
-              <span>
-                { totalPriceItems }
-              </span> 
-            </h6>
-            <ul>
-              {!catStats
-                ? null
-                : catStats.map((cat) => (
-                  <li>{cat.category}: {cat.count}</li>
-                ))
-              }
-            </ul>
-            <img
-              src={window.location.origin + "/pie_explode.jpg"}
-              alt="Girl in a jacket"
-              width="300"
-              height="300"
-              className="pie"
-            >              
-            </img>
-            <ul style={{ fontSize: "20px", listStyleType: "none" }}>
-              <li>
-                <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
-              </li>
-              <li>
-                <span style={{ color: getColor("Baking Products") }}>&#9632;</span> Baking Products
-              </li>
-              <li>
-                <span style={{ color: getColor("Meat/Poultry") }}>&#9632;</span> Meat/Poultry
-              </li>
-            </ul>
-          </div>
+          </div>          
         </div>
       </React.Fragment>
     );
