@@ -36,10 +36,11 @@ class RecipeForm extends Form {
       {props.items.map((item, index) => (
         <img
           key={item + index}
+          id={item.fileId}
           src={URL.createObjectURL(item)}
           alt={index}
           style={{ width: "50px", height: "50px" }}
-          onClick={null}
+          onClick={props.onClick}
         />
       ))}
       <img
@@ -62,42 +63,34 @@ class RecipeForm extends Form {
   };
 
   handleThumbnailAdd(e) {
-    if(e.target.files.length === 0) {
+    if (e.target.files.length === 0) {
       return;
     }
 
+    let newFile = e.target.files[0];
+
+    newFile.fileId = Date.now();
+
     let updatedFiles = this.state.data.filesToUpload;
-    //    if (
-    //      updatedFiles.length === 1 &&
-    //      updatedFiles[0] === UPLOAD_LIST_PLACEHOLDER
-    //    ) {
-    //      updatedFiles = [];
-    //    }
-    //    console.log(UPLOAD_LIST_PLACEHOLDER);
-    //    console.log(e.target.files[0]);
     this.setState({
       data: {
         ...this.state.data,
-        filesToUpload: updatedFiles.concat(e.target.files[0]),
+        filesToUpload: [newFile].concat(updatedFiles),
       },
     });
   }
 
   handleThumbnailRemove(e) {
-    let remainingFiles = [...this.state.data.filesToUpload];
-    var index = remainingFiles.indexOf(e.target.src);
-    if (index !== -1) {
-      remainingFiles.splice(index, 1);
-      //      if (remainingFiles.length === 0) {
-      //        remainingFiles = [UPLOAD_LIST_PLACEHOLDER];
-      //      }
-      this.setState({
-        data: {
-          ...this.state.data,
-          filesToUpload: remainingFiles,
-        },
-      });
-    }
+    let originalArray = [...this.state.data.filesToUpload];
+    const remainingFiles = originalArray.filter((el) => {
+      return el.fileId.toString() !== e.target.id;
+    });
+    this.setState({
+      data: {
+        ...this.state.data,
+        filesToUpload: remainingFiles,
+      },
+    });
   }
 
   renderDeleteButton() {
@@ -107,9 +100,18 @@ class RecipeForm extends Form {
   }
 
   doSubmit = async () => {
-    var formData = new FormData();
-    formData.append("name", "sampleFile");
-    formData.append("sampleFile", this.state.data.filesToUpload[0]);
+
+    let imageUrls = [];
+
+    for (const imageFile of this.state.data.filesToUpload) {
+      var formData = new FormData();
+      formData.append("name", "sampleFile");
+      formData.append("sampleFile", imageFile);
+
+      const imageUrl = await
+    }
+
+
 
     for (var key of formData.entries()) {
       console.log(key[0] + ", " + key[1]);
@@ -140,7 +142,9 @@ class RecipeForm extends Form {
     this.textInput.focus();
   }
 
-  triggerInputFile = () => this.fileInput.click()
+  triggerInputFile = () => {
+    this.fileInput.click();
+  }
 
   render() {
     return (
