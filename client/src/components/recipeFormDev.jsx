@@ -26,7 +26,7 @@ class RecipeFormDev extends Form {
         instructions: "",
         filesToUpload: [],
       },
-      ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
+      ingredients: [{ qty: "", unit: "", item: "", notes: "" }],
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
     this.fileInput = React.createRef();
@@ -149,6 +149,7 @@ class RecipeFormDev extends Form {
     };
     const ingredients = [...this.state.ingredients, ingredient];
     this.setState({ ingredients });
+    console.log(this.state.ingredients);
   };
 
   // handle deleting a row from the ingredients table
@@ -172,7 +173,7 @@ class RecipeFormDev extends Form {
 
   doSubmit = async () => {
 
-    let imageUrls = [];
+    let imageLinks = [];
 
     for (const imageFile of this.state.data.filesToUpload) {
 
@@ -180,16 +181,31 @@ class RecipeFormDev extends Form {
       formData.append("name", "file");
       formData.append("file", imageFile);
 
-      const imageUrl = await http.post(process.env.REACT_APP_API_URL + "/img", formData, {
+      const imageData = await http.post(process.env.REACT_APP_API_URL + "/img", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      imageUrls.push(imageUrl.data);
+      imageLinks.push(imageData.data);
     }
 
-    console.log(imageUrls)
+    console.log(this.props)
+
+    let recipeRecord = {
+      title: this.state.data.title,
+      author: this.props.user._id,
+      avgRating: "TODO: calculate/store upon adding new review",
+      numReviews: "TODO: calculate/store upon adding new review",
+      category: this.state.data.category,
+      images: imageLinks,
+      isPublished: this.state.data.publish,
+      instructions: this.state.data.instructions,
+      ingredients: this.state.ingredients,
+    }
+
+    console.log(recipeRecord);
+    // TODO: Send new recipe
   };
 
   render() {
