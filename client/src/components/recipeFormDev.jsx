@@ -170,28 +170,30 @@ class RecipeFormDev extends Form {
 
   triggerInputFile = () => {
     this.fileInput.click();
-  }
+  };
 
   doSubmit = async () => {
-
     let imageLinks = [];
 
     for (const imageFile of this.state.data.filesToUpload) {
-
       var formData = new FormData();
       formData.append("name", "file");
       formData.append("file", imageFile);
 
-      const imageData = await http.post(process.env.REACT_APP_API_URL + "/img", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const imageData = await http.post(
+        process.env.REACT_APP_API_URL + "/img",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       imageLinks.push(imageData.data);
     }
 
-    console.log(this.props)
+    console.log(this.props);
 
     let recipeRecord = {
       title: this.state.data.title,
@@ -203,7 +205,7 @@ class RecipeFormDev extends Form {
       isPublished: this.state.data.publish,
       instructions: this.state.data.instructions,
       ingredients: this.state.ingredients,
-    }
+    };
 
     try {
       const res = await recipeService.newRecipe(recipeRecord);
@@ -225,139 +227,127 @@ class RecipeFormDev extends Form {
         <input
           id="myInput"
           type="file"
-          ref={fileInput => this.fileInput = fileInput}
+          ref={(fileInput) => (this.fileInput = fileInput)}
           onChange={this.handleThumbnailAdd}
           style={{ display: "none" }}
         />
 
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Title")}
+        <section id="add-recipe-form">
+          <h2>Create A Recipe</h2>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("title", "Title")}
 
-          <div>
-            <h3>Recipe Images:</h3>
-            <this.ImagePreviews
-              items={this.state.data.filesToUpload}
-              onClick={this.handleThumbnailRemove.bind(this)}
-              fileInputClick={this.triggerInputFile}
-            />
-          </div>
+            <div>
+              <button className="btn btn-outline-dark">Add Image +</button>
+              {/* <h3>Recipe Images:</h3> */}
+              <this.ImagePreviews
+                items={this.state.data.filesToUpload}
+                onClick={this.handleThumbnailRemove.bind(this)}
+                fileInputClick={this.triggerInputFile}
+              />
+            </div>
+            <div className="form-group mb-5 mt-5">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th className="pl-2"> Qty </th>
+                    <th className="pl-2"> Unit </th>
+                    <th className="pl-2"> Item </th>
+                    <th className="pl-2"> Notes </th>
+                    <th className=""> </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...Array(ingredients.length)].map((row, i) => {
+                    return (
+                      (this.state.recipeId ||
+                        this.props.match.params.id === "new") && (
+                        <tr key={i}>
+                          {/* </tr><tr key={i}>    */}
+                          <td className="qty">
+                            {this.renderMultiRowSelect(
+                              "qty",
+                              null,
+                              // row,
+                              i,
+                              "ingredients",
+                              this.state.quantities
+                            )}
+                          </td>
+                          <td className="unit">
+                            {this.renderMultiRowSelect(
+                              "unit",
+                              null,
+                              // row,
+                              i,
+                              "ingredients",
+                              this.state.units
+                            )}
+                          </td>
+                          <td className="item">
+                            <ItemSearch
+                              items={this.props.items}
+                              update={this.handleIngredientUpdate}
+                              row={i}
+                              initialValue={
+                                ingredients[i].item
+                                  ? ingredients[i].item.name
+                                  : ""
+                              }
+                            />
+                          </td>
+                          <td className="notes">
+                            {this.renderMultiRowInput(
+                              "notes",
+                              null,
+                              i,
+                              "ingredients",
+                              "text",
+                              "Notes"
+                            )}
+                          </td>
+                          <td className="delete">
+                            <FaTrash
+                              className="hover-icon"
+                              onClick={this.handleRemoveSpecificRow(i)}
+                              // onClick={this.handleRemoveSpecificRow(i)} ********
+                            />
+                          </td>
+                        </tr>
+                      )
+                    );
+                  })}
+                </tbody>
+              </table>
+              <button
+                onClick={this.handleAddRow}
+                className="btn btn-outline-dark"
+              >
+                Add Ingredient +
+              </button>
+            </div>
 
-          <section className="ingredients-form">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th className="pl-2"> Qty </th>
-                  <th className="pl-2"> Unit </th>
-                  <th className="pl-2"> Item </th>
-                  <th className="pl-2"> Notes </th>
-                  <th className=""> </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...Array(ingredients.length)].map((row, i) => {
-                  return (
-                    (this.state.recipeId ||
-                      this.props.match.params.id === "new") && (
-                      <tr key={i}>
-                        {/* </tr><tr key={i}>    */}
-                        <td className="qty">
-                          {this.renderMultiRowSelect(
-                            "qty",
-                            null,
-                            // row,
-                            i,
-                            "ingredients",
-                            this.state.quantities
-                          )}
-                        </td>
-                        <td className="unit">
-                          {this.renderMultiRowSelect(
-                            "unit",
-                            null,
-                            // row,
-                            i,
-                            "ingredients",
-                            this.state.units
-                          )}
-                        </td>
-                        <td className="item">
-                          <ItemSearch
-                            items={this.props.items}
-                            update={this.handleIngredientUpdate}
-                            row={i}
-                            initialValue={
-                              ingredients[i].item ? ingredients[i].item.name : ""
-                            }
-                          />
-                        </td>
-                        <td className="notes">
-                          {this.renderMultiRowInput(
-                            "notes",
-                            null,
-                            i,
-                            "ingredients",
-                            "text",
-                            "Notes"
-                          )}
-                        </td>
-                        <td className="delete">
-                          <FaTrash
-                            className="hover-icon"
-                            onClick={this.handleRemoveSpecificRow(i)}
-                          // onClick={this.handleRemoveSpecificRow(i)} ********
-                          />
-                        </td>
-                      </tr>
-                    )
-                  );
-                })}
-              </tbody>
-            </table>
-            <button onClick={this.handleAddRow} className="btn btn-dark">
-              Add Ingredient +
-          </button>
-          </section>
-          <label htmlFor="category">Category</label>
-          <select
-            name="category"
-            //defaultValue={this.state.selectValue}
-            onChange={this.handleChange}
-          >
-            <option defaultValue disabled value="Orange">
-              Orange
-            </option>
-            <option value="Radish">Radish</option>
-            <option value="Cherry">Cherry</option>
-          </select>
+            {this.renderSelect("category", "Category", this.state.units)}
 
-          <div className="custom-control custom-switch">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="customSwitch1"
-              name="publish"
-              onClick={this.handleChange}
-            ></input>
-            <label className="custom-control-label" htmlFor="customSwitch1">
-              Publish
-            </label>
-          </div>
+            {this.renderTextArea("instructions", "Recipe Instructions", 5)}
 
-          <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1">
-              Recipe Instructions
-            </label>
-            <textarea
-              name="instructions"
-              className="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-              onChange={this.handleChange}
-            ></textarea>
-          </div>
-          {this.renderButton("Save Recipe")}
-          {this.renderDeleteButton()}
-        </form>
+            <div className="custom-control custom-switch">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="customSwitch1"
+                name="publish"
+                onClick={this.handleChange}
+              ></input>
+              <label className="custom-control-label" htmlFor="customSwitch1">
+                Publish
+              </label>
+            </div>
+            
+            {this.renderButton("Save Recipe")}
+            {this.renderDeleteButton()}
+          </form>
+        </section>
       </React.Fragment>
     );
   }
