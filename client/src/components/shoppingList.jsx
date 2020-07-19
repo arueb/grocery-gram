@@ -239,6 +239,7 @@ class ShoppingList extends Component {
     for (let i = 0; i < addedItems.length; i++) {
       totalPriceItems += addedItems[i].price;
     }
+    totalPriceItems = totalPriceItems.toFixed(2); // set to 2 dec places
     // calculate percentage and add pie chart colors
     const catPercents = [];
     catStats.forEach((cat) => catPercents.push({
@@ -247,7 +248,6 @@ class ShoppingList extends Component {
         color: getColor(cat.name)
       }
     ))
-    // catPercents.map((cat) => cat.count / totalNumItems * 100)
     this.setState({ catPercents, totalNumItems, totalPriceItems });
   } 
 
@@ -287,9 +287,7 @@ class ShoppingList extends Component {
                 ? null
                 : addedItems.map((item, i) => (
                     <li
-                      //   key={item._id}
                       key={i}
-                      //   onClick={() => this.handleRemoveItem(item._id)}
                       onClick={this.handleRemoveItem.bind(this, item._id)}
                       style={{
                         borderTop: 0,
@@ -336,20 +334,7 @@ class ShoppingList extends Component {
               totalPriceItems={totalPriceItems}
               catPercents={catPercents}
             />
-            {/* <h5 className="totals">Totals</h5>
-            <h6>
-              {totalNumItems + " "}
-              items: $<span>{totalPriceItems}</span>
-            </h6>
-            <ul>
-              {!catStats
-                ? null
-                : catStats.map((cat, i) => (
-                    <li key={i}>
-                      {cat.category}: {cat.count}
-                    </li>
-                  ))}
-            </ul> */}
+          </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover">

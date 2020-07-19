@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import CanvasJSReact from "../canvasjs.react";
-import { getColor } from "../services/itemService";
-var CanvasJS = CanvasJSReact.CanvasJS;
+// var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class PieChart extends Component {
   render() {
-    const { catPercents, totalNumItems, totalPriceItems,
-      colorSetArray } = this.props;
-    // const priceFormatted = totalPriceItems.toFixed(2);
+    const { catPercents, totalNumItems, totalPriceItems } = this.props;
+    const itemFormat = (totalNumItems === 1) ? "item" : "items";
    
-    CanvasJS.addColorSet("grocerygram", colorSetArray);
     const options = {
       animationEnabled: true,
       title: {
         text: "Totals",
+        fontFamily: "Roboto, sans-serif",
+        fontSize: "20",
+        fontWeight: 500,
+        lineHeight: 1.2,
       },
       subtitles: [
         {
-          text: `${totalNumItems} items: $${totalPriceItems}`,
+          text: `${totalNumItems} ${itemFormat}: $${totalPriceItems}`,
           verticalAlign: "center",
           fontSize: 24,
+          // fontFamily: "Roboto, sans-serif",
+          fontWeight: "bold",
           dockInsidePlotArea: true,
         },
       ],
