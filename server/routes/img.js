@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
-//const fileUpload = require("express-fileupload");
 const Multer = require('multer');
 const CLOUD_BUCKET = 'grocerygramapi_bucket';
 const { format } = require('util');
 const shortid = require('shortid');
 var sizeOf = require('buffer-image-size');
 const sharp = require('sharp');
+
+const THUMB_WIDTH = 200;
+const THUMB_HEIGHT = 200;
 
 // Imports the Google Cloud client library
 const { Storage } = require('@google-cloud/storage');
@@ -26,84 +28,78 @@ const multer = Multer({
 // A bucket is a container for objects (files).
 const bucket = storage.bucket(CLOUD_BUCKET);
 
+// modified from https://medium.com/@olamilekan001/image-upload-with-google-cloud-storage-and-node-js-a1cf9baa1876
+const uploadImageToGCS = (file, fileName) => new Promise((resolve, reject) => {
+  const { originalname, buffer } = file;
+
+  const blob = bucket.file(fileName)
+  const blobStream = blob.createWriteStream({
+    resumable: false
+  });
+
+  blobStream.on('finish', () => {
+    const publicUrl = format(
+      `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+    )
+    resolve(publicUrl)
+  })
+    .on('error', () => {
+      reject(`Unable to upload image, something went wrong`)
+    })
+    .end(buffer)
+})
+
 // Modified from GCloud Example: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/appengine/storage/standard/app.js
 // Process the file upload and upload to Google Cloud Storage.
-router.post('/', multer.single('file'), (req, res, next) => {
-  //console.log(req.file);
+router.post('/', multer.single('file'), async function (req, res, next) {
+  let outputJson = {
+    fullsizeHeight: "",
+    fullsizeUrl: "",
+    fullsizeWidth: "",
+    thumbHeight: "",
+    thumbUrl: "",
+    thumbWidth: ""
+  }
 
   if (!req.file) {
     res.status(400).send('No file uploaded.');
     return;
   }
 
-  var dimensions = sizeOf(req.file.buffer);
-  req.file.width = dimensions.width;
-  req.file.height = dimensions.height;
+  var fullsizeDimensions = sizeOf(req.file.buffer);
+  outputJson.fullsizeWidth = fullsizeDimensions.width;
+  outputJson.fullsizeHeight = fullsizeDimensions.height;
 
-  // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(shortid.generate() + "_" + Date.now() + "." + req.file.originalname.split('.').pop());
-  const blobStream = blob.createWriteStream({
-    resumable: false,
-  });
+  const fullsizeFileName = shortid.generate() + "_" + Date.now() + "." + req.file.originalname.split('.').pop();
 
-  blobStream.on('error', (err) => {
-    next(err);
-  });
-
-  blobStream.on('finish', () => {
-    // The public URL can be used to directly access the file via HTTP.
-    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-    console.log("File uploaded to " + publicUrl);
-
-    const roundedCornerResizer = sharp()
-      .resize(200, 200)
-      .composite([{
-        input: req.file.buffer,
-        blend: 'dest-in'
-      }])
-      .png();
-
-    roundedCornerResizer.createWriteStream()
-      .on('error', function (err) { })
-      .on('finish', function () { console.log("hey it worked?") })
-      .end(fileContents);
-
-    res.status(200).json({
-      fullUrl: publicUrl,
-      fullHeight: req.file.height,
-      fullWidth: req.file.width
-    });
-  });
-
-  blobStream.end(req.file.buffer);
-});
-/*
-// Based on example from https://github.com/richardgirges/express-fileupload/tree/master/example#basic-file-upload
-router.post('/', async function(req, res) {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
+  try {
+    outputJson.fullsizeUrl = await uploadImageToGCS(req.file, fullsizeFileName);
+  } catch (error) {
+    next(error);
   }
 
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let sampleFile = req.files.sampleFile;
+  console.log("File uploaded to " + outputJson.fullsizeUrl);
 
-  console.log(sampleFile);
+  await sharp(req.file.buffer)
+    .resize(thumbWidth, thumbHeight)
+    .toBuffer()
+    .then(buffer => { req.file.buffer = buffer });
 
-  // Uploads a local file to the bucket
-  await storage.bucket(CLOUD_BUCKET).upload(sampleFile, {
-    // Support for HTTP requests made with `Accept-Encoding: gzip`
-    gzip: true,
-    // By setting the option `destination`, you can change the name of the
-    // object you are uploading to a bucket.
-    metadata: {
-      // Enable long-lived HTTP caching headers
-      // Use only if the contents of the file will never change
-      // (If the contents will change, use cacheControl: 'no-cache')
-      cacheControl: 'public, max-age=31536000',
-    },
-  });
+  let thumbDimensions = sizeOf(req.file.buffer);
+  outputJson.thumbWidth = thumbDimensions.width;
+  outputJson.thumbHeight = thumbDimensions.height;
 
-  res.send("file uploaded?");
+  const thumbFileName = shortid.generate() + "_thumb_" + Date.now() + "." + req.file.originalname.split('.').pop();
+
+  try {
+    outputJson.thumbUrl = await uploadImageToGCS(req.file, thumbFileName);
+  } catch (error) {
+    next(error);
+  }
+
+  console.log("File uploaded to " + outputJson.thumbUrl);
+
+  res.status(200).json(outputJson);
 });
-*/
+
 module.exports = router;
