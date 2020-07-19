@@ -6,13 +6,14 @@ import {
 } from "../services/shoppingListService";
 import { getColor } from "../services/itemService";
 import ItemSearch from "../components/itemSearch";
+import PieChart from "./pieChart";
 
 class ShoppingList extends Component {
   state = {
     userData: null,
     addedItems: null,
     removedItems: null,
-    catStats: null,
+    catPercents: null,
     totalNumItems: null,
     totalPriceItems: null,
     activeId: null,
@@ -217,7 +218,7 @@ class ShoppingList extends Component {
       if (!cats.includes(catName)) {
         cats.push(catName);
         let catObj = {
-          category: catName,
+          name: catName,
           count: 1,
           cost: addedItems[i].price
         }
@@ -225,21 +226,29 @@ class ShoppingList extends Component {
       }
       else {
         const catArr = catStats.filter((cat) => {
-          return cat.category === catName
+          return cat.name === catName
         });
         let catObj = catArr[0];
         catObj.count++;
         catObj.cost += addedItems[i].price;
       }
-    }
+    }    
     // calculate item totals
     let totalNumItems = addedItems.length;
     let totalPriceItems = 0;
     for (let i = 0; i < addedItems.length; i++) {
-      console.log('i=', i);
       totalPriceItems += addedItems[i].price;
     }
-    this.setState({ catStats, totalNumItems, totalPriceItems });
+    // calculate percentage and add pie chart colors
+    const catPercents = [];
+    catStats.forEach((cat) => catPercents.push({
+        name: cat.name,
+        y: cat.count / totalNumItems * 100, // calc percent of total
+        color: getColor(cat.name)
+      }
+    ))
+    // catPercents.map((cat) => cat.count / totalNumItems * 100)
+    this.setState({ catPercents, totalNumItems, totalPriceItems });
   } 
 
   // updateMyStaples
@@ -252,7 +261,7 @@ class ShoppingList extends Component {
 
   render() {
     const { addedItems, removedItems, totalNumItems,
-            totalPriceItems, catStats } = this.state;
+            totalPriceItems, catPercents } = this.state;
 
     return (
       <React.Fragment>
@@ -322,42 +331,25 @@ class ShoppingList extends Component {
             </div>
           </div>
           <div className="col-md-4 order-md-12">
-            <h5 className="totals">Totals</h5>
+            <PieChart
+              totalNumItems={totalNumItems}
+              totalPriceItems={totalPriceItems}
+              catPercents={catPercents}
+            />
+            {/* <h5 className="totals">Totals</h5>
             <h6>
               {totalNumItems + " "}
-               items: $
-              <span>
-                {totalPriceItems}
-              </span>
+              items: $<span>{totalPriceItems}</span>
             </h6>
             <ul>
               {!catStats
                 ? null
-                : catStats.map((cat) => (
-                  <li>{cat.category}: {cat.count}</li>
-                ))
-              }
-            </ul>
-            <img
-              src={window.location.origin + "/pie_explode.jpg"}
-              alt="Girl in a jacket"
-              width="300"
-              height="300"
-              className="pie"
-            >
-            </img>
-            <ul style={{ fontSize: "20px", listStyleType: "none" }}>
-              <li>
-                <span style={{ color: getColor("Fruit") }}>&#9632;</span> Fruit
-              </li>
-              <li>
-                <span style={{ color: getColor("Baking Products") }}>&#9632;</span> Baking Products
-              </li>
-              <li>
-                <span style={{ color: getColor("Meat/Poultry") }}>&#9632;</span> Meat/Poultry
-              </li>
-            </ul>
-          </div>
+                : catStats.map((cat, i) => (
+                    <li key={i}>
+                      {cat.category}: {cat.count}
+                    </li>
+                  ))}
+            </ul> */}
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover">
@@ -377,7 +369,7 @@ class ShoppingList extends Component {
               <li className="list-group-item border-0">A recipe</li>
               <li className="list-group-item border-0">A recipe</li>
             </div>
-          </div>          
+          </div>
         </div>
       </React.Fragment>
     );
