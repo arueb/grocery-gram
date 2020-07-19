@@ -7,6 +7,7 @@ import { getQuantities } from "../services/qtyService";
 import { getRecipe } from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
+import * as recipeService from "../services/recipeService";
 
 const UPLOAD_LIST_PLACEHOLDER =
   process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
@@ -195,8 +196,8 @@ class RecipeFormDev extends Form {
     let recipeRecord = {
       title: this.state.data.title,
       author: this.props.user._id,
-      avgRating: "TODO: calculate/store upon adding new review",
-      numReviews: "TODO: calculate/store upon adding new review",
+      avgRating: 0,
+      numReviews: 0,
       category: this.state.data.category,
       images: imageLinks,
       isPublished: this.state.data.publish,
@@ -204,8 +205,16 @@ class RecipeFormDev extends Form {
       ingredients: this.state.ingredients,
     }
 
-    console.log(recipeRecord);
-    // TODO: Send new recipe
+    try {
+      const res = await recipeService.newRecipe(recipeRecord);
+
+      console.log(res);
+      // This should bounce page over to the view recipe page
+    } catch (ex) {
+      console.log("Something went wrong with uploading a recipe");
+      console.log(ex);
+    }
+    
   };
 
   render() {
@@ -248,7 +257,7 @@ class RecipeFormDev extends Form {
                 {[...Array(ingredients.length)].map((row, i) => {
                   return (
                     (this.state.recipeId ||
-                      this.props.match.params.id === "test") && (
+                      this.props.match.params.id === "new") && (
                       <tr key={i}>
                         {/* </tr><tr key={i}>    */}
                         <td className="qty">
