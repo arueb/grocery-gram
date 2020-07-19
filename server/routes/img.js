@@ -81,7 +81,7 @@ router.post('/', multer.single('file'), async function (req, res, next) {
   console.log("File uploaded to " + outputJson.fullsizeUrl);
 
   await sharp(req.file.buffer)
-    .resize(thumbWidth, thumbHeight)
+    .resize(THUMB_WIDTH, THUMB_HEIGHT)
     .toBuffer()
     .then(buffer => { req.file.buffer = buffer });
 
