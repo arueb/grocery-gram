@@ -3,6 +3,7 @@ import Joi from "joi-browser";
 import Input from "./input";
 import TextArea from "./textArea";
 import Select from "./select";
+import Slider from "./slider";
 
 class Form extends Component {
   state = {
@@ -41,6 +42,8 @@ class Form extends Component {
   };
 
   handleChange = ({ currentTarget: input }) => {
+//    console.log("handle change called");
+//    console.log(input);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
 
@@ -80,6 +83,20 @@ class Form extends Component {
       />
     );
   }
+
+  renderSlider(name, label ) {
+    const { data, errors } = this.state;
+    return (
+      <Slider
+        name={name}
+        label={label}
+        value={data[name]}
+        onClick={this.handleChange}
+        error={errors[name]}
+      />
+    );
+  }
+
   renderTextArea(name, label, rows, placeholder = "") {
     const { data, errors } = this.state;
     return (

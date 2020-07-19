@@ -11,7 +11,7 @@ export function getRecipe(recipeId) {
 }
 
 export function newRecipe(recipe) {
-  return http.post(apiEndpoint, {
+  return http.post(apiEndpoint, recipe);/* {
     title: recipe.title,
     author: recipe.author,
     avgRating: recipe.avgRating,
@@ -22,4 +22,5 @@ export function newRecipe(recipe) {
     instructions: recipe.instructions,
     ingredients: recipe.ingredients,
   });
+  */
 }

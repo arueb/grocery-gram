@@ -4,13 +4,14 @@ import Joi from "joi-browser";
 import http from "../services/httpService";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
+import { getCategories } from "../services/categoryService";
 import { getRecipe } from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 import * as recipeService from "../services/recipeService";
 
-const UPLOAD_LIST_PLACEHOLDER =
-  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
+//const UPLOAD_LIST_PLACEHOLDER =
+//  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
 
 class RecipeFormDev extends Form {
   constructor(props) {
@@ -23,7 +24,7 @@ class RecipeFormDev extends Form {
       data: {
         title: "",
         category: "",
-        publish: "",
+        publish: "on",
         instructions: "",
         filesToUpload: [],
       },
@@ -54,19 +55,20 @@ class RecipeFormDev extends Form {
           id={item.fileId}
           src={URL.createObjectURL(item)}
           alt={index}
-          style={{ width: "50px", height: "50px" }}
+          style={{ height: "50px" }}
           onClick={props.onClick}
         />
       ))}
-      <img
-        key="imageUploadPlaceholder"
-        src={UPLOAD_LIST_PLACEHOLDER}
-        onClick={props.fileInputClick}
-        alt="upload button"
-        style={{ width: "50px", height: "50px" }}
-      />
     </div>
   );
+
+  //      <img
+  //        key="imageUploadPlaceholder"
+  //        src={UPLOAD_LIST_PLACEHOLDER}
+  //        onClick={props.fileInputClick}
+  //        alt="upload button"
+  //        style={{ height: "50px" }}
+  //      />
 
   handleThumbnailAdd(e) {
     if (e.target.files.length === 0) {
@@ -168,11 +170,13 @@ class RecipeFormDev extends Form {
     this.setState({ ingredients });
   }
 
-  triggerInputFile = () => {
+  triggerInputFile = (event) => {
+    event.preventDefault();
     this.fileInput.click();
   };
 
   doSubmit = async () => {
+    console.log("called doSubmit");
     let imageLinks = [];
 
     for (const imageFile of this.state.data.filesToUpload) {
@@ -207,6 +211,8 @@ class RecipeFormDev extends Form {
       ingredients: this.state.ingredients,
     };
 
+    console.log(recipeRecord);
+
     try {
       const res = await recipeService.newRecipe(recipeRecord);
 
@@ -216,7 +222,7 @@ class RecipeFormDev extends Form {
       console.log("Something went wrong with uploading a recipe");
       console.log(ex);
     }
-    
+
   };
 
   render() {
@@ -238,7 +244,7 @@ class RecipeFormDev extends Form {
             {this.renderInput("title", "Title")}
 
             <div>
-              <button className="btn btn-outline-dark">Add Image +</button>
+              <button className="btn btn-outline-dark" onClick={(event) => {this.triggerInputFile(event)}}>Add Image +</button>
               {/* <h3>Recipe Images:</h3> */}
               <this.ImagePreviews
                 items={this.state.data.filesToUpload}
@@ -310,7 +316,7 @@ class RecipeFormDev extends Form {
                             <FaTrash
                               className="hover-icon"
                               onClick={this.handleRemoveSpecificRow(i)}
-                              // onClick={this.handleRemoveSpecificRow(i)} ********
+                            // onClick={this.handleRemoveSpecificRow(i)} ********
                             />
                           </td>
                         </tr>
@@ -327,24 +333,14 @@ class RecipeFormDev extends Form {
               </button>
             </div>
 
-            {this.renderSelect("category", "Category", this.state.units)}
+            {this.renderSelect("category", "Category", getCategories())}
 
             {this.renderTextArea("instructions", "Recipe Instructions", 5)}
 
-            <div className="custom-control custom-switch">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="customSwitch1"
-                name="publish"
-                onClick={this.handleChange}
-              ></input>
-              <label className="custom-control-label" htmlFor="customSwitch1">
-                Publish
-              </label>
-            </div>
-            
+            {this.renderSlider("publish", "Publish")}
+
             {this.renderButton("Save Recipe")}
+
             {this.renderDeleteButton()}
           </form>
         </section>
