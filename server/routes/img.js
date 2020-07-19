@@ -3,16 +3,16 @@ const router = express.Router();
 //const fileUpload = require("express-fileupload");
 const Multer = require('multer');
 const CLOUD_BUCKET = 'grocerygramapi_bucket';
-const {format} = require('util');
+const { format } = require('util');
 const shortid = require('shortid');
 var sizeOf = require('buffer-image-size');
 const sharp = require('sharp');
 
 // Imports the Google Cloud client library
-const {Storage} = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 
 // Creates a client from a Google service account key.
-const storage = new Storage({keyFilename: "gcloud_storage.json"});
+const storage = new Storage({ keyFilename: "gcloud_storage.json" });
 
 // Multer is required to process file uploads and make them available via
 // req.files.
@@ -55,14 +55,18 @@ router.post('/', multer.single('file'), (req, res, next) => {
     const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
     console.log("File uploaded to " + publicUrl);
 
-    const roundedCornerResizer =
-  sharp()
-    .resize(200, 200)
-    .composite([{
-      input: req.file.buffer,
-      blend: 'dest-in'
-    }])
-    .png();
+    const roundedCornerResizer = sharp()
+      .resize(200, 200)
+      .composite([{
+        input: req.file.buffer,
+        blend: 'dest-in'
+      }])
+      .png();
+
+    roundedCornerResizer.createWriteStream()
+      .on('error', function (err) { })
+      .on('finish', function () { console.log("hey it worked?") })
+      .end(fileContents);
 
     res.status(200).json({
       fullUrl: publicUrl,
