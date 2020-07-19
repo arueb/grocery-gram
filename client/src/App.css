@@ -259,10 +259,6 @@ td.delete {
   animation-delay: 0.05s;
 }
 
-footer .social-icons a {
-  padding-right: ;
-}
-
 .flex-center {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -287,6 +283,10 @@ footer .social-icons a {
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
+  /*  Add Recipe Form  */
+  #add-recipe-form {
+    padding: 5em 5em;
+  }
 }
 
 /* Large devices (desktops, 992px and up) */
