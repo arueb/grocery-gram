@@ -24,7 +24,7 @@ class RecipeForm extends Form {
       data: {
         title: "",
         category: "",
-        isPublished: "",
+        isPublished: false,
         instructions: "",
         filesToUpload: [],
       },
@@ -35,14 +35,14 @@ class RecipeForm extends Form {
   }
 
   schema = {
-    title: Joi.string().label("Recipe Name"),
-    category: Joi.string().label("Recipe Category"),
-    isPublished: Joi.string().label("Recipe Published Slider"),
-    instructions: Joi.string().label("Recipe Instructions"),
-    filesToUpload: Joi.array().label("Files"),
-    qty: Joi.string().label("Qty"),
-    unit: Joi.string().label("Unit"),
-    itemId: Joi.string().label("Item"),
+    title: Joi.string().min(5).required().label("Recipe Name"),
+    category: Joi.string().required().label("Recipe Category"),
+    isPublished: Joi.boolean().required().label("Recipe Published Slider"),
+    instructions: Joi.string().required().label("Recipe Instructions"),
+    filesToUpload: Joi.array().required().label("Files"),
+    qty: Joi.string().required().label("Qty"),
+    unit: Joi.string().required().label("Unit"),
+    itemId: Joi.string().required().label("Item"),
     notes: Joi.string().label("Notes"),
   };
 
@@ -62,14 +62,6 @@ class RecipeForm extends Form {
       ))}
     </div>
   );
-
-  //      <img
-  //        key="imageUploadPlaceholder"
-  //        src={UPLOAD_LIST_PLACEHOLDER}
-  //        onClick={props.fileInputClick}
-  //        alt="upload button"
-  //        style={{ height: "50px" }}
-  //      />
 
   handleThumbnailAdd(e) {
     if (e.target.files.length === 0) {
@@ -107,7 +99,14 @@ class RecipeForm extends Form {
       return this.renderButton("Delete Recipe");
     }
   }
-
+  
+  renderHeader() {
+    if (this.props.match.params.id === "new") {
+      return <h2>Create A Recipe</h2>;
+    } else {
+      return <h2>Edit Recipe</h2>;
+    }
+  }
   // populates recipe in state if valid recipe id
   async populateRecipe() {
     try {
@@ -242,7 +241,7 @@ class RecipeForm extends Form {
         />
 
         <section id="add-recipe-form">
-          <h2>Create A Recipe</h2>
+          {this.renderHeader()}
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("title", "Title")}
 
