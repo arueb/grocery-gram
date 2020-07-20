@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
 
     // create the recipe object from the request body and save
     const recipe = new Recipe(req.body);
-    //console.log(recipe);
+    console.log(recipe);
     await recipe.save();
     console.log * "saved recipe successfully!";
     res.status(200).send(recipe); // send recipe back with response

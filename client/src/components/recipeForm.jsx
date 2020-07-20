@@ -28,24 +28,31 @@ class RecipeForm extends Form {
         instructions: "",
         filesToUpload: [],
       },
-      ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
+      //   ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
+      ingredients: [],
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
     this.fileInput = React.createRef();
   }
 
   schema = {
-    title: Joi.string().min(5).required().label("Recipe Name"),
-    category: Joi.string().required().label("Recipe Category"),
-    isPublished: Joi.boolean().required().label("Recipe Published Slider"),
-    instructions: Joi.string().required().label("Recipe Instructions"),
-    filesToUpload: Joi.array().required().label("Files"),
-    qty: Joi.string().required().label("Qty"),
-    unit: Joi.string().required().label("Unit"),
-    itemId: Joi.string().required().label("Item"),
-    notes: Joi.string().label("Notes"),
+    title: Joi.string().label("Recipe Name"),
+    category: Joi.string().label("Recipe Category"),
+    isPublished: Joi.boolean().label("Recipe Published Slider"),
+    instructions: Joi.string().label("Recipe Instructions"),
+    filesToUpload: Joi.array().label("Files"),
+    qty: Joi.string().label("Qty"),
+    unit: Joi.string().label("Unit"),
+    itemId: Joi.string().label("Item"),
+    notes: Joi.string().label("Notes").optional(),
   };
 
+  ingredientsSchema = {
+    qty: Joi.string().label("Qty"),
+    unit: Joi.string().label("Unit"),
+    itemId: Joi.string().label("Item").required(),
+    notes: Joi.string().label("Notes").allow(""),
+  };
   // This is used to make the images picker/uploader
   ImagePreviews = (props) => (
     <div>
@@ -99,7 +106,7 @@ class RecipeForm extends Form {
       return this.renderButton("Delete Recipe");
     }
   }
-  
+
   renderHeader() {
     if (this.props.match.params.id === "new") {
       return <h2>Create A Recipe</h2>;
@@ -146,7 +153,8 @@ class RecipeForm extends Form {
   }
 
   // handle adding a new row to the ingredients table
-  handleAddRow = () => {
+  handleAddRow = (e) => {
+    e.preventDefault();
     const ingredient = {
       qty: "",
       unit: "",
@@ -154,15 +162,16 @@ class RecipeForm extends Form {
       notes: "",
     };
     const ingredients = [...this.state.ingredients, ingredient];
-    this.setState({ ingredients });
-    console.log(this.state.ingredients);
+    this.setState({ ingredients, validateIngredientsRow: null });
+    // console.log(this.state.ingredients);
   };
 
   // handle deleting a row from the ingredients table
   handleRemoveSpecificRow = (idx) => () => {
     const ingredients = [...this.state.ingredients];
     ingredients.splice(idx, 1);
-    this.setState({ ingredients });
+    this.setState({ ingredients, validateIngredientsRow: null });
+    // this.setState({ validateIngredientsRow: null });
   };
 
   // handle updating ingredients from child itemSearch component
@@ -178,8 +187,51 @@ class RecipeForm extends Form {
     this.fileInput.click();
   };
 
+  validateIngredients = (row) => {
+    // console.log("validateIngrents() fired");
+    const options = { abortEarly: true };
+    const ingredient = this.state.ingredients[row];
+    // console.log("ingredient to be validated", ingredient);
+    // delete ingredient.notes;
+    delete ingredient.item;
+    const { error } = Joi.validate(
+      //   this.state.ingredients[row],
+      ingredient,
+      this.ingredientsSchema,
+      options
+    );
+    // console.log("validationerror", error);
+    if (!error) return null;
+
+    const errors = {};
+    for (let item of error.details) errors[item.path[0]] = item.message;
+    return errors;
+  };
+
   doSubmit = async () => {
-    console.log("called doSubmit");
+    // console.log("called doSubmit");
+    // console.log("ing length:", this.state.ingredients.length);
+
+    const { ingredients } = this.state;
+    console.log("validate ingredients form");
+    if (ingredients.length > 0) {
+      ingredients.forEach((ingredient, row) => {
+        // console.log("row", row);
+        const errors = this.validateIngredients(row);
+        // console.log(errors);
+        this.setState({ errors: errors || {} });
+        if (errors) {
+          this.setState({ validateIngredientsRow: row });
+          return;
+        }
+        this.setState({ validateIngredientsRow: null });
+      });
+
+      //   console.log(this.validateIngredients());
+    }
+    console.log("state errors", this.state.errors);
+    if (this.state.validateIgredientsRow) return;
+    console.log("maded it past state errosr!");
     let imageLinks = [];
 
     for (const imageFile of this.state.data.filesToUpload) {
@@ -264,79 +316,91 @@ class RecipeForm extends Form {
             </div>
 
             <div className="form-group mb-5 mt-5 ingredients">
-              <label htmlFor="addImg">Ingredients</label>
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th className="pl-2"> Qty </th>
-                    <th className="pl-2"> Unit </th>
-                    <th className="pl-2"> Item </th>
-                    <th className="pl-2"> Notes </th>
-                    <th className=""> </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...Array(ingredients.length)].map((row, i) => {
-                    return (
-                      (this.state.recipeId ||
-                        this.props.match.params.id === "new") && (
-                        <tr key={i}>
-                          {/* </tr><tr key={i}>    */}
-                          <td className="qty">
-                            {this.renderMultiRowSelect(
-                              "qty",
-                              null,
-                              // row,
-                              i,
-                              "ingredients",
-                              this.state.quantities
-                            )}
-                          </td>
-                          <td className="unit">
-                            {this.renderMultiRowSelect(
-                              "unit",
-                              null,
-                              // row,
-                              i,
-                              "ingredients",
-                              this.state.units
-                            )}
-                          </td>
-                          <td className="item">
-                            <ItemSearch
-                              items={this.props.items}
-                              update={this.handleIngredientUpdate}
-                              row={i}
-                              initialValue={
-                                ingredients[i].item
-                                  ? ingredients[i].item.name
-                                  : ""
-                              }
-                            />
-                          </td>
-                          <td className="notes">
-                            {this.renderMultiRowInput(
-                              "notes",
-                              null,
-                              i,
-                              "ingredients",
-                              "text",
-                              "Notes"
-                            )}
-                          </td>
-                          <td className="delete">
-                            <FaTrash
-                              className="hover-icon"
-                              onClick={this.handleRemoveSpecificRow(i)}
-                              // onClick={this.handleRemoveSpecificRow(i)} ********
-                            />
-                          </td>
-                        </tr>
-                      )
-                    );
-                  })}
-                </tbody>
-              </table>
+              <div>
+                <label htmlFor="addImg">Ingredients</label>
+              </div>
+              {ingredients.length > 0 && (
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th className="pl-2"> Qty </th>
+                      <th className="pl-2"> Unit </th>
+                      <th className="pl-2"> Item </th>
+                      <th className="pl-2"> Notes </th>
+                      <th className=""> </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {[...Array(ingredients.length)].map((row, i) => {
+                      return (
+                        (this.state.recipeId ||
+                          this.props.match.params.id === "new") && (
+                          <tr key={i}>
+                            {/* </tr><tr key={i}>    */}
+                            <td className="qty">
+                              {this.renderMultiRowSelect(
+                                "qty",
+                                null,
+                                // row,
+                                i,
+                                "ingredients",
+                                this.state.quantities
+                              )}
+                            </td>
+                            <td className="unit">
+                              {this.renderMultiRowSelect(
+                                "unit",
+                                null,
+                                // row,
+                                i,
+                                "ingredients",
+                                this.state.units
+                              )}
+                            </td>
+                            <td className="item">
+                              <ItemSearch
+                                items={this.props.items}
+                                update={this.handleIngredientUpdate}
+                                row={i}
+                                initialValue={
+                                  ingredients[i].item
+                                    ? ingredients[i].item.name
+                                    : ""
+                                }
+                              />
+                              {this.state.validateIngredientsRow === i &&
+                                this.state.errors.itemId && (
+                                  <div className="alert alert-danger">
+                                    {this.state.errors.itemId}
+                                  </div>
+                                )}
+                            </td>
+                            <td className="notes">
+                              {this.renderMultiRowInput(
+                                "notes",
+                                null,
+                                i,
+                                "ingredients",
+                                "text",
+                                "Notes"
+                              )}
+                            </td>
+                            <td className="delete">
+                              <FaTrash
+                                className="hover-icon"
+                                onClick={this.handleRemoveSpecificRow(i)}
+                                // onClick={this.handleRemoveSpecificRow(i)} ********
+                              />
+                            </td>
+                          </tr>
+                        )
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+
               <button
                 onClick={this.handleAddRow}
                 className="btn btn-outline-dark"

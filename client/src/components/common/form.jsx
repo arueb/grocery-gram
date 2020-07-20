@@ -34,25 +34,13 @@ class Form extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault(); //prevent roundtrip http request to server
-    console.log("handling submit");
-    // const errors = this.validate();
-    // this.setState({ errors: errors || {} });
-    // if (errors) return;
+    // console.log("handling submit");
+    const errors = this.validate();
+    console.log(errors);
+    this.setState({ errors: errors || {} });
+    if (errors) return;
 
     this.doSubmit();
-  };
-
-  handleChange = ({ currentTarget: input }) => {
-    // console.log("handle change called");
-    // console.log(input.value);
-    const errors = { ...this.state.errors };
-    const errorMessage = this.validateProperty(input);
-
-    if (!errorMessage) delete errors[input.name];
-
-    const data = { ...this.state.data };
-    data[input.name] = input.value;
-    this.setState({ data, errors });
   };
 
   handleSliderChange = ({ currentTarget: input }) => {
@@ -69,8 +57,8 @@ class Form extends Component {
   };
 
   handleChange = ({ currentTarget: input }) => {
-    console.log("handle change called");
-    console.log(input.value);
+    // console.log("handle change called");
+    // console.log(input.value);
     // console.log(e.target.value);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
@@ -112,10 +100,9 @@ class Form extends Component {
     );
   }
 
-  renderSlider(name, label, checked) {
+  renderSlider(name, label, checked = false) {
     const { errors } = this.state;
-    console.log("name", name);
-    // console.log("sliderName", data[name]);
+
     return (
       <Slider
         name={name}
@@ -166,7 +153,8 @@ class Form extends Component {
         placeholder={placeholder}
         value={stateField[row][name]}
         onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
-        error={errors[name]}
+        error={row === this.state.validateIngredientsRow && errors[name]}
+        // error={errors[name]}
       />
     );
   }
@@ -197,7 +185,8 @@ class Form extends Component {
         value={stateField[row][name]}
         options={options}
         onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
-        error={errors[name]}
+        // error={errors[name]}
+        error={row === this.state.validateIngredientsRow && errors[name]}
       />
     );
   }
