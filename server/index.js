@@ -1,17 +1,15 @@
 const express = require("express");
-const fileUpload = require('express-fileupload');
-//var bodyParser = require('body-parser')
+//const fileUpload = require('express-fileupload');
+const bodyParser = require('body-parser');
 //var multer = require('multer')
 const cors = require('cors');
 const app = express();
 
 // default options
-app.use(fileUpload());
+//app.use(fileUpload());
 
 
-//app.use(bodyParser.raw({
-  //  type: 'multipart/form-data'
-  //}));
+app.use(bodyParser.json());
   
 // enable cors for PATCH requests
 app.options('*', cors());

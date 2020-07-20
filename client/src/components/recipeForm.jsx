@@ -1,86 +1,105 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
-// import auth from "../services/authService";
-// import http from "../services/httpService";
-import axios from "axios"
+import http from "../services/httpService";
+import { getUnits } from "../services/unitService";
+import { getQuantities } from "../services/qtyService";
+import { getCategories } from "../services/categoryService";
+import { getRecipe } from "../services/recipeService";
+import { FaTrash } from "react-icons/fa";
+import ItemSearch from "../components/itemSearch";
+import * as recipeService from "../services/recipeService";
 
-const UPLOAD_LIST_PLACEHOLDER =
-  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
-
-const ImagePreviews = (props) => (
-  <div>
-    {props.items.map((item, index) => (
-      <img
-        key={item + index}
-        src={item}
-        alt={index}
-        style={{ width: "50px", height: "50px" }}
-        onClick={props.onClick}
-      />
-    ))}
-  </div>
-);
+//const UPLOAD_LIST_PLACEHOLDER =
+//  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
 
 class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
+      errors: {},
+      units: [],
+      quantities: [],
+      rows: [{}],
       data: {
         title: "",
         category: "",
-        publish: "on",
+        isPublished: "",
         instructions: "",
-        filesToUpload: [UPLOAD_LIST_PLACEHOLDER],
+        filesToUpload: [],
       },
-      errors: {},
+      ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
+    this.fileInput = React.createRef();
   }
 
-  // define schema for input validation in browser
   schema = {
     title: Joi.string().label("Recipe Name"),
     category: Joi.string().label("Recipe Category"),
-    publish: Joi.string().label("Recipe Published Slider"),
+    isPublished: Joi.string().label("Recipe Published Slider"),
     instructions: Joi.string().label("Recipe Instructions"),
     filesToUpload: Joi.array().label("Files"),
+    qty: Joi.string().label("Qty"),
+    unit: Joi.string().label("Unit"),
+    itemId: Joi.string().label("Item"),
+    notes: Joi.string().label("Notes"),
   };
 
+  // This is used to make the images picker/uploader
+  ImagePreviews = (props) => (
+    <div>
+      {props.items.map((item, index) => (
+        <img
+          key={item + index}
+          id={item.fileId}
+          src={URL.createObjectURL(item)}
+          alt={index}
+          //   style={{ height: "50px" }}
+          style={{ height: "80px" }}
+          onClick={props.onClick}
+        />
+      ))}
+    </div>
+  );
+
+  //      <img
+  //        key="imageUploadPlaceholder"
+  //        src={UPLOAD_LIST_PLACEHOLDER}
+  //        onClick={props.fileInputClick}
+  //        alt="upload button"
+  //        style={{ height: "50px" }}
+  //      />
+
   handleThumbnailAdd(e) {
-    let updatedFiles = this.state.data.filesToUpload;
-    if (
-      updatedFiles.length === 1 &&
-      updatedFiles[0] === UPLOAD_LIST_PLACEHOLDER
-    ) {
-      updatedFiles = [];
+    if (e.target.files.length === 0) {
+      return;
     }
 
+    let newFile = e.target.files[0];
+
+    newFile.fileId = Date.now();
+
+    let updatedFiles = this.state.data.filesToUpload;
     this.setState({
       data: {
         ...this.state.data,
-        filesToUpload: updatedFiles.concat(
-          URL.createObjectURL(e.target.files[0])
-        ),
+        filesToUpload: [newFile].concat(updatedFiles),
       },
     });
   }
 
   handleThumbnailRemove(e) {
-    let remainingFiles = [...this.state.data.filesToUpload];
-    var index = remainingFiles.indexOf(e.target.src);
-    if (index !== -1) {
-      remainingFiles.splice(index, 1);
-      if (remainingFiles.length === 0) {
-        remainingFiles = [UPLOAD_LIST_PLACEHOLDER];
-      }
-      this.setState({
-        data: {
-          ...this.state.data,
-          filesToUpload: remainingFiles,
-        },
-      });
-    }
+    let originalArray = [...this.state.data.filesToUpload];
+    const remainingFiles = originalArray.filter((el) => {
+      return el.fileId.toString() !== e.target.id;
+    });
+    this.setState({
+      data: {
+        ...this.state.data,
+        filesToUpload: remainingFiles,
+      },
+    });
   }
 
   renderDeleteButton() {
@@ -89,107 +108,322 @@ class RecipeForm extends Form {
     }
   }
 
-  doSubmit = async () => {
-    var formData = new FormData();
-    formData.append("name", "sampleFile",)
-    console.log("here comes formdata");
-    console.log(formData);    
-    formData.append("files", this.state.data.filesToUpload[0]);
-    console.log("Appended = " + this.state.data.filesToUpload[0]);
-    console.log("here comes formdata");
-    console.log(formData);
-    console.log("here comes more formdata");
-    for (var key of formData.entries()) {
-      console.log(key[0] + ', ' + key[1]);
+  // populates recipe in state if valid recipe id
+  async populateRecipe() {
+    try {
+      const recipeId = this.props.match.params.id;
+      //   console.log("recipeId", recipeId);
+      if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
+
+      const { data: recipe } = await getRecipe(recipeId);
+      this.setState({
+        recipeId: recipe[0]._id,
+        ingredients: recipe[0].ingredients,
+        // ingredients: this.mapToViewModel(recipe),
+      });
+
+      const data = { ...this.state.data };
+      data.title = recipe[0].title;
+      data.category = recipe[0].category;
+      data.instructions = recipe[0].instructions;
+      data.isPublished = recipe[0].isPublished;
+      this.setState({ data });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
   }
 
-    axios.post(process.env.REACT_APP_API_URL + "/img", formData, {
-      
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+  async componentDidMount() {
+    // Bind the this context to the handler function
+    this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
+    // this.handleValidation = this.handleValidation.bind(this);
+
+    // load the recipe (unless new)
+    await this.populateRecipe();
+
+    // load the units and quantitiy options for select boxes into local state
+    this.setState({ units: getUnits(), quantities: getQuantities() });
+  }
+
+  // handle adding a new row to the ingredients table
+  handleAddRow = () => {
+    const ingredient = {
+      qty: "",
+      unit: "",
+      item: "",
+      notes: "",
+    };
+    const ingredients = [...this.state.ingredients, ingredient];
+    this.setState({ ingredients });
+    console.log(this.state.ingredients);
   };
 
-  onChangeHandler=event=>{
+  // handle deleting a row from the ingredients table
+  handleRemoveSpecificRow = (idx) => () => {
+    const ingredients = [...this.state.ingredients];
+    ingredients.splice(idx, 1);
+    this.setState({ ingredients });
+  };
 
-    console.log(event.target)
+  // handle updating ingredients from child itemSearch component
+  // updates itemId
+  handleIngredientUpdate(value, row) {
+    const ingredients = [...this.state.ingredients];
+    ingredients[row].itemId = value;
+    this.setState({ ingredients });
+  }
 
-}
+  triggerInputFile = (event) => {
+    event.preventDefault();
+    this.fileInput.click();
+  };
+
+  doSubmit = async () => {
+    console.log("called doSubmit");
+    let imageLinks = [];
+
+    for (const imageFile of this.state.data.filesToUpload) {
+      var formData = new FormData();
+      formData.append("name", "file");
+      formData.append("file", imageFile);
+
+      const imageData = await http.post(
+        process.env.REACT_APP_API_URL + "/img",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      imageLinks.push(imageData.data);
+    }
+
+    // console.log("ingredients", this.state.ingredients);
+
+    let recipeRecord = {
+      title: this.state.data.title,
+      userId: this.props.user._id,
+      avgRating: 0,
+      numReviews: 0,
+      category: this.state.data.category,
+      images: imageLinks,
+      isPublished: this.state.data.isPublished,
+      instructions: this.state.data.instructions,
+      ingredients: this.state.ingredients,
+    };
+    // console.log("recipeRecord", recipeRecord);
+
+    try {
+      await recipeService.newRecipe(recipeRecord);
+
+      //   console.log(res);
+      this.props.history.push("/my-recipes");
+      // This should bounce page over to the view recipe page
+    } catch (ex) {
+      console.log("Something went wrong with uploading a recipe");
+      console.log(ex);
+    }
+  };
 
   render() {
+    const { ingredients } = this.state;
+
     return (
-      <section id="create-recipe-form">
+      <React.Fragment>
+        <input
+          id="myInput"
+          type="file"
+          ref={(fileInput) => (this.fileInput = fileInput)}
+          onChange={this.handleThumbnailAdd}
+          style={{ display: "none" }}
+        />
 
+        <section id="add-recipe-form">
+          <h2>Create A Recipe</h2>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("title", "Title")}
 
-    <form ref='uploadForm' 
-      id='uploadForm' 
-      action={ process.env.REACT_APP_API_URL + "/img" } 
-      method='post' 
-      encType="multipart/form-data"
-      onChange={this.onChangeHandler}>
-        <input type="file" name="sampleFile" />
-        <input type='submit' value='Upload!' />
-    </form> 
+            <div className="form-group">
+              <label htmlFor="addImg">Recipe Images</label>
+              <this.ImagePreviews
+                items={this.state.data.filesToUpload}
+                onClick={this.handleThumbnailRemove.bind(this)}
+                fileInputClick={this.triggerInputFile}
+              />
+              <button
+                name="addImg"
+                className="btn btn-outline-dark"
+                onClick={(event) => {
+                  this.triggerInputFile(event);
+                }}
+              >
+                Add Image +
+              </button>
+            </div>
 
+            <div className="form-group mb-5 mt-5 ingredients">
+              <label htmlFor="addImg">Ingredients</label>
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th className="pl-2"> Qty </th>
+                    <th className="pl-2"> Unit </th>
+                    <th className="pl-2"> Item </th>
+                    <th className="pl-2"> Notes </th>
+                    <th className=""> </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...Array(ingredients.length)].map((row, i) => {
+                    return (
+                      (this.state.recipeId ||
+                        this.props.match.params.id === "new") && (
+                        <tr key={i}>
+                          {/* </tr><tr key={i}>    */}
+                          <td className="qty">
+                            {this.renderMultiRowSelect(
+                              "qty",
+                              null,
+                              // row,
+                              i,
+                              "ingredients",
+                              this.state.quantities
+                            )}
+                          </td>
+                          <td className="unit">
+                            {this.renderMultiRowSelect(
+                              "unit",
+                              null,
+                              // row,
+                              i,
+                              "ingredients",
+                              this.state.units
+                            )}
+                          </td>
+                          <td className="item">
+                            <ItemSearch
+                              items={this.props.items}
+                              update={this.handleIngredientUpdate}
+                              row={i}
+                              initialValue={
+                                ingredients[i].item
+                                  ? ingredients[i].item.name
+                                  : ""
+                              }
+                            />
+                          </td>
+                          <td className="notes">
+                            {this.renderMultiRowInput(
+                              "notes",
+                              null,
+                              i,
+                              "ingredients",
+                              "text",
+                              "Notes"
+                            )}
+                          </td>
+                          <td className="delete">
+                            <FaTrash
+                              className="hover-icon"
+                              onClick={this.handleRemoveSpecificRow(i)}
+                              // onClick={this.handleRemoveSpecificRow(i)} ********
+                            />
+                          </td>
+                        </tr>
+                      )
+                    );
+                  })}
+                </tbody>
+              </table>
+              <button
+                onClick={this.handleAddRow}
+                className="btn btn-outline-dark"
+              >
+                Add Ingredient +
+              </button>
+            </div>
 
-        <h1>Create a Recipe</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Recipe Name*")}
-          <div>
-            <input type="file" onChange={this.handleThumbnailAdd} />
-            <ImagePreviews
-              items={this.state.data.filesToUpload}
-              onClick={this.handleThumbnailRemove.bind(this)}
-            />
-          </div>
-          <label htmlFor="category">
-              Category
-            </label>
-          <select
-            name="category"
-            //defaultValue={this.state.selectValue}
-            onChange={this.handleChange}
-          >
-            
-            <option defaultValue disabled value="Orange">
-              Orange
-            </option>
-            <option value="Radish">Radish</option>
-            <option value="Cherry">Cherry</option>
-          </select>
+            {this.renderSelect("category", "Category", getCategories())}
 
-          <div className="custom-control custom-switch">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="customSwitch1"
-              name="publish"
-              onClick={this.handleChange}
-            ></input>
-            <label className="custom-control-label" htmlFor="customSwitch1">
-              Publish
-            </label>
-          </div>
+            {this.renderTextArea("instructions", "Recipe Instructions", 5)}
 
-          <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1">
-              Recipe Instructions
-            </label>
-            <textarea
-              name="instructions"
-              className="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-              onChange={this.handleChange}
-            ></textarea>
-          </div>
-          {this.renderButton("Save Recipe")}
-          {this.renderDeleteButton()}
-        </form>
-      </section>
+            {this.renderSlider(
+              "isPublished",
+              "Publish",
+              this.state.data.isPublished
+            )}
+
+            {this.renderButton("Save Recipe")}
+
+            {this.renderDeleteButton()}
+          </form>
+        </section>
+      </React.Fragment>
     );
   }
 }
 
 export default RecipeForm;
+
+// <tbody>
+// {[...Array(ingredients.length)].map((row, i) => {
+//   return (
+//     (this.state.recipeId ||
+//       this.props.match.params.id === "test") && (
+//       <tr key={i}>
+//         {/* </tr><tr key={i}>    */}
+//         <td>
+//           {this.renderMultiRowSelect(
+//             "qty",
+//             null,
+//             // row,
+//             i,
+//             "ingredients",
+//             this.state.quantities
+//           )}
+//         </td>
+//         <td>
+//           {this.renderMultiRowSelect(
+//             "unit",
+//             null,
+//             // row,
+//             i,
+//             "ingredients",
+//             this.state.units
+//           )}
+//         </td>
+//         <td>
+//           <ItemSearch
+//             items={this.props.items}
+//             update={this.handleIngredientUpdate}
+//             row={i}
+//             initialValue={
+//               ingredients[i].item ? ingredients[i].item.name : ""
+//             }
+//           />
+//         </td>
+//         <td>
+//           {this.renderMultiRowInput(
+//             "notes",
+//             null,
+//             i,
+//             "ingredients",
+//             "text",
+//             "Notes"
+//           )}
+//         </td>
+//         <td className="delete">
+//           <FaTrash
+//             className="hover-icon"
+//             onClick={this.handleRemoveSpecificRow(i)}
+//             // onClick={this.handleRemoveSpecificRow(i)} ********
+//           />
+//         </td>
+//       </tr>
+//     )
+//   );
+// })}
+// </tbody>

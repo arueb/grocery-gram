@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "grocerygramapi",
+  "private_key_id": "fcd1ba4a81186a1257ed295aec2d571ced7ba0c2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCzWqce3eD0hyeI\nWBY48N0NMEsMjiGWDTXUFmJvI1xIm8SRFugTqUFi4zmyXRXRkhlggqzPLzUKN/xc\nm28LBhcp1ea0X+rzlrUuWmM2Rqp6S5IxDlLQdGBT8I2uodVx1RwUTkS36BWtjn6A\nFKcKEkrm6RPwaiWBUjn3WLUCeET0IqvFlVv3ecGR81ADrt/mIzyHe9cWl8qzM6wb\nucimUpWXyLd0dD3zd35tQHQOerX97xBAUfov9G/mGl0kUATya/HQRi139hUKxfIZ\nnjwcAZit3DTMyIkUgs9CSZpH84liXNsQMXTbbWDwlfMQUHmGO9NwIA6gM1781ZpE\n3kN9K0G/AgMBAAECggEAEORmXhlesRkzp3tIaIeDAlV8lAuk7SmEWtva3IXTkMEf\nA91I8WUdE++7xOlQf0MH4dec6AyVrcc1HRHEpSCnONj9GBr6mYOlv95ifr+sGcWZ\nWMZ1FU4Iro83AO4cGNMOCHmQrlONCyIjFvQbAW9Un6fvKVMOAj6Y2AuCTN+/+tBK\ne1hBLq0fAeKkwFGo2I9rxAwUJKsNz1ldHGT6KEX8oj2B04VC+mc/Qkyj/n6P8z3l\nSNQuh6mNTSwbqZcIzowhv7qHmgsJT3bK+X8IBwcYVNI4rhxznlHy7owUgjSoXBe7\ncC9E9gg4r6Psajr9n1XypUhl6pnHrNucpBwJfspbjQKBgQDyReaKuC+RQY3WZeF/\nv+ENhLh1sqzimweynOHKKFpy3dtHmqAyaW1hdwP/tR4k3hSAVnywM15vFDqKgCJm\nmO42ShFjn7RJivdinBdMqJK1HDD184AMRfRZt3EXfgI9vGTmm/sy8shqQAICC5Pg\n2WSh7ElpRRq2BdGc9hSn1DmCPQKBgQC9hCGt5K04wPjZJ2ropyZHVjdFvMnvexn5\n9jP7XwC0NWlMDrRROtsTFswxMlT6ud/5NRGj05CCZZwE67FDH53Ho/kifjXrKjMe\nESJBbCDsUtVM5Q5vS7PL2bq1lT4aaHAK2n/o5Hf5yQsNpm2YD2wLnmFT4TH9RsI7\naARqCwl/qwKBgQDlZbZjRv8TRMTuas1XzvFjgXW/TA1TC4QAZXeNmSP7e4IzjH9+\n/EBrduu8ZVxDgFxdIIczt5AFEVxU4/qutsNneD563C8zK3gOUMnm9f7jqevaFlP6\nSwqRIJberZulpQrNKIhzt1p48F52XUwKLQ2SHE9uc9ZU37GYM5FfUB2b6QKBgQCP\naET0CW7q21tzN1i25IUaxirdIpbMGSL2+08qkCFAPIqJezcHoLnWIBIzyBp1/+Fz\n+qx2g8l+YtVFA/UHDg2e3H3RlB/I7A3yWpTJXMEtEyFFJq9dmLNdNk0KyvxLj2v5\nSo4v9XK0GWW71oxn3IOt5xNPHcFuHvUrbvKoK+HsMQKBgQCSQakWadApbmHTqJE8\nYc08ruLPPgipudu+Nbl8NpoWRKANXZsyFcwu7vFwjEyzvMlo2pGM/Pc3S/I6HOKt\n0uKUSX64YBYzZQ9FjzGeYW5LvuPC3uz9u5OjFPMIuV3bpH06AX9FSckcHlqqhrIa\nls+KUsHpf0HtYQStmVQ9VqnkrA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "grocerygramapi@appspot.gserviceaccount.com",
+  "client_id": "115610150217910436649",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/grocerygramapi%40appspot.gserviceaccount.com"
+}

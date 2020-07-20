@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
+import TextArea from "./textArea";
 import Select from "./select";
+import Slider from "./slider";
 
 class Form extends Component {
   state = {
@@ -32,14 +34,44 @@ class Form extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault(); //prevent roundtrip http request to server
-    const errors = this.validate();
-    this.setState({ errors: errors || {} });
-    if (errors) return;
+    console.log("handling submit");
+    // const errors = this.validate();
+    // this.setState({ errors: errors || {} });
+    // if (errors) return;
 
     this.doSubmit();
   };
 
   handleChange = ({ currentTarget: input }) => {
+    // console.log("handle change called");
+    // console.log(input.value);
+    const errors = { ...this.state.errors };
+    const errorMessage = this.validateProperty(input);
+
+    if (!errorMessage) delete errors[input.name];
+
+    const data = { ...this.state.data };
+    data[input.name] = input.value;
+    this.setState({ data, errors });
+  };
+
+  handleSliderChange = ({ currentTarget: input }) => {
+    // console.log("handle slider change called");
+    // console.log(input.checked);
+    const errors = { ...this.state.errors };
+    const errorMessage = this.validateProperty(input);
+
+    if (!errorMessage) delete errors[input.name];
+
+    const data = { ...this.state.data };
+    data[input.name] = input.checked;
+    this.setState({ data, errors });
+  };
+
+  handleChange = ({ currentTarget: input }) => {
+    console.log("handle change called");
+    console.log(input.value);
+    // console.log(e.target.value);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
 
@@ -60,9 +92,9 @@ class Form extends Component {
     this.setState({ valueField: data, errors });
   };
 
-  renderButton(label) {
+  renderButton(label, style = "btn btn-dark") {
     // console.log(this.validate());
-    return <button className="btn btn-primary">{label}</button>;
+    return <button className={style}>{label}</button>;
   }
 
   renderInput(name, label, type = "text", placeholder = "") {
@@ -73,6 +105,41 @@ class Form extends Component {
         name={name}
         label={label}
         placeholder={placeholder}
+        value={data[name]}
+        onChange={this.handleChange}
+        error={errors[name]}
+      />
+    );
+  }
+
+  renderSlider(name, label, checked) {
+    const { errors } = this.state;
+    console.log("name", name);
+    // console.log("sliderName", data[name]);
+    return (
+      <Slider
+        name={name}
+        label={label}
+        checked={checked}
+        // checked={data["isPublished"]}
+        // value={data[name]}
+        // onClick={this.handleChange}
+        onChange={this.handleSliderChange}
+        // onClick={(e) => this.handleSliderChange(e)}
+        // handleChange={this.handleChange.bind(this)}
+        error={errors[name]}
+      />
+    );
+  }
+
+  renderTextArea(name, label, rows, placeholder = "") {
+    const { data, errors } = this.state;
+    return (
+      <TextArea
+        name={name}
+        label={label}
+        placeholder={placeholder}
+        rows={rows}
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}

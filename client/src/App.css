@@ -259,10 +259,6 @@ td.delete {
   animation-delay: 0.05s;
 }
 
-footer .social-icons a {
-  padding-right: ;
-}
-
 .flex-center {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -281,12 +277,30 @@ footer .social-icons a {
   color: rgba(255, 255, 255, 0.6);
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+footer {
+  margin-top: 6em;
+}
+
+#add-recipe-form img {
+  margin: 1em 0.3em;
+  border: 1px solid #d2d2d2;
+}
+
+.ingredients table thead th {
+  font-weight: 300;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
+  /*  Add Recipe Form  */
+  #add-recipe-form {
+    padding: 5em 5em;
+  }
 }
 
 /* Large devices (desktops, 992px and up) */

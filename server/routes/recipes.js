@@ -10,8 +10,7 @@ router.get("/", async (req, res) => {
   try {
     const recipes = await Recipe.find().sort("-updatedOn");
     res.send(recipes);
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).send("Something failed");
   }
 });
@@ -72,6 +71,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  //console.log(req.body);
   // validate request body
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -83,8 +83,10 @@ router.post("/", async (req, res) => {
 
     // create the recipe object from the request body and save
     const recipe = new Recipe(req.body);
+    //console.log(recipe);
     await recipe.save();
-    res.send(recipe); // send recipe back with response
+    console.log * "saved recipe successfully!";
+    res.status(200).send(recipe); // send recipe back with response
   } catch (err) {
     res.status(500).send("Something failed.", err);
   }
@@ -97,14 +99,12 @@ router.patch("/:id", async (req, res) => {
 
   // if editing recipe's userId, first ensure it is present in db
   if (req.body.userId) {
-    try { 
+    try {
       const user = await User.findOne({ _id: req.body.userId });
-      if (!user)
-        return res.status(404).send("The userId does not exist");
-    }
-    catch (err) {
+      if (!user) return res.status(404).send("The userId does not exist");
+    } catch (err) {
       res.status(500).send("Something failed.", err);
-    }    
+    }
   }
 
   // make requested updates to recipe
@@ -116,7 +116,9 @@ router.patch("/:id", async (req, res) => {
     );
 
     if (!recipe)
-      return res.status(404).send("The recipe with the given ID was not found.");
+      return res
+        .status(404)
+        .send("The recipe with the given ID was not found.");
 
     res.send(recipe);
   } catch (err) {
