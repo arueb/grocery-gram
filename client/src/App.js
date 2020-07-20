@@ -8,10 +8,10 @@ import MyRecipes from "./components/myRecipes";
 import ExploreRecipes from "./components/exploreRecipes";
 import NotFound from "./components/notFound";
 import RegisterForm from "./components/registerForm";
-import RecipeForm from "./components/recipeForm";
+//import RecipeForm from "./components/recipeForm";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
-import RecipeFormDev from "./components/recipeFormDev";
+import RecipeForm from "./components/recipeForm";
 import auth from "./services/authService";
 import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,7 +44,7 @@ class App extends Component {
             <Route
               path="/my-recipes/:id"
               render={(props) => (
-                <RecipeFormDev {...props} user={user} items={items} />
+                <RecipeForm {...props} user={user} items={items} />
               )}
             />
             <Route path="/my-recipes" component={MyRecipes} />

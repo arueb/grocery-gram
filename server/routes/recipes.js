@@ -71,6 +71,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  //console.log(req.body);
   // validate request body
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -82,7 +83,7 @@ router.post("/", async (req, res) => {
 
     // create the recipe object from the request body and save
     const recipe = new Recipe(req.body);
-    console.log(recipe);
+    //console.log(recipe);
     await recipe.save();
     console.log * "saved recipe successfully!";
     res.status(200).send(recipe); // send recipe back with response

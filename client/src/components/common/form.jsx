@@ -113,7 +113,7 @@ class Form extends Component {
   }
 
   renderSlider(name, label, checked) {
-    const { data, errors } = this.state;
+    const { errors } = this.state;
     console.log("name", name);
     // console.log("sliderName", data[name]);
     return (
