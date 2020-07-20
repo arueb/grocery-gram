@@ -21,7 +21,7 @@ class MyRecipes extends Component {
           <div className="col-md-4 new-recipe">
             <button
               onClick={this.onNewRecipe}
-              className="btn btn-primary">+ New Recipe</button>
+              className="btn btn-dark">+ New Recipe</button>
           </div>
         </div>
         <hr className="divider"/>

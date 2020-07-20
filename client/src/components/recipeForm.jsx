@@ -107,6 +107,13 @@ class RecipeForm extends Form {
     }
   }
 
+  renderHeader() {
+    if (this.props.match.params.id === "new") {
+      return <h2>Create A Recipe</h2>;
+    } else {
+      return <h2>Edit Recipe</h2>;
+    }
+  }
   // populates recipe in state if valid recipe id
   async populateRecipe() {
     try {
@@ -286,7 +293,7 @@ class RecipeForm extends Form {
         />
 
         <section id="add-recipe-form">
-          <h2>Create A Recipe</h2>
+          {this.renderHeader()}
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("title", "Title")}
 
