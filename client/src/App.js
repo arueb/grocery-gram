@@ -42,12 +42,11 @@ class App extends Component {
             <Route path="/register" component={RegisterForm} />
             {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
             <Route
-              path="/my-recipes-dev/:id"
+              path="/my-recipes/:id"
               render={(props) => (
                 <RecipeFormDev {...props} user={user} items={items} />
               )}
             />
-            <Route path="/my-recipes/:id" component={RecipeForm} />
             <Route path="/my-recipes" component={MyRecipes} />
             <Route path="/explore-recipes" component={ExploreRecipes} />
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
