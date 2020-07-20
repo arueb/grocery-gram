@@ -350,3 +350,15 @@ Custom media queries
     margin-left: 15px;
   }
 }
+
+.new-recipe {
+  float: right;
+}
+
+.divider {
+  margin-bottom: 2em;
+}
+
+.mr-button-row {
+  margin-bottom: 2em;
+}
