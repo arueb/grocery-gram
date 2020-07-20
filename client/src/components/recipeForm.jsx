@@ -39,7 +39,7 @@ class RecipeForm extends Form {
     category: Joi.string().required().label("Recipe Category"),
     isPublished: Joi.boolean().required().label("Recipe Published Slider"),
     instructions: Joi.string().required().label("Recipe Instructions"),
-    filesToUpload: Joi.array().required().min(1).label("Files"),
+    filesToUpload: Joi.array().required().label("Files"),
     qty: Joi.string().required().label("Qty"),
     unit: Joi.string().required().label("Unit"),
     itemId: Joi.string().required().label("Item"),
