@@ -1,7 +1,44 @@
 import React, { Component } from "react";
+import * as recipeService from "../services/recipeService";
+import RecipeBlock from "./recipeBlock";
 
 class MyRecipes extends Component {
-  state = {};
+  state = {
+    data: "",
+    recipe:[{
+      avgRating:0,
+      numReviews:0,
+      isPublished:true,
+      _id:"5f15c469ce6c5e2f7ca8a6b5",
+      title:"midpoint test recipe",
+      userId:"5f15ac663a4d9d10c0b19d4b",
+      category:"Noodles",
+      images:[
+        {
+          _id:"5f15c469ce6c5e2f7ca8a6b6",
+          fullsizeUrl:"https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+          thumbHeight:200,
+          thumbUrl:"https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+          thumbWidth:200
+        },
+        {_id:"5f15c469ce6c5e2f7ca8a6b7",
+        fullsizeUrl:"https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+        thumbHeight:200,
+        thumbUrl:"https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+        thumbWidth:200
+      }],
+      instructions:"asdf",
+      ingredients:[{
+        _id:"5f15c469ce6c5e2f7ca8a6b8",
+        qty:"1/8",
+        unit:"Dash",
+        itemId:"5f0f556c5fcb370ff0b48acd",
+        notes:"gfd"
+      }],
+      createdOn:"2020-07-20T16:20:57.175Z",
+      __v:0
+    }]
+  };
 
   onNewRecipe = () => {
     // test for user logged in?
@@ -10,7 +47,29 @@ class MyRecipes extends Component {
     window.location = "/my-recipes/new"
   }
 
+  async componentDidMount() {
+    console.log(this.state);
+    try {
+      const { data: recipes } = await recipeService.getRecipes();
+      this.setState({ recipes });
+      this.renderRecipeBlocks()
+    } catch (ex) {
+      console.log(ex);
+    }
+    console.log(this.state);
+  }
+
+  renderRecipeBlocks(recipes) {
+    console.log('hey1');
+    if (recipes) {
+      recipes.map(function (recipe) {
+        return <RecipeBlock recipe={recipe} />
+      })
+    }
+  }
+
   render() {
+
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -24,7 +83,7 @@ class MyRecipes extends Component {
               className="btn btn-primary">+ New Recipe</button>
           </div>
         </div>
-        <hr className="divider"/>
+        <hr className="divider" />
         <div className="row mr-button-row">
           <div className="col-md-4">
             <button>All</button>
@@ -38,6 +97,9 @@ class MyRecipes extends Component {
             <button>Search</button>
           </div>
         </div>
+
+        <RecipeBlock recipe={this.state.recipe[0]}/>
+
         <div className="row">
           <div className="col-md-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
