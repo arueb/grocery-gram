@@ -27,9 +27,21 @@ class MyRecipes extends Component {
         <hr className="divider"/>
         <div className="row mr-button-row">
           <div className="col-md-4">
-            <button>All</button>
-            <button>Saved</button>
-            <button>My Own</button>
+            <div
+              className="btn-group"
+              role="group"
+              aria-label="Type of Recipes"
+            >
+              <button type="button" class="btn btn-outline-dark">
+                All
+              </button>
+              <button type="button" class="btn btn-outline-dark">
+                Saved
+              </button>
+              <button type="button" class="btn btn-outline-dark">
+                My Own
+              </button>              
+            </div>
           </div>
           <div className="col-md-4">
             <button>Filter by Category</button>
@@ -38,7 +50,7 @@ class MyRecipes extends Component {
             <button>Search</button>
           </div>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div className="col-md-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -66,7 +78,7 @@ class MyRecipes extends Component {
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
             culpa qui officia deserunt mollit anim id est laborum.
           </div>
-        </div>
+        </div> */}
       </React.Fragment>
     );
   }
