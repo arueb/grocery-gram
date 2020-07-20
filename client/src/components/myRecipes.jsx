@@ -5,39 +5,142 @@ import RecipeBlock from "./recipeBlock";
 class MyRecipes extends Component {
   state = {
     data: "",
-    recipe:[{
-      avgRating:0,
-      numReviews:0,
-      isPublished:true,
-      _id:"5f15c469ce6c5e2f7ca8a6b5",
-      title:"midpoint test recipe",
-      userId:"5f15ac663a4d9d10c0b19d4b",
-      category:"Noodles",
-      images:[
+    recipes: [{
+      avgRating: 3.5,
+      numReviews: 20,
+      isPublished: true,
+      _id: "5f15c469ce6c5e2f7ca8a6b5",
+      title: "midpoint test recipe",
+      userId: "5f15ac663a4d9d10c0b19d4b",
+      category: "Noodles",
+      images: [
         {
-          _id:"5f15c469ce6c5e2f7ca8a6b6",
-          fullsizeUrl:"https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
-          thumbHeight:200,
-          thumbUrl:"https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
-          thumbWidth:200
+          _id: "5f15c469ce6c5e2f7ca8a6b6",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+          thumbWidth: 200
         },
-        {_id:"5f15c469ce6c5e2f7ca8a6b7",
-        fullsizeUrl:"https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
-        thumbHeight:200,
-        thumbUrl:"https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
-        thumbWidth:200
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b7",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+          thumbWidth: 200
+        }],
+      instructions: "asdf",
+      ingredients: [{
+        _id: "5f15c469ce6c5e2f7ca8a6b8",
+        qty: "1/8",
+        unit: "Dash",
+        itemId: "5f0f556c5fcb370ff0b48acd",
+        notes: "gfd"
       }],
-      instructions:"asdf",
-      ingredients:[{
-        _id:"5f15c469ce6c5e2f7ca8a6b8",
-        qty:"1/8",
-        unit:"Dash",
-        itemId:"5f0f556c5fcb370ff0b48acd",
-        notes:"gfd"
+      createdOn: "2020-07-20T16:20:57.175Z",
+      __v: 0
+    },
+    {
+      avgRating: 3.5,
+      numReviews: 20,
+      isPublished: true,
+      _id: "5f15c469ce6c5e2f7ca8a6b5",
+      title: "midpoint test recipe",
+      userId: "5f15ac663a4d9d10c0b19d4b",
+      category: "Noodles",
+      images: [
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b6",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+          thumbWidth: 200
+        },
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b7",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+          thumbWidth: 200
+        }],
+      instructions: "asdf",
+      ingredients: [{
+        _id: "5f15c469ce6c5e2f7ca8a6b8",
+        qty: "1/8",
+        unit: "Dash",
+        itemId: "5f0f556c5fcb370ff0b48acd",
+        notes: "gfd"
       }],
-      createdOn:"2020-07-20T16:20:57.175Z",
-      __v:0
-    }]
+      createdOn: "2020-07-20T16:20:57.175Z",
+      __v: 0
+    },
+    {
+      avgRating: 3.5,
+      numReviews: 20,
+      isPublished: true,
+      _id: "5f15c469ce6c5e2f7ca8a6b5",
+      title: "midpoint test recipe",
+      userId: "5f15ac663a4d9d10c0b19d4b",
+      category: "Noodles",
+      images: [
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b6",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+          thumbWidth: 200
+        },
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b7",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+          thumbWidth: 200
+        }],
+      instructions: "asdf",
+      ingredients: [{
+        _id: "5f15c469ce6c5e2f7ca8a6b8",
+        qty: "1/8",
+        unit: "Dash",
+        itemId: "5f0f556c5fcb370ff0b48acd",
+        notes: "gfd"
+      }],
+      createdOn: "2020-07-20T16:20:57.175Z",
+      __v: 0
+    },
+    {
+      avgRating: 3.5,
+      numReviews: 20,
+      isPublished: true,
+      _id: "5f15c469ce6c5e2f7ca8a6b5",
+      title: "midpoint test recipe",
+      userId: "5f15ac663a4d9d10c0b19d4b",
+      category: "Noodles",
+      images: [
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b6",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+          thumbWidth: 200
+        },
+        {
+          _id: "5f15c469ce6c5e2f7ca8a6b7",
+          fullsizeUrl: "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+          thumbHeight: 200,
+          thumbUrl: "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+          thumbWidth: 200
+        }],
+      instructions: "asdf",
+      ingredients: [{
+        _id: "5f15c469ce6c5e2f7ca8a6b8",
+        qty: "1/8",
+        unit: "Dash",
+        itemId: "5f0f556c5fcb370ff0b48acd",
+        notes: "gfd"
+      }],
+      createdOn: "2020-07-20T16:20:57.175Z",
+      __v: 0
+    },]
   };
 
   onNewRecipe = () => {
@@ -50,9 +153,12 @@ class MyRecipes extends Component {
   async componentDidMount() {
     console.log(this.state);
     try {
+      console.log("predownload");
       const { data: recipes } = await recipeService.getRecipes();
       this.setState({ recipes });
-      this.renderRecipeBlocks()
+      console.log("postdownload")
+      console.log(this.state.recipes[0]);
+      //this.renderRecipeBlocks()
     } catch (ex) {
       console.log(ex);
     }
@@ -60,12 +166,13 @@ class MyRecipes extends Component {
   }
 
   renderRecipeBlocks(recipes) {
-    console.log('hey1');
+    let items = [];
     if (recipes) {
       recipes.map(function (recipe) {
-        return <RecipeBlock recipe={recipe} />
+        items.push(<RecipeBlock recipe={recipe} />)
       })
     }
+    return items;
   }
 
   render() {
@@ -97,9 +204,9 @@ class MyRecipes extends Component {
             <button>Search</button>
           </div>
         </div>
-
-        <RecipeBlock recipe={this.state.recipe[0]}/>
-
+        <div className="row">
+        {this.renderRecipeBlocks(this.state.recipes)}
+        </div>
         <div className="row">
           <div className="col-md-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
