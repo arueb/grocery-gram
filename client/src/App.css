@@ -104,7 +104,7 @@ tr:hover .hover-icon {
 }
 
 .pie {
-  margin-top: 1em;
+  margin-bottom: 3em;
 }
 
 .react-autosuggest__container {
@@ -363,4 +363,16 @@ Custom media queries
   .ingredients-form .btn {
     margin-left: 15px;
   }
+}
+
+.new-recipe {
+  float: right;
+}
+
+.divider {
+  margin-bottom: 2em;
+}
+
+.mr-button-row {
+  margin-bottom: 2em;
 }

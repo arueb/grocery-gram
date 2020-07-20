@@ -328,7 +328,7 @@ class ShoppingList extends Component {
                   ))}
             </div>
           </div>
-          <div className="col-md-4 order-md-12">
+          <div className="col-md-4 order-md-12 pie">
             <PieChart
               totalNumItems={totalNumItems}
               totalPriceItems={totalPriceItems}
