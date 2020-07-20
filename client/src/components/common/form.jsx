@@ -34,16 +34,44 @@ class Form extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault(); //prevent roundtrip http request to server
-    const errors = this.validate();
-    this.setState({ errors: errors || {} });
-    if (errors) return;
+    console.log("handling submit");
+    // const errors = this.validate();
+    // this.setState({ errors: errors || {} });
+    // if (errors) return;
 
     this.doSubmit();
   };
 
   handleChange = ({ currentTarget: input }) => {
-//    console.log("handle change called");
-//    console.log(input);
+    // console.log("handle change called");
+    // console.log(input.value);
+    const errors = { ...this.state.errors };
+    const errorMessage = this.validateProperty(input);
+
+    if (!errorMessage) delete errors[input.name];
+
+    const data = { ...this.state.data };
+    data[input.name] = input.value;
+    this.setState({ data, errors });
+  };
+
+  handleSliderChange = ({ currentTarget: input }) => {
+    // console.log("handle slider change called");
+    // console.log(input.checked);
+    const errors = { ...this.state.errors };
+    const errorMessage = this.validateProperty(input);
+
+    if (!errorMessage) delete errors[input.name];
+
+    const data = { ...this.state.data };
+    data[input.name] = input.checked;
+    this.setState({ data, errors });
+  };
+
+  handleChange = ({ currentTarget: input }) => {
+    console.log("handle change called");
+    console.log(input.value);
+    // console.log(e.target.value);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
 
@@ -64,9 +92,9 @@ class Form extends Component {
     this.setState({ valueField: data, errors });
   };
 
-  renderButton(label) {
+  renderButton(label, style = "btn btn-dark") {
     // console.log(this.validate());
-    return <button className="btn btn-primary">{label}</button>;
+    return <button className={style}>{label}</button>;
   }
 
   renderInput(name, label, type = "text", placeholder = "") {
@@ -84,14 +112,17 @@ class Form extends Component {
     );
   }
 
-  renderSlider(name, label ) {
+  renderSlider(name, label) {
     const { data, errors } = this.state;
     return (
       <Slider
         name={name}
         label={label}
-        value={data[name]}
-        onClick={this.handleChange}
+        // value={data[name]}
+        // onClick={this.handleChange}
+        onClick={this.handleSliderChange}
+        // onClick={(e) => this.handleSliderChange(e)}
+        // handleChange={this.handleChange.bind(this)}
         error={errors[name]}
       />
     );

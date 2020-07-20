@@ -9,14 +9,34 @@ const recipeSchema = new Schema({
   category: { type: String, max: 128, required: true },
   avgRating: { type: Number, min: 0, max: 5, default: 0 },
   numReviews: { type: Number, min: 0, default: 0 },
+  images: [
+    {
+      type: new Schema({
+        fullSizeHeight: {
+          type: Number,
+        },
+        fullsizeUrl: {
+          type: String,
+        },
+        thumbHeight: {
+          type: Number,
+        },
+        thumbWidth: {
+          type: Number,
+        },
+        thumbUrl: {
+          type: String,
+        },
+      }),
+    },
+  ],
   isPublished: { type: Boolean, default: false },
   instructions: { type: String, max: 2048 },
   ingredients: [
     {
       type: new Schema({
         qty: {
-          type: Number,
-          default: 1,
+          type: String,
         },
         itemId: {
           type: mongoose.Schema.ObjectId,
@@ -38,13 +58,13 @@ const recipeSchema = new Schema({
     required: true,
     default: Date.now,
   },
-}); 
+});
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
 
 validateRecipe = (recipe, ignoreRequiredFields = false) => {
   const schema = Joi.object({
-    title: Joi.string().min(2).max(128).required(), 
+    title: Joi.string().min(2).max(128).required(),
     userId: Joi.string().max(128).required(),
     category: Joi.string().max(128).required(),
     avgRating: Joi.number().min(0).max(5),
@@ -52,6 +72,7 @@ validateRecipe = (recipe, ignoreRequiredFields = false) => {
     isPublished: Joi.boolean(),
     instructions: Joi.string().max(2048),
     ingredients: Joi.array(),
+    images: Joi.array(),
     createdOn: Joi.date(),
   });
 

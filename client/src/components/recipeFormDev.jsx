@@ -24,11 +24,11 @@ class RecipeFormDev extends Form {
       data: {
         title: "",
         category: "",
-        publish: "on",
+        publish: "",
         instructions: "",
         filesToUpload: [],
       },
-      ingredients: [{ qty: "", unit: "", item: "", notes: "" }],
+      ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
     this.fileInput = React.createRef();
@@ -198,21 +198,33 @@ class RecipeFormDev extends Form {
       imageLinks.push(imageData.data);
     }
 
-    console.log(this.props);
+    console.log("ingredients", this.state.ingredients);
+
+    const ingredients = [...this.state.ingredients];
+    const newIngredients = ingredients.map((i) => {
+      return {
+        qty: i.qty,
+        unit: i.unit,
+        itemId: i.itemId,
+        notes: i.notes,
+      };
+    });
+
+    console.log("newIngredients", newIngredients);
 
     let recipeRecord = {
       title: this.state.data.title,
-      author: this.props.user._id,
+      userId: this.props.user._id,
       avgRating: 0,
       numReviews: 0,
       category: this.state.data.category,
       images: imageLinks,
       isPublished: this.state.data.publish,
       instructions: this.state.data.instructions,
+      //   ingredients: newIngredients,
       ingredients: this.state.ingredients,
     };
-
-    console.log(recipeRecord);
+    console.log("recipeRecord", recipeRecord);
 
     try {
       const res = await recipeService.newRecipe(recipeRecord);
@@ -243,8 +255,15 @@ class RecipeFormDev extends Form {
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("title", "Title")}
 
-            <div>
+            <div className="form-group">
+              <label htmlFor="addImg">Recipe Images</label>
+              <this.ImagePreviews
+                items={this.state.data.filesToUpload}
+                onClick={this.handleThumbnailRemove.bind(this)}
+                fileInputClick={this.triggerInputFile}
+              />
               <button
+                name="addImg"
                 className="btn btn-outline-dark"
                 onClick={(event) => {
                   this.triggerInputFile(event);
@@ -252,14 +271,10 @@ class RecipeFormDev extends Form {
               >
                 Add Image +
               </button>
-              {/* <h3>Recipe Images:</h3> */}
-              <this.ImagePreviews
-                items={this.state.data.filesToUpload}
-                onClick={this.handleThumbnailRemove.bind(this)}
-                fileInputClick={this.triggerInputFile}
-              />
             </div>
-            <div className="form-group mb-5 mt-5">
+
+            <div className="form-group mb-5 mt-5 ingredients">
+              <label htmlFor="addImg">Ingredients</label>
               <table className="table table-hover">
                 <thead>
                   <tr>
