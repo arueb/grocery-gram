@@ -55,7 +55,8 @@ class RecipeFormDev extends Form {
           id={item.fileId}
           src={URL.createObjectURL(item)}
           alt={index}
-          style={{ height: "50px" }}
+          //   style={{ height: "50px" }}
+          style={{ height: "80px" }}
           onClick={props.onClick}
         />
       ))}
@@ -222,7 +223,6 @@ class RecipeFormDev extends Form {
       console.log("Something went wrong with uploading a recipe");
       console.log(ex);
     }
-
   };
 
   render() {
@@ -244,7 +244,14 @@ class RecipeFormDev extends Form {
             {this.renderInput("title", "Title")}
 
             <div>
-              <button className="btn btn-outline-dark" onClick={(event) => {this.triggerInputFile(event)}}>Add Image +</button>
+              <button
+                className="btn btn-outline-dark"
+                onClick={(event) => {
+                  this.triggerInputFile(event);
+                }}
+              >
+                Add Image +
+              </button>
               {/* <h3>Recipe Images:</h3> */}
               <this.ImagePreviews
                 items={this.state.data.filesToUpload}
@@ -316,7 +323,7 @@ class RecipeFormDev extends Form {
                             <FaTrash
                               className="hover-icon"
                               onClick={this.handleRemoveSpecificRow(i)}
-                            // onClick={this.handleRemoveSpecificRow(i)} ********
+                              // onClick={this.handleRemoveSpecificRow(i)} ********
                             />
                           </td>
                         </tr>
