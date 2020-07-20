@@ -24,7 +24,7 @@ class RecipeFormDev extends Form {
       data: {
         title: "",
         category: "",
-        publish: "",
+        isPublished: "",
         instructions: "",
         filesToUpload: [],
       },
@@ -37,7 +37,7 @@ class RecipeFormDev extends Form {
   schema = {
     title: Joi.string().label("Recipe Name"),
     category: Joi.string().label("Recipe Category"),
-    publish: Joi.string().label("Recipe Published Slider"),
+    isPublished: Joi.string().label("Recipe Published Slider"),
     instructions: Joi.string().label("Recipe Instructions"),
     filesToUpload: Joi.array().label("Files"),
     qty: Joi.string().label("Qty"),
@@ -124,6 +124,9 @@ class RecipeFormDev extends Form {
 
       const data = { ...this.state.data };
       data.title = recipe[0].title;
+      data.category = recipe[0].category;
+      data.instructions = recipe[0].instructions;
+      data.isPublished = recipe[0].isPublished;
       this.setState({ data });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
@@ -198,19 +201,7 @@ class RecipeFormDev extends Form {
       imageLinks.push(imageData.data);
     }
 
-    console.log("ingredients", this.state.ingredients);
-
-    const ingredients = [...this.state.ingredients];
-    const newIngredients = ingredients.map((i) => {
-      return {
-        qty: i.qty,
-        unit: i.unit,
-        itemId: i.itemId,
-        notes: i.notes,
-      };
-    });
-
-    console.log("newIngredients", newIngredients);
+    // console.log("ingredients", this.state.ingredients);
 
     let recipeRecord = {
       title: this.state.data.title,
@@ -219,17 +210,17 @@ class RecipeFormDev extends Form {
       numReviews: 0,
       category: this.state.data.category,
       images: imageLinks,
-      isPublished: this.state.data.publish,
+      isPublished: this.state.data.isPublished,
       instructions: this.state.data.instructions,
-      //   ingredients: newIngredients,
       ingredients: this.state.ingredients,
     };
-    console.log("recipeRecord", recipeRecord);
+    // console.log("recipeRecord", recipeRecord);
 
     try {
       const res = await recipeService.newRecipe(recipeRecord);
 
-      console.log(res);
+      //   console.log(res);
+      this.props.history.push("/my-recipes");
       // This should bounce page over to the view recipe page
     } catch (ex) {
       console.log("Something went wrong with uploading a recipe");
@@ -359,7 +350,11 @@ class RecipeFormDev extends Form {
 
             {this.renderTextArea("instructions", "Recipe Instructions", 5)}
 
-            {this.renderSlider("publish", "Publish")}
+            {this.renderSlider(
+              "isPublished",
+              "Publish",
+              this.state.data.isPublished
+            )}
 
             {this.renderButton("Save Recipe")}
 

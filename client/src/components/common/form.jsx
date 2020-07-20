@@ -112,15 +112,19 @@ class Form extends Component {
     );
   }
 
-  renderSlider(name, label) {
+  renderSlider(name, label, checked) {
     const { data, errors } = this.state;
+    console.log("name", name);
+    // console.log("sliderName", data[name]);
     return (
       <Slider
         name={name}
         label={label}
+        checked={checked}
+        // checked={data["isPublished"]}
         // value={data[name]}
         // onClick={this.handleChange}
-        onClick={this.handleSliderChange}
+        onChange={this.handleSliderChange}
         // onClick={(e) => this.handleSliderChange(e)}
         // handleChange={this.handleChange.bind(this)}
         error={errors[name]}
