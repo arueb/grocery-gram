@@ -4,12 +4,6 @@ import { Link } from 'react-router-dom'
 //import StarRating from "./common/starRating";
 import AvgStarRating from "./common/avgStarRating";
 
-//{<FaStarHalfAlt size={50} />}
-//{<FaStar size={50} />}
-//{<FaRegStar size={50} />}
-//{<FaHeart size={50} />}
-//{<FaRegHeart size={50} />}
-
 class RecipeBlock extends Component {
 
   placeholderOrImage() {
