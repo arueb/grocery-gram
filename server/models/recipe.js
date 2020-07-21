@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 
 const recipeSchema = new Schema({
   title: { type: String, max: 128, required: true },
-  userId: { type: String, max: 128, required: true },
+  //   userId: { type: String, max: 128, required: true },
+  userId: { type: mongoose.Schema.ObjectId, ref: "User", required: true },
   category: { type: String, max: 128, required: true },
   avgRating: { type: Number, min: 0, max: 5, default: 0 },
   numReviews: { type: Number, min: 0, default: 0 },
