@@ -10,6 +10,10 @@ export function getRecipe(recipeId) {
   return http.get(recipeUrl(recipeId));
 }
 
+export function getRecipes() {
+  return http.get(apiEndpoint);
+}
+
 export function newRecipe(recipe) {
   return http.post(apiEndpoint, recipe);/* {
     title: recipe.title,
