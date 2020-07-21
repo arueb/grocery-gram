@@ -7,177 +7,176 @@ class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [
-      {
-        avgRating: 3.5,
-        numReviews: 20,
-        isPublished: true,
-        _id: "5f15c469ce6c5e2f7ca8a6b5",
-        title: "midpoint test recipe",
-        userId: "5f15ac663a4d9d10c0b19d4b",
-        category: "Noodles",
-        images: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b6",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
-            thumbWidth: 200,
-          },
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b7",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
-            thumbWidth: 200,
-          },
-        ],
-        instructions: "asdf",
-        ingredients: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b8",
-            qty: "1/8",
-            unit: "Dash",
-            itemId: "5f0f556c5fcb370ff0b48acd",
-            notes: "gfd",
-          },
-        ],
-        createdOn: "2020-07-20T16:20:57.175Z",
-        __v: 0,
-      },
-      {
-        avgRating: 3.5,
-        numReviews: 20,
-        isPublished: true,
-        _id: "5f15c469ce6c5e2f7ca8a6b5",
-        title: "midpoint test recipe",
-        userId: "5f15ac663a4d9d10c0b19d4b",
-        category: "Noodles",
-        images: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b6",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
-            thumbWidth: 200,
-          },
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b7",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
-            thumbWidth: 200,
-          },
-        ],
-        instructions: "asdf",
-        ingredients: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b8",
-            qty: "1/8",
-            unit: "Dash",
-            itemId: "5f0f556c5fcb370ff0b48acd",
-            notes: "gfd",
-          },
-        ],
-        createdOn: "2020-07-20T16:20:57.175Z",
-        __v: 0,
-      },
-      {
-        avgRating: 3.5,
-        numReviews: 20,
-        isPublished: true,
-        _id: "5f15c469ce6c5e2f7ca8a6b5",
-        title: "midpoint test recipe",
-        userId: "5f15ac663a4d9d10c0b19d4b",
-        category: "Noodles",
-        images: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b6",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
-            thumbWidth: 200,
-          },
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b7",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
-            thumbWidth: 200,
-          },
-        ],
-        instructions: "asdf",
-        ingredients: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b8",
-            qty: "1/8",
-            unit: "Dash",
-            itemId: "5f0f556c5fcb370ff0b48acd",
-            notes: "gfd",
-          },
-        ],
-        createdOn: "2020-07-20T16:20:57.175Z",
-        __v: 0,
-      },
-      {
-        avgRating: 3.5,
-        numReviews: 20,
-        isPublished: true,
-        _id: "5f15c469ce6c5e2f7ca8a6b5",
-        title: "midpoint test recipe",
-        userId: "5f15ac663a4d9d10c0b19d4b",
-        category: "Noodles",
-        images: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b6",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
-            thumbWidth: 200,
-          },
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b7",
-            fullsizeUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
-            thumbHeight: 200,
-            thumbUrl:
-              "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
-            thumbWidth: 200,
-          },
-        ],
-        instructions: "asdf",
-        ingredients: [
-          {
-            _id: "5f15c469ce6c5e2f7ca8a6b8",
-            qty: "1/8",
-            unit: "Dash",
-            itemId: "5f0f556c5fcb370ff0b48acd",
-            notes: "gfd",
-          },
-        ],
-        createdOn: "2020-07-20T16:20:57.175Z",
-        __v: 0,
-      },
+      // {
+      //   avgRating: 3.5,
+      //   numReviews: 20,
+      //   isPublished: true,
+      //   _id: "5f15c469ce6c5e2f7ca8a6b5",
+      //   title: "midpoint test recipe",
+      //   userId: "5f15ac663a4d9d10c0b19d4b",
+      //   category: "Noodles",
+      //   images: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b6",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+      //       thumbWidth: 200,
+      //     },
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b7",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+      //       thumbWidth: 200,
+      //     },
+      //   ],
+      //   instructions: "asdf",
+      //   ingredients: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b8",
+      //       qty: "1/8",
+      //       unit: "Dash",
+      //       itemId: "5f0f556c5fcb370ff0b48acd",
+      //       notes: "gfd",
+      //     },
+      //   ],
+      //   createdOn: "2020-07-20T16:20:57.175Z",
+      //   __v: 0,
+      // },
+      // {
+      //   avgRating: 3.5,
+      //   numReviews: 20,
+      //   isPublished: true,
+      //   _id: "5f15c469ce6c5e2f7ca8a6b5",
+      //   title: "midpoint test recipe",
+      //   userId: "5f15ac663a4d9d10c0b19d4b",
+      //   category: "Noodles",
+      //   images: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b6",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+      //       thumbWidth: 200,
+      //     },
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b7",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+      //       thumbWidth: 200,
+      //     },
+      //   ],
+      //   instructions: "asdf",
+      //   ingredients: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b8",
+      //       qty: "1/8",
+      //       unit: "Dash",
+      //       itemId: "5f0f556c5fcb370ff0b48acd",
+      //       notes: "gfd",
+      //     },
+      //   ],
+      //   createdOn: "2020-07-20T16:20:57.175Z",
+      //   __v: 0,
+      // },
+      // {
+      //   avgRating: 3.5,
+      //   numReviews: 20,
+      //   isPublished: true,
+      //   _id: "5f15c469ce6c5e2f7ca8a6b5",
+      //   title: "midpoint test recipe",
+      //   userId: "5f15ac663a4d9d10c0b19d4b",
+      //   category: "Noodles",
+      //   images: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b6",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+      //       thumbWidth: 200,
+      //     },
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b7",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+      //       thumbWidth: 200,
+      //     },
+      //   ],
+      //   instructions: "asdf",
+      //   ingredients: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b8",
+      //       qty: "1/8",
+      //       unit: "Dash",
+      //       itemId: "5f0f556c5fcb370ff0b48acd",
+      //       notes: "gfd",
+      //     },
+      //   ],
+      //   createdOn: "2020-07-20T16:20:57.175Z",
+      //   __v: 0,
+      // },
+      // {
+      //   avgRating: 3.5,
+      //   numReviews: 20,
+      //   isPublished: true,
+      //   _id: "5f15c469ce6c5e2f7ca8a6b5",
+      //   title: "midpoint test recipe",
+      //   userId: "5f15ac663a4d9d10c0b19d4b",
+      //   category: "Noodles",
+      //   images: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b6",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/jqFPjlo45_1595262055455.jpeg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/AGZtkC-Wyb_thumb_1595262056061.jpeg",
+      //       thumbWidth: 200,
+      //     },
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b7",
+      //       fullsizeUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/Tp5YugtPK_1595262056274.jpg",
+      //       thumbHeight: 200,
+      //       thumbUrl:
+      //         "https://storage.googleapis.com/grocerygramapi_bucket/tUt5Eg4zHv_thumb_1595262056539.jpg",
+      //       thumbWidth: 200,
+      //     },
+      //   ],
+      //   instructions: "asdf",
+      //   ingredients: [
+      //     {
+      //       _id: "5f15c469ce6c5e2f7ca8a6b8",
+      //       qty: "1/8",
+      //       unit: "Dash",
+      //       itemId: "5f0f556c5fcb370ff0b48acd",
+      //       notes: "gfd",
+      //     },
+      //   ],
+      //   createdOn: "2020-07-20T16:20:57.175Z",
+      //   __v: 0,
+      // },
     ],
   };
 
   onNewRecipe = () => {
     // test for user logged in?
-    console.log("clicked button");
-    // return <Redirect to="/my-recipes/new" />
+    // console.log("clicked button");
     window.location = "/my-recipes/new";
   };
 
@@ -187,11 +186,11 @@ class MyRecipes extends Component {
       console.log("predownload");
       const { data: recipes } = await recipeService.getRecipes();
       this.setState({ recipes });
-      console.log("postdownload");
-      console.log(this.state.recipes[0]);
+      // console.log("postdownload");
+      // console.log(this.state.recipes[0]);
       //this.renderRecipeBlocks()
     } catch (ex) {
-      console.log(ex);
+      // console.log(ex);
     }
     console.log(this.state);
   }
@@ -210,10 +209,10 @@ class MyRecipes extends Component {
     console.log("filter by category...");
   };
 
-
   render() {
     const options = getCategories();
-    console.log('options', options);
+    // const optionsPlus = ["Filter by Category", ...options]
+
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -229,7 +228,7 @@ class MyRecipes extends Component {
         </div>
         <hr className="divider" />
         <div className="row mr-button-row">
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div
               className="btn-group"
               role="group"
@@ -246,10 +245,16 @@ class MyRecipes extends Component {
               </button>
             </div>
           </div>
-          <div className="col-md-4">
-            <select className="form-control" id="category" name="category">
-              <option selected disabled>Filter by Category</option>
-              {/* onChange={this.handleFilterByCategory} */}
+          <div className="col-md-3">
+            <select
+              className="form-control"
+              id="mr-category"
+              name="mr-category"
+              // onChange="this.handleFilterByCategory"
+            >
+              <option selected disabled value="">
+                Filter by Category
+              </option>
               {options.map((option) => (
                 <option key={option._id} value={option.name}>
                   {option.name}
@@ -259,7 +264,7 @@ class MyRecipes extends Component {
             </select>
           </div>
           <div className="col-md-4">
-            <button>Search</button>
+            <input type="text" value="Search" className="form-control"></input>
           </div>
         </div>
         <div className="row">{this.renderRecipeBlocks(this.state.recipes)}</div>
