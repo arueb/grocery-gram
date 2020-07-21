@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
+const { Recipe } = require("../models/recipe");
 
 // create new user
 router.post("/", async (req, res) => {
@@ -131,6 +132,16 @@ router.get("/:id", async (req, res) => {
     );
   } catch (err) {
     // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    res.status(500).send("Something failed.");
+  }
+});
+
+// get all recipes for user with given id
+router.get("/:id/recipes", async (req, res) => {
+  try {
+    const recipes = await Recipe.find({ userId: req.params.id });
+    res.send(recipes);
+  } catch (err) {
     res.status(500).send("Something failed.");
   }
 });
