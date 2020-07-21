@@ -31,12 +31,18 @@ class ShoppingList extends Component {
     this.setState({ totalPriceItems: 0 })
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
-    await this.expandShoppingLists();
-    // a setTimeout hack to get pie chart to render on mount
-    // because addedItems aren't available immediately
-    setTimeout(() => {
-      this.handleUpdatePieChart();
-    }, 500);
+    try {
+      await this.expandShoppingLists();
+      // a setTimeout hack to get pie chart to render on mount
+      // because addedItems aren't available immediately
+
+      setTimeout(() => {
+        this.handleUpdatePieChart();
+      }, 500);
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   async expandShoppingLists() {
