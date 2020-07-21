@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+//import Link from 'react-router-dom'
 //import { FaStarHalfAlt, FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 //import StarRating from "./common/starRating";
 import AvgStarRating from "./common/avgStarRating";
@@ -28,7 +29,7 @@ class RecipeBlock extends Component {
             <p className="card-text">{this.props.recipe.instructions}</p>
             <p className="card-text">{"by " + this.props.recipe.userId}</p>
             <AvgStarRating avgRating={this.props.recipe.avgRating} numReviews={this.props.recipe.numReviews} starSize={20} />
-            <a href={window.location.pathname + '/my-recipes/' + this.props.recipe._id} className="stretched-link"></a>
+            <a href={window.location.pathname + '/' + this.props.recipe._id} className="stretched-link">Here</a>
           </div>
         </div>
       </React.Fragment>

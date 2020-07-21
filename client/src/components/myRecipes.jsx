@@ -198,7 +198,7 @@ class MyRecipes extends Component {
   renderRecipeBlocks(recipes) {
     let items = [];
     if (recipes) {
-      recipes.map(function (recipe) {
+      recipes.forEach(function (recipe) {
         items.push(<RecipeBlock key={recipe._id} recipe={recipe} />);
       });
     }
@@ -260,7 +260,6 @@ class MyRecipes extends Component {
                   {option.name}
                 </option>
               ))}
-              />
             </select>
           </div>
           <div className="col-md-4">
