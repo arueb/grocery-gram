@@ -13,7 +13,7 @@ const THUMB_HEIGHT = 200;
 // Imports the Google Cloud client library
 const { Storage } = require('@google-cloud/storage');
 
-// Creates a client from a Google service account key.
+// Creates a client from a Google service account key
 const storage = new Storage({ keyFilename: "gcloud_storage.json" });
 
 // Multer is required to process file uploads and make them available via
