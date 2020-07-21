@@ -120,18 +120,9 @@ class ShoppingList extends Component {
 
     setTimeout(() => {
       this.moveItemsInLists(itemId, "removeItem");
-      // this.handleUpdatePieChart();
+      this.handleUpdatePieChart();
       this.setState({ activeId: null });
-    }, 300);
-
-    try {      
-      setTimeout(() => {
-        this.handleUpdatePieChart();
-      }, 500)      
-    }
-    catch (err) {
-      
-    }
+    }, 300);      
   };
 
   moveItemsInLists = async (itemId, action) => {
@@ -348,7 +339,7 @@ class ShoppingList extends Component {
                 totalNumItems={totalNumItems}
                 totalPriceItems={totalPriceItems}
                 catPercents={catPercents}
-                />
+              />
             }
           </div>
           <div className="col-md-3 order-md-1">
