@@ -293,6 +293,10 @@ footer {
 
 .category-legend {
   list-style: none;
+  margin-top: -42px;
+  background: white;
+  width: 100%;
+  position: absolute;
 }
 
 .list-group-item {
@@ -302,6 +306,15 @@ footer {
 .myStaples .list-group-item,
 .myRecipes .list-group-item {
   padding: 0.3rem 1.25rem;
+}
+
+#canvasjs-react-chart-container-0 {
+  margin-top: -25px;
+}
+
+.pie h5 {
+  position: absolute;
+  z-index: 100;
 }
 
 /* Small devices (landscape phones, 576px and up) */
