@@ -3,7 +3,8 @@ import _ from "lodash";
 import {
   getUserData,
   updateShoppingList,
-} from "../services/shoppingListService";
+  updateItemCounts,
+} from "../services/userService";
 import { getColor } from "../services/itemService";
 import ItemSearch from "../components/itemSearch";
 import PieChart from "./pieChart";
@@ -14,54 +15,54 @@ class ShoppingList extends Component {
     addedItems: null,
     removedItems: null,
     catPercents: null,
-    totalNumItems: null,
-    totalPriceItems: null,
+    totalNumItems: 0,
+    totalPriceItems: 0,
     activeId: null,
     staples: [],
     recipes: [],
+    itemCounts: [],
+    isLoading: true,
     errors: {},
   };
 
-  async componentDidUpdate() {
-    await this.expandShoppingLists();
-  }
+  //   async componentDidUpdate() {
+  //     alert("component did update");
+  //     await this.expandShoppingLists();
+  //   }
 
   async componentDidMount() {
-    this.setState({ totalNumItems: 0 })
-    this.setState({ totalPriceItems: 0 })
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
-    try {
-      await this.expandShoppingLists();
-      // a setTimeout hack to get pie chart to render on mount
-      // because addedItems aren't available immediately
+    await this.expandShoppingLists();
 
-      setTimeout(() => {
-        this.handleUpdatePieChart();
-      }, 500);
-    }
-    catch (err) {
-      console.log(err);
-    }
+    // a setTimeout hack to get pie chart to render on mount
+    // because addedItems aren't available immediately
+    this.handleUpdatePieChart();
+    // setTimeout(() => {
+    //   this.handleUpdatePieChart();
+    // }, 500);
   }
 
   async expandShoppingLists() {
     const { items, user } = this.props;
 
     if (!user) {
-      console.log("User not logged in...");
+      console.log("User not logged in...", user);
       return;
     }
 
     if (items && !this.state.userData) {
       const { data: userData } = await getUserData(user._id);
-
+      const itemCounts = userData.itemCounts;
       const addedItemIds = userData.addedItems;
       let addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
       addedItems = this.sortItems(addedItems);
-      this.setState({ addedItems, removedItems, userData });
+      this.setState({ addedItems, removedItems, userData, itemCounts });
+      this.updateMyStaples(itemCounts);
+      //   this.handleUpdatePieChart();
+      this.setState({ isLoading: false });
     }
   }
 
@@ -93,6 +94,11 @@ class ShoppingList extends Component {
     const newAddedItemIds = newAddedItems.map((item) => item._id);
     const removedItemIds = this.state.removedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
+    const itemCounts = [...this.state.itemCounts];
+    setTimeout(() => {
+      this.updateMyStaples(itemCounts);
+    }, 300);
+
     try {
       await updateShoppingList(
         this.props.user._id,
@@ -109,20 +115,24 @@ class ShoppingList extends Component {
   };
 
   handleAddBackItem = async (itemId) => {
+    console.log("handling add back");
     await this.moveItemsInLists(itemId, "addBack");
     this.handleUpdatePieChart();
+    // const itemCounts = [...this.state.itemCounts];
+    // this.updateMyStaples(itemCounts);
+    this.updateMyStaples(this.state.itemCounts);
   };
 
   handleRemoveItem = async (itemId) => {
-    // this.handleUpdatePieChart();
-    console.log("clicked an item");
+    this.updateItemCount(itemId);
+    // console.log("clicked an item");
     this.setState({ activeId: itemId });
 
     setTimeout(() => {
       this.moveItemsInLists(itemId, "removeItem");
       this.handleUpdatePieChart();
       this.setState({ activeId: null });
-    }, 300);      
+    }, 300);
   };
 
   moveItemsInLists = async (itemId, action) => {
@@ -210,7 +220,7 @@ class ShoppingList extends Component {
       const item = this.expandItemById(value, items);
       this.handleAddItemFromSearchBox(item);
     }
-  }  
+  }
 
   handleUpdatePieChart = () => {
     // create array of category objects for use in pie chart
@@ -225,19 +235,18 @@ class ShoppingList extends Component {
         let catObj = {
           name: catName,
           count: 1,
-          cost: addedItems[i].price
-        }
+          cost: addedItems[i].price,
+        };
         catStats.push(catObj);
-      }
-      else {
+      } else {
         const catArr = catStats.filter((cat) => {
-          return cat.name === catName
+          return cat.name === catName;
         });
         let catObj = catArr[0];
         catObj.count++;
         catObj.cost += addedItems[i].price;
       }
-    }    
+    }
     // calculate item totals
     let totalNumItems = addedItems.length;
     let totalPriceItems = 0;
@@ -247,16 +256,54 @@ class ShoppingList extends Component {
     totalPriceItems = totalPriceItems.toFixed(2); // set to 2 dec places
     // calculate percentage and add pie chart colors
     const catPercents = [];
-    catStats.forEach((cat) => catPercents.push({
+    catStats.forEach((cat) =>
+      catPercents.push({
         name: cat.name,
-        y: cat.count / totalNumItems * 100, // calc percent of total
-        color: getColor(cat.name)
-      }
-    ))
+        y: (cat.count / totalNumItems) * 100, // calc percent of total
+        color: getColor(cat.name),
+      })
+    );
     this.setState({ catPercents, totalNumItems, totalPriceItems });
-  } 
+  };
 
   // updateMyStaples
+
+  updateItemCount = async (itemId) => {
+    const itemCounts = [...this.state.itemCounts];
+    const idx = itemCounts.findIndex((i) => i._id === itemId);
+
+    if (idx === -1) {
+      const result = { _id: itemId, count: 1 };
+      itemCounts.push(result);
+    } else {
+      itemCounts[idx].count++;
+    }
+
+    this.setState({ itemCounts });
+    this.updateMyStaples(itemCounts);
+    try {
+      await updateItemCounts(this.props.user._id, itemCounts);
+    } catch (err) {}
+  };
+
+  updateMyStaples = (itemCounts) => {
+    const addedItems = [...this.state.addedItems].map((i) => i._id);
+    const allItems = [...this.props.items];
+
+    // only include items not already present in addedItems
+    const filtered = itemCounts.filter((item) => {
+      return !addedItems.includes(item._id);
+    });
+    // console.log("filtered", filtered);
+    const staples = filtered
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6)
+      .map((i) => {
+        return allItems.find((item) => item._id === i._id);
+      });
+    // return results;
+    this.setState({ staples });
+  };
 
   // updateMyRecipes
 
@@ -265,11 +312,20 @@ class ShoppingList extends Component {
   // handleChooseRecipe
 
   render() {
-    const { addedItems, removedItems, totalNumItems,
-            totalPriceItems, catPercents } = this.state;
+    const {
+      addedItems,
+      removedItems,
+      totalNumItems,
+      totalPriceItems,
+      catPercents,
+      staples,
+      isLoading,
+    } = this.state;
 
     return (
       <React.Fragment>
+        {isLoading && <p>page loading...</p>}
+
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
@@ -334,26 +390,55 @@ class ShoppingList extends Component {
             </div>
           </div>
           <div className="col-md-4 order-md-12 pie">
-            {totalNumItems && totalPriceItems && catPercents &&
+            <h5>List Summary</h5>
+            {totalNumItems > 0 && (
               <PieChart
                 totalNumItems={totalNumItems}
                 totalPriceItems={totalPriceItems}
                 catPercents={catPercents}
               />
-            }
+            )}
+            <ul className="category-legend">
+              {totalNumItems &&
+                catPercents.map((cat, i) => {
+                  return (
+                    <li key={i}>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          backgroundColor: cat.color,
+                          width: "12px",
+                          height: "12px",
+                          marginRight: ".5em",
+                        }}
+                      ></span>
+                      {cat.name}
+                    </li>
+                  );
+                })}
+            </ul>
           </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
-            <div className="list-group lst-grp-hover">
-              <li className="list-group-item border-0">A staple</li>
-              <li className="list-group-item border-0">A staple</li>
-              <li className="list-group-item border-0">A staple</li>
-              <li className="list-group-item border-0">A staple</li>
-              <li className="list-group-item border-0">A staple</li>
-              <li className="list-group-item border-0">A staple</li>
+            <div className="list-group lst-grp-hover myStaples">
+              {console.log("staples", staples)}
+              {!isLoading &&
+                staples &&
+                staples.map(
+                  (item, i) =>
+                    item && (
+                      <li
+                        key={i}
+                        className="list-group-item border-0"
+                        onClick={() => this.handleAddItemFromSearchBox(item)}
+                      >
+                        {item.name}
+                      </li>
+                    )
+                )}
             </div>
             <h5 className="my-recipes-header">My Recipes</h5>
-            <div className="list-group lst-grp-hover">
+            <div className="list-group lst-grp-hover myRecipes">
               <li className="list-group-item border-0">A recipe</li>
               <li className="list-group-item border-0">A recipe</li>
               <li className="list-group-item border-0">A recipe</li>

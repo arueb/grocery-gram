@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import CanvasJSReact from "../canvasjs.react";
 // var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -6,18 +6,17 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 class PieChart extends Component {
   render() {
     const { catPercents, totalNumItems, totalPriceItems } = this.props;
-    const itemFormat = (totalNumItems === 1) ? "item" : "items";
-   
-    const options = {
+    const itemFormat = totalNumItems === 1 ? "item" : "items";
 
+    const options = {
       animationEnabled: true,
-      title: {
-        text: "Totals",
-        fontFamily: "Roboto, sans-serif",
-        fontSize: "20",
-        fontWeight: 500,
-        lineHeight: 1.2,
-      },
+      //   title: {
+      //     text: "Totals",
+      //     fontFamily: "Roboto, sans-serif",
+      //     fontSize: 20,
+      //     fontWeight: 500,
+      //     lineHeight: 1.2,
+      //   },
       subtitles: [
         {
           text: `${totalNumItems} ${itemFormat}: $${totalPriceItems}`,
@@ -31,7 +30,7 @@ class PieChart extends Component {
       data: [
         {
           type: "doughnut",
-          showInLegend: true,
+          //   showInLegend: true,
           // indexLabel: "{name}: {y}",
           // indexLabel: "",
           yValueFormatString: "#,###'%'",
