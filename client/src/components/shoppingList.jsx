@@ -278,6 +278,7 @@ class ShoppingList extends Component {
     } else {
       itemCounts[idx].count++;
     }
+
     this.setState({ itemCounts });
     this.updateMyStaples(itemCounts);
     try {
@@ -288,7 +289,8 @@ class ShoppingList extends Component {
   updateMyStaples = (itemCounts) => {
     const addedItems = [...this.state.addedItems].map((i) => i._id);
     const allItems = [...this.props.items];
-    // console.log("addedItems", addedItems);
+
+    // only include items not already present in addedItems
     const filtered = itemCounts.filter((item) => {
       return !addedItems.includes(item._id);
     });
