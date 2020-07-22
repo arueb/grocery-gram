@@ -13,6 +13,8 @@ export const units = [
   { _id: "12", name: "Gallon" },
   { _id: "13", name: "Liter" },
   { _id: "14", name: "Cup" },
+  { _id: "15", name: "Lb" },
+  { _id: "16", name: "Each" },
 ];
 
 export function getUnits() {
