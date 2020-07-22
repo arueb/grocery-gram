@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
         "itemCounts",
       ])
     );
-});  
+});
 
 // update given user's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
@@ -69,22 +69,22 @@ router.patch("/:id", async (req, res) => {
         .status(400)
         .send("A user with this username is already registered.");
   }
-  
+
   // make requested updates to user
   try {
-    const user = await User.findOneAndUpdate(    
+    const user = await User.findOneAndUpdate(
       { _id: req.params.id },
-      { $set: req.body },  
-      { new: true }    
-    ); 
+      { $set: req.body },
+      { new: true }
+    );
 
     if (!user)
-      return res.status(404).send("The user with the given ID was not found.");    
+      return res.status(404).send("The user with the given ID was not found.");
 
-      // Need to remove password key from output
-      user.password = undefined;
+    // Need to remove password key from output
+    user.password = undefined;
 
-      res.json(user);    
+    res.json(user);
   } catch (err) {
     res.status(500).send("Something failed", err);
   }
@@ -139,6 +139,10 @@ router.get("/:id", async (req, res) => {
 // get all recipes for user with given id
 router.get("/:id/recipes", async (req, res) => {
   try {
+    const user = await User.findById(req.params.id);
+    if (!user)
+      return res.status(404).send("The user with the given ID was not found.");
+
     const recipes = await Recipe.find({ userId: req.params.id });
     res.send(recipes);
   } catch (err) {

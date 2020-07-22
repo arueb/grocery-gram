@@ -4,11 +4,47 @@ const _ = require("lodash");
 const { Recipe, validate } = require("../models/recipe");
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
+// get all recipes
+// router.get("/", async (req, res) => {
+//   try {
+//     const recipes = await Recipe.find().sort("-updatedOn");
+//     res.send(recipes);
+//   } catch (err) {
+//     res.status(500).send("Something failed");
+//   }
+// });
 
 // get all recipes
 router.get("/", async (req, res) => {
   try {
-    const recipes = await Recipe.find().sort("-updatedOn");
+    const recipes = await Recipe.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          avgRating: 1,
+          numReviews: 1,
+          isPublished: 1,
+          userId: 1,
+          category: 1,
+          images: 1,
+          instructions: 1,
+          title: 1,
+          ingredients: 1,
+          createdOn: 1,
+          "user.username": 1,
+          "user._id": 1,
+        },
+      },
+    ]);
+
     res.send(recipes);
   } catch (err) {
     res.status(500).send("Something failed");
