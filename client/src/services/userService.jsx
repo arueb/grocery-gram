@@ -2,10 +2,26 @@ import http from "./httpService";
 
 const apiEndpoint = "/users";
 
+function userUrl(id) {
+  return `${apiEndpoint}/${id}`;
+}
+
 export function register(user) {
   return http.post(apiEndpoint, {
     email: user.email,
     username: user.username,
     password: user.password,
   });
+}
+
+export function getUserData(userId) {
+  return http.get(userUrl(userId));
+}
+
+export function updateShoppingList(userId, addedItems, removedItems) {
+  return http.patch(userUrl(userId), { addedItems, removedItems });
+}
+
+export function updateItemCounts(userId, itemCounts) {
+  return http.patch(userUrl(userId), { itemCounts });
 }

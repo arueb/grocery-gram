@@ -21,48 +21,51 @@ class App extends Component {
   state = {
     user: null,
     items: null,
+    isLoading: true,
   };
 
   async componentDidMount() {
     const user = auth.getCurrentUser();
     const { data: items } = await item.getItems();
-    this.setState({ user, items });
+    this.setState({ user, items, isLoading: false });
   }
 
   render() {
-    const { user, items } = this.state;
+    const { user, items, isLoading } = this.state;
     return (
-      <React.Fragment>
-        <ToastContainer />
-        <Navbar user={user} />
-        <main className="container">
-          <Switch>
-            <Route path="/login" component={LoginForm} />
-            <Route path="/logout" component={Logout} />
-            <Route path="/register" component={RegisterForm} />
-            {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
-            <Route
-              path="/my-recipes/:id"
-              render={(props) => (
-                <RecipeForm {...props} user={user} items={items} />
-              )}
-            />
-            <Route path="/my-recipes" component={MyRecipes} />
-            <Route path="/explore-recipes" component={ExploreRecipes} />
-            {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
-            <Route
-              path="/shopping-list"
-              render={(props) => (
-                <ShoppingList {...props} user={user} items={items} />
-              )}
-            />
-            <Route path="/not-found" component={NotFound} />
-            <Redirect exact from="/" to="/shopping-list" />
-            <Redirect to="/not-found" />
-          </Switch>
-        </main>
-        <Footer />
-      </React.Fragment>
+      !isLoading && (
+        <React.Fragment>
+          <ToastContainer />
+          <Navbar user={user} />
+          <main className="container">
+            <Switch>
+              <Route path="/login" component={LoginForm} />
+              <Route path="/logout" component={Logout} />
+              <Route path="/register" component={RegisterForm} />
+              {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
+              <Route
+                path="/my-recipes/:id"
+                render={(props) => (
+                  <RecipeForm {...props} user={user} items={items} />
+                )}
+              />
+              <Route path="/my-recipes" component={MyRecipes} />
+              <Route path="/explore-recipes" component={ExploreRecipes} />
+              {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
+              <Route
+                path="/shopping-list"
+                render={(props) => (
+                  <ShoppingList {...props} user={user} items={items} />
+                )}
+              />
+              <Route path="/not-found" component={NotFound} />
+              <Redirect exact from="/" to="/shopping-list" />
+              <Redirect to="/not-found" />
+            </Switch>
+          </main>
+          <Footer />
+        </React.Fragment>
+      )
     );
   }
 }

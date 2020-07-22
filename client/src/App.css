@@ -291,6 +291,10 @@ footer {
   font-weight: 300;
 }
 
+.category-legend {
+  list-style: none;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }
