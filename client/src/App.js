@@ -47,7 +47,12 @@ class App extends Component {
                 <RecipeForm {...props} user={user} items={items} />
               )}
             />
-            <Route path="/my-recipes" component={MyRecipes} />
+            <Route
+              path="/my-recipes"
+              render={(props) => (
+                <MyRecipes {...props} user={user} />
+              )}
+              />
             <Route path="/explore-recipes" component={ExploreRecipes} />
             {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
             <Route

@@ -31,12 +31,18 @@ class ShoppingList extends Component {
     this.setState({ totalPriceItems: 0 })
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
-    await this.expandShoppingLists();
-    // a setTimeout hack to get pie chart to render on mount
-    // because addedItems aren't available immediately
-    setTimeout(() => {
-      this.handleUpdatePieChart();
-    }, 500);
+    try {
+      await this.expandShoppingLists();
+      // a setTimeout hack to get pie chart to render on mount
+      // because addedItems aren't available immediately
+
+      setTimeout(() => {
+        this.handleUpdatePieChart();
+      }, 500);
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   async expandShoppingLists() {
@@ -116,8 +122,7 @@ class ShoppingList extends Component {
       this.moveItemsInLists(itemId, "removeItem");
       this.handleUpdatePieChart();
       this.setState({ activeId: null });
-    }, 300);
-    
+    }, 300);      
   };
 
   moveItemsInLists = async (itemId, action) => {
@@ -329,11 +334,13 @@ class ShoppingList extends Component {
             </div>
           </div>
           <div className="col-md-4 order-md-12 pie">
-            <PieChart
-              totalNumItems={totalNumItems}
-              totalPriceItems={totalPriceItems}
-              catPercents={catPercents}
-            />
+            {totalNumItems && totalPriceItems && catPercents &&
+              <PieChart
+                totalNumItems={totalNumItems}
+                totalPriceItems={totalPriceItems}
+                catPercents={catPercents}
+              />
+            }
           </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
