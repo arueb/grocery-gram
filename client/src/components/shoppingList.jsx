@@ -418,7 +418,7 @@ class ShoppingList extends Component {
           </div>
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
-            <div className="list-group lst-grp-hover">
+            <div className="list-group lst-grp-hover myStaples">
               {staples &&
                 staples.map((item, i) => (
                   <li
@@ -431,7 +431,7 @@ class ShoppingList extends Component {
                 ))}
             </div>
             <h5 className="my-recipes-header">My Recipes</h5>
-            <div className="list-group lst-grp-hover">
+            <div className="list-group lst-grp-hover myRecipes">
               <li className="list-group-item border-0">A recipe</li>
               <li className="list-group-item border-0">A recipe</li>
               <li className="list-group-item border-0">A recipe</li>

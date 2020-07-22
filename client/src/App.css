@@ -295,6 +295,15 @@ footer {
   list-style: none;
 }
 
+.list-group-item {
+  padding: 0.6rem 1.25rem;
+}
+
+.myStaples .list-group-item,
+.myRecipes .list-group-item {
+  padding: 0.3rem 1.25rem;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }
