@@ -400,7 +400,7 @@ class ShoppingList extends Component {
               {totalNumItems &&
                 catPercents.map((cat, i) => {
                   return (
-                    <li>
+                    <li key={i}>
                       <span
                         style={{
                           display: "inline-block",
@@ -419,16 +419,21 @@ class ShoppingList extends Component {
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover myStaples">
-              {staples &&
-                staples.map((item, i) => (
-                  <li
-                    key={i}
-                    className="list-group-item border-0"
-                    onClick={() => this.handleAddItemFromSearchBox(item)}
-                  >
-                    {item.name}
-                  </li>
-                ))}
+              {console.log("staples", staples)}
+              {!isLoading &&
+                staples &&
+                staples.map(
+                  (item, i) =>
+                    item && (
+                      <li
+                        key={i}
+                        className="list-group-item border-0"
+                        onClick={() => this.handleAddItemFromSearchBox(item)}
+                      >
+                        {item.name}
+                      </li>
+                    )
+                )}
             </div>
             <h5 className="my-recipes-header">My Recipes</h5>
             <div className="list-group lst-grp-hover myRecipes">
