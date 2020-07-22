@@ -30,26 +30,29 @@ class RecipeBlock extends Component {
     );
     return (
       <React.Fragment>
-        <Link to={"/my-recipes/" + this.props.recipe._id}>
-          <div className="card" style={{ width: "200px" }}>
-            {this.placeholderOrImage()}
-            <div className="card-body bg-secondary text-white">
-              <h5 className="card-title">{this.props.recipe.title}</h5>
-              {/* <p className="card-text">{this.props.recipe.instructions}</p> */}
-              <p className="card-text">
-                By{" "}
-                {this.props.recipe.user[0]
-                  ? this.props.recipe.user[0].username
-                  : this.props.recipe.userId}
-              </p>
-              <AvgStarRating
-                avgRating={this.props.recipe.avgRating}
-                numReviews={this.props.recipe.numReviews}
-                starSize={20}
-              />
+        <div className="col-md-4 col-lg-3 mb-4">
+          <Link to={"/my-recipes/" + this.props.recipe._id}>
+            <div className="card">
+              {/* <div className="card" style={{ width: "200px" }}> */}
+              {this.placeholderOrImage()}
+              <div className="card-body bg-secondary text-white">
+                <h5 className="card-title">{this.props.recipe.title}</h5>
+                {/* <p className="card-text">{this.props.recipe.instructions}</p> */}
+                <p className="card-text">
+                  By{" "}
+                  {this.props.recipe.user[0]
+                    ? this.props.recipe.user[0].username
+                    : this.props.recipe.userId}
+                </p>
+                <AvgStarRating
+                  avgRating={this.props.recipe.avgRating}
+                  numReviews={this.props.recipe.numReviews}
+                  starSize={20}
+                />
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </React.Fragment>
     );
   }
