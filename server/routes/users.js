@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
 const { Recipe } = require("../models/recipe");
+const mongoose = require("mongoose");
 
 // create new user
 router.post("/", async (req, res) => {
@@ -137,13 +138,78 @@ router.get("/:id", async (req, res) => {
 });
 
 // get all recipes for user with given id
+// router.get("/:id/recipes", async (req, res) => {
+//   try {
+//     const user = await User.findById(req.params.id);
+//     if (!user)
+//       return res.status(404).send("The user with the given ID was not found.");
+
+//     const recipes = await Recipe.find({ userId: req.params.id });
+//     res.send(recipes);
+//   } catch (err) {
+//     res.status(500).send("Something failed.");
+//   }
+// });
+
+// get all recipes for user with given id
 router.get("/:id/recipes", async (req, res) => {
   try {
+    // check to make sure the user exists
     const user = await User.findById(req.params.id);
     if (!user)
       return res.status(404).send("The user with the given ID was not found.");
 
-    const recipes = await Recipe.find({ userId: req.params.id });
+    // convert array of id strings to mongoose ObjectIds
+    let ids = [...user.savedRecipes];
+    ids = ids.map((id) => {
+      return mongoose.Types.ObjectId(id);
+    });
+
+    const recipes = await Recipe.aggregate([
+      // match recipes either created or saved by the user
+      {
+        $match: {
+          $or: [
+            { userId: mongoose.Types.ObjectId(user._id) },
+            { _id: { $in: ids } },
+          ],
+        },
+      },
+      { $unwind: "$ingredients" },
+      // lookup item in ingredients and return full object with response
+      {
+        $lookup: {
+          from: "items",
+          localField: "ingredients.itemId",
+          foreignField: "_id",
+          as: "ingredients.item", // this is the name of the new property to hold the item object
+        },
+      },
+      // converts newly added 'item' property to a single object instead of an object array
+      { $unwind: "$ingredients.item" },
+
+      // group everythign back together again into a single parent object
+      {
+        $group: {
+          _id: "$_id",
+          root: { $mergeObjects: "$$ROOT" },
+          ingredients: { $push: "$ingredients" },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ["$root", "$$ROOT"],
+          },
+        },
+      },
+      {
+        $project: {
+          root: 0,
+        },
+      },
+    ]);
+
     res.send(recipes);
   } catch (err) {
     res.status(500).send("Something failed.");
