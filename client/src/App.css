@@ -9,10 +9,85 @@ M E D I A  Q U E R I E S
 Bootstrap 4 breakpoints
 */
 
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  /*  Add Recipe Form  */
+  #add-recipe-form {
+    padding: 5em 5em;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries
+*/
+
+/* Set width to make card deck cards 100% width */
+@media (max-width: 575px) {
+  .ingredients-form {
+    margin: 0 -15px;
+  }
+
+  .ingredients-form thead {
+    display: none;
+  }
+  .ingredients-form td {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+  }
+
+  .ingredients-form .qty,
+  .ingredients-form .unit {
+    width: 50%;
+    padding-top: 1em;
+  }
+  .ingredients-form .qty {
+    padding-right: 0.5rem;
+  }
+  .ingredients-form .unit {
+    padding-left: 0.5rem;
+  }
+
+  .ingredients-form .item {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .ingredients-form .notes {
+    width: 85%;
+    padding-bottom: 1em;
+    padding-right: 0.5rem;
+  }
+  .ingredients-form .delete {
+    padding-left: 0.5rem;
+    padding-top: 0.6rem;
+  }
+  .ingredients-form tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .ingredients-form .btn {
+    margin-left: 15px;
+  }
+}
+
 /* 
-Extra small devices (portrait phones, less than 576px) 
+GLOBAL DEVICE STYLES - All devices (portrait phones, less than 576px) and larger
 No media query since this is the default in Bootstrap because it is "mobile first"
 */
+
 body {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
@@ -317,80 +392,6 @@ footer {
   z-index: 100;
 }
 
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) {
-}
-
-/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
-@media (min-width: 768px) {
-  /*  Add Recipe Form  */
-  #add-recipe-form {
-    padding: 5em 5em;
-  }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
-}
-
-/*
-::::::::::::::::::::::::::::::::::::::::::::::::::::
-Custom media queries
-*/
-
-/* Set width to make card deck cards 100% width */
-@media (max-width: 575px) {
-  .ingredients-form {
-    margin: 0 -15px;
-  }
-
-  .ingredients-form thead {
-    display: none;
-  }
-  .ingredients-form td {
-    display: inline-block;
-    padding: 0.4rem 1rem;
-  }
-
-  .ingredients-form .qty,
-  .ingredients-form .unit {
-    width: 50%;
-    padding-top: 1em;
-  }
-  .ingredients-form .qty {
-    padding-right: 0.5rem;
-  }
-  .ingredients-form .unit {
-    padding-left: 0.5rem;
-  }
-
-  .ingredients-form .item {
-    width: 100%;
-    min-width: 100%;
-  }
-
-  .ingredients-form .notes {
-    width: 85%;
-    padding-bottom: 1em;
-    padding-right: 0.5rem;
-  }
-  .ingredients-form .delete {
-    padding-left: 0.5rem;
-    padding-top: 0.6rem;
-  }
-  .ingredients-form tr {
-    border-bottom: 1px solid #ddd;
-  }
-
-  .ingredients-form .btn {
-    margin-left: 15px;
-  }
-}
-
 .new-recipe {
   float: right;
 }
@@ -401,4 +402,40 @@ Custom media queries
 
 .mr-button-row {
   margin-bottom: 2em;
+}
+
+.card-title {
+  font-size: 1.1rem;
+}
+
+.card-text {
+  font-size: 0.8rem;
+}
+
+.card-link:hover {
+  text-decoration: none;
+}
+
+/* [1] The container */
+.img-hover-zoom {
+  /* height: 300px; [1.1] Set it as per your need */
+  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+}
+
+/* [2] Transition property for smooth transformation of images */
+.img-hover-zoom img {
+  transition: transform 0.3s ease;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+.card:hover img {
+  transform: scale(1.1);
+}
+
+.card:hover .card-body {
+  background-color: #343a40 !important;
+  /* background-color: #AD310B; */
+  -webkit-transition: background-color 300ms linear;
+  -ms-transition: background-color 300ms linear;
+  transition: background-color 300ms linear;
 }
