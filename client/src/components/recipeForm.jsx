@@ -112,12 +112,9 @@ class RecipeForm extends Form {
 
   async handleDeleteRecipe(e) {
     e.preventDefault();
-    console.log("deleting recipe...");
     const { recipeId } = this.state;
-    // console.log(this.state.recipeId);
     try {
       await deleteRecipe(recipeId);
-      console.log("deleted recipe");
       this.props.history.push("/my-recipes");
     } catch (err) {}
   }

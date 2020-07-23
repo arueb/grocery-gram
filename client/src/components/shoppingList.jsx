@@ -34,15 +34,12 @@ class ShoppingList extends Component {
   async componentDidMount() {
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
+
+    // populate the users lists and recipes
     await this.expandShoppingLists();
 
-    // a setTimeout hack to get pie chart to render on mount
-    // because addedItems aren't available immediately
+    // update the pie chart
     this.handleUpdatePieChart();
-
-    // setTimeout(() => {
-    //   this.handleUpdatePieChart();
-    // }, 500);
   }
 
   async expandShoppingLists() {
@@ -319,6 +316,39 @@ class ShoppingList extends Component {
   // handleChooseStaple
 
   // handleChooseRecipe
+  handleAddRecipeIngredients = async (recipe) => {
+    // console.log(recipe);
+    let itemsToAdd = recipe.ingredients.map((ingredient) => {
+      return ingredient.item;
+    });
+
+    const prevAddedItems = [...this.state.addedItems];
+    const prevAddedItemIds = prevAddedItems.map((item) => item._id);
+    itemsToAdd = itemsToAdd.filter((item) => {
+      return !prevAddedItemIds.includes(item._id);
+    });
+
+    let newAddedItems = [...this.state.addedItems, ...itemsToAdd];
+
+    newAddedItems = this.sortItems(newAddedItems);
+    const newAddedItemIds = newAddedItems.map((item) => item._id);
+
+    this.setState({ addedItems: newAddedItems });
+    const itemCounts = [...this.state.itemCounts];
+    setTimeout(() => {
+      this.updateMyStaples(itemCounts);
+    }, 300);
+
+    try {
+      await updateShoppingList(this.props.user._id, newAddedItemIds);
+      this.handleUpdatePieChart();
+    } catch (err) {
+      // revert state back to original
+      this.setState({ addedItems: prevAddedItems });
+      this.handleUpdatePieChart();
+      console.log("Something went wrong.", err);
+    }
+  };
 
   render() {
     const {
@@ -458,9 +488,7 @@ class ShoppingList extends Component {
                         key={i}
                         className="list-group-item border-0"
                         // onClick={() => this.handleAddItemFromSearchBox(recipe)}
-                        onClick={() =>
-                          console.log("Add ingredients to shopping list")
-                        }
+                        onClick={() => this.handleAddRecipeIngredients(recipe)}
                       >
                         {recipe.title}
                       </li>
