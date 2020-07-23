@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import * as recipeService from "../services/recipeService";
+// import * as recipeService from "../services/recipeService";
+import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
 
@@ -15,12 +16,16 @@ class MyRecipes extends Component {
   };
 
   async componentDidMount() {
-    console.log('CDM props:', this.props);
+    console.log("CDM props:", this.props);
     console.log(this.state);
     try {
       console.log("predownload");
-      const { data: recipes } = await recipeService.getRecipes();
-      this.setState({ recipes });
+      //   const { data: recipes } = await recipeService.getRecipes();
+      const user = this.props.user;
+      if (user) {
+        const { data: recipes } = await getUserRecipes(user._id);
+        this.setState({ recipes });
+      }
       // console.log("postdownload");
       // console.log(this.state.recipes[0]);
       //this.renderRecipeBlocks()

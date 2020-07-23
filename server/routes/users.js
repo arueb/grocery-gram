@@ -187,7 +187,32 @@ router.get("/:id/recipes", async (req, res) => {
       },
       // converts newly added 'item' property to a single object instead of an object array
       { $unwind: "$ingredients.item" },
-
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      {
+        $project: {
+          _id: 1,
+          avgRating: 1,
+          numReviews: 1,
+          isPublished: 1,
+          userId: 1,
+          category: 1,
+          images: 1,
+          instructions: 1,
+          title: 1,
+          ingredients: 1,
+          createdOn: 1,
+          "user.username": 1,
+          "user._id": 1,
+        },
+      },
       // group everythign back together again into a single parent object
       {
         $group: {

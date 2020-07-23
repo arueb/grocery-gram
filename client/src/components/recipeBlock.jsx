@@ -40,8 +40,8 @@ class RecipeBlock extends Component {
                 {/* <p className="card-text">{this.props.recipe.instructions}</p> */}
                 <p className="card-text">
                   By{" "}
-                  {this.props.recipe.user[0]
-                    ? this.props.recipe.user[0].username
+                  {this.props.recipe.user
+                    ? this.props.recipe.user.username
                     : this.props.recipe.userId}
                 </p>
                 <AvgStarRating
