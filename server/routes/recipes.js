@@ -162,4 +162,16 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  // check to make sure the specified user exists
+  try {
+    let recipe = await Recipe.findByIdAndRemove(req.params.id);
+    if (!recipe)
+      return res.status(404).send("The recipeId could not be found.");
+    res.send(recipe);
+  } catch (err) {
+    res.status(500).send("Something failed.", err);
+  }
+});
+
 module.exports = router;

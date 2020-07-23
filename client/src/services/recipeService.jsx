@@ -14,6 +14,10 @@ export function getRecipes() {
   return http.get(apiEndpoint);
 }
 
+export function deleteRecipe(recipeId) {
+  return http.delete(recipeUrl(recipeId));
+}
+
 export function newRecipe(recipe) {
   return http.post(
     apiEndpoint,
