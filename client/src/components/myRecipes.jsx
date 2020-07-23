@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as recipeService from "../services/recipeService";
+// import * as recipeService from "../services/recipeService";
 import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
