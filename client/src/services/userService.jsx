@@ -18,6 +18,10 @@ export function getUserData(userId) {
   return http.get(userUrl(userId));
 }
 
+export function getUserRecipes(id) {
+  return http.get(userUrl(id) + "/recipes");
+}
+
 export function updateShoppingList(userId, addedItems, removedItems) {
   return http.patch(userUrl(userId), { addedItems, removedItems });
 }

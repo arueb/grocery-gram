@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import {
   getUserData,
+  getUserRecipes,
   updateShoppingList,
   updateItemCounts,
 } from "../services/userService";
@@ -38,6 +39,7 @@ class ShoppingList extends Component {
     // a setTimeout hack to get pie chart to render on mount
     // because addedItems aren't available immediately
     this.handleUpdatePieChart();
+
     // setTimeout(() => {
     //   this.handleUpdatePieChart();
     // }, 500);
@@ -53,15 +55,22 @@ class ShoppingList extends Component {
 
     if (items && !this.state.userData) {
       const { data: userData } = await getUserData(user._id);
+      const { data: userRecipes } = await getUserRecipes(user._id);
       const itemCounts = userData.itemCounts;
       const addedItemIds = userData.addedItems;
       let addedItems = this.expandItems(addedItemIds, items);
       const removedItemIds = userData.removedItems;
       const removedItems = this.expandItems(removedItemIds, items);
       addedItems = this.sortItems(addedItems);
-      this.setState({ addedItems, removedItems, userData, itemCounts });
+      this.setState({
+        addedItems,
+        removedItems,
+        userData,
+        userRecipes,
+        itemCounts,
+      });
       this.updateMyStaples(itemCounts);
-      //   this.handleUpdatePieChart();
+
       this.setState({ isLoading: false });
     }
   }
@@ -319,6 +328,7 @@ class ShoppingList extends Component {
       totalPriceItems,
       catPercents,
       staples,
+      userRecipes,
       isLoading,
     } = this.state;
 
@@ -421,7 +431,7 @@ class ShoppingList extends Component {
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover myStaples">
-              {console.log("staples", staples)}
+              {/* {console.log("staples", staples)} */}
               {!isLoading &&
                 staples &&
                 staples.map(
@@ -439,12 +449,24 @@ class ShoppingList extends Component {
             </div>
             <h5 className="my-recipes-header">My Recipes</h5>
             <div className="list-group lst-grp-hover myRecipes">
-              <li className="list-group-item border-0">A recipe</li>
-              <li className="list-group-item border-0">A recipe</li>
-              <li className="list-group-item border-0">A recipe</li>
-              <li className="list-group-item border-0">A recipe</li>
-              <li className="list-group-item border-0">A recipe</li>
-              <li className="list-group-item border-0">A recipe</li>
+              {!isLoading &&
+                userRecipes &&
+                userRecipes.map(
+                  (recipe, i) =>
+                    recipe && (
+                      <li
+                        key={i}
+                        className="list-group-item border-0"
+                        // onClick={() => this.handleAddItemFromSearchBox(recipe)}
+                        onClick={() =>
+                          console.log("Add ingredients to shopping list")
+                        }
+                      >
+                        {recipe.title}
+                      </li>
+                    )
+                )}
+              {/* <li className="list-group-item border-0">A recipe</li> */}
             </div>
           </div>
         </div>
