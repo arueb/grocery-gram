@@ -5,7 +5,7 @@ import http from "../services/httpService";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
 import { getCategories } from "../services/categoryService";
-import { getRecipe } from "../services/recipeService";
+import { getRecipe, deleteRecipe } from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 import * as recipeService from "../services/recipeService";
@@ -103,8 +103,23 @@ class RecipeForm extends Form {
 
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
-      return this.renderButton("Delete Recipe");
+      return this.renderButtonCustomHandler(
+        "Delete Recipe",
+        this.handleDeleteRecipe
+      );
     }
+  }
+
+  async handleDeleteRecipe(e) {
+    e.preventDefault();
+    console.log("deleting recipe...");
+    const { recipeId } = this.state;
+    // console.log(this.state.recipeId);
+    try {
+      await deleteRecipe(recipeId);
+      console.log("deleted recipe");
+      this.props.history.push("/my-recipes");
+    } catch (err) {}
   }
 
   renderHeader() {
@@ -143,6 +158,7 @@ class RecipeForm extends Form {
   async componentDidMount() {
     // Bind the this context to the handler function
     this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
+    this.handleDeleteRecipe = this.handleDeleteRecipe.bind(this);
     // this.handleValidation = this.handleValidation.bind(this);
 
     // load the recipe (unless new)

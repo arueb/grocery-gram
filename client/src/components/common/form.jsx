@@ -80,9 +80,22 @@ class Form extends Component {
     this.setState({ valueField: data, errors });
   };
 
-  renderButton(label, style = "btn btn-dark") {
+  renderButton(label, style = "btn btn-dark mt-4 mr-2") {
     // console.log(this.validate());
     return <button className={style}>{label}</button>;
+  }
+
+  renderButtonCustomHandler(
+    label,
+    handleClick,
+    style = "btn btn-dark mt-4 mr-2"
+  ) {
+    // console.log(this.validate());
+    return (
+      <button className={style} onClick={(e) => handleClick(e)}>
+        {label}
+      </button>
+    );
   }
 
   renderInput(name, label, type = "text", placeholder = "") {
