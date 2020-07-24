@@ -400,7 +400,7 @@ footer {
   margin-bottom: 2em;
 }
 
-.mr-list-group-row {
+.list-group-row {
   margin-bottom: 2em;
 }
 
@@ -440,8 +440,14 @@ footer {
   transition: background-color 300ms linear;
 }
 
-/* style active page in pagination and buttons in btn-group */
+/* style active page in pagination */
 .page-item.active .page-link {
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+/* style active page in list-group */
+.list-group-item.active {
   background-color: #343a40;
   border-color: #343a40;
 }

@@ -11,7 +11,8 @@ class MyRecipes extends Component {
     data: "",
     recipes: [],
     pageSize: 8,
-    currentPage: 1
+    currentPage: 1,
+    selectedOwnerType: "All"
   };
 
   onNewRecipe = () => {
@@ -49,17 +50,15 @@ class MyRecipes extends Component {
     return items;
   }
 
-  handleOwnership = (type) => {
-    if (type === "all") {
-      console.log("showing all ");
-    }
+  handleOwnerSelect = (ownerType) => {
+    this.setState({ selectedOwnerType: ownerType });
   };
 
   handleFilterByCategory = ({ currentTarget: input }) => {
     console.log("filter by category...");
   };
 
-  handlePageChange = page => {
+  handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
@@ -67,7 +66,8 @@ class MyRecipes extends Component {
     const options = getCategories();
     // const optionsPlus = ["Filter by Category", ...options]
 
-    const { recipes: allRecipes, pageSize, currentPage } = this.state;
+    const { recipes: allRecipes, pageSize, currentPage,
+        selectedOwnerType} = this.state;
 
     const recipes = paginate(allRecipes, currentPage, pageSize);
 
@@ -87,9 +87,13 @@ class MyRecipes extends Component {
           </div>
         </div>
         <hr className="divider" />
-        <div className="row mr-list-group-row">
-          <div className="col-md-3">
-            <ListGroup items={listGroupLabels} />
+        <div className="row list-group-row">
+          <div className="col-md-4">
+            <ListGroup
+              items={listGroupLabels}
+              selectedItem={selectedOwnerType}
+              onItemSelect={this.handleOwnerSelect}
+            />
             {/* <div
               className="btn-group"
               data-toggle="button"
@@ -111,7 +115,7 @@ class MyRecipes extends Component {
               </button>
             </div> */}
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <select
               className="form-control"
               id="mr-category"
