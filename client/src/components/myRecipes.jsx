@@ -14,13 +14,20 @@ class MyRecipes extends Component {
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All",
+    selectValue: null
   };
+
+  getInitialSelectVal() {
+    return "Select a Category";
+  }
 
   onNewRecipe = () => {
     window.location = "/my-recipes/new";
   };
 
   async componentDidMount() {
+    this.setState({ selectValue: this.getInitialSelectVal() });
+
     try {
       const user = this.props.user;
       if (user) {
@@ -46,8 +53,9 @@ class MyRecipes extends Component {
     this.setState({ selectedOwnerType: ownerType, currentPage: 1 });
   };
 
-  handleFilterByCategory = ({ currentTarget: input }) => {
-    console.log("you chose", input);
+  handleFilterByCategory = (event) => {
+    console.log("you chose", event.target.value);
+    this.setState({ selectValue: event.target.value })
   };
 
   handlePageChange = (page) => {
@@ -61,15 +69,14 @@ class MyRecipes extends Component {
       currentPage,
       listGroupLabels,
       selectedOwnerType,
+      selectValue
     } = this.state;
 
     const { user } = this.props;
 
     const options = getCategories();
-    // const optionsPlus = ["Filter by Category", ...options]
 
     let filtered;
-
     if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
         filtered = allRecipes.filter((r) => r.userId !== user._id);
@@ -80,7 +87,14 @@ class MyRecipes extends Component {
       }
     }
 
-    const recipes = paginate(filtered, currentPage, pageSize);
+    let filteredByCat = filtered;
+    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
+      filteredByCat = filtered;
+    } else { 
+      filteredByCat = filtered.filter(r => r.category === selectValue);
+    }
+      
+    const recipes = paginate(filteredByCat, currentPage, pageSize);
 
     return (
       <React.Fragment>
@@ -105,35 +119,23 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-            <label htmlFor="addImg">
-              Filter by Category: 
+            {/* <label htmlFor="addImg">
+              Filter by Category  */}
               <select
                 className="form-control"
                 id="mr-category"
                 name="mr-category"
-                // onChange={this.handleFilterByCategory(currentTarget)}
+                onChange={this.handleFilterByCategory}
+                value={this.state.selectValue}
               >
+                <option disabled>Select a Category</option>
                 {options.map((option) => (
                   <option key={option._id} value={option.name}>
-                  {/* <option> */}
                     {option.name}
                   </option>
                 ))}
               </select>
-            </label>
-            {/* <select
-              className="form-control"
-              id="mr-category"
-              name="mr-category"
-              value="Filter by Category"
-            >
-              <option disabled>Filter by Category</option>
-              {options.map((option) => (
-                <option key={option._id} value={option.name}>
-                  {option.name}
-                </option>
-              ))}
-            </select> */}
+            {/* </label> */}
           </div>
           <div className="col-md-4">
             Search Box Coming Soon...
