@@ -69,6 +69,9 @@ class MyRecipes extends Component {
     const { recipes: allRecipes, pageSize, currentPage,
         selectedOwnerType} = this.state;
 
+    // const filtered = selectedOwnerType ? allRecipes.filter(r =>
+    //   r.)  // should I create a state variable filtered?
+
     const recipes = paginate(allRecipes, currentPage, pageSize);
 
     const listGroupLabels = ["All", "Saved", "My Own"];
@@ -94,26 +97,6 @@ class MyRecipes extends Component {
               selectedItem={selectedOwnerType}
               onItemSelect={this.handleOwnerSelect}
             />
-            {/* <div
-              className="btn-group"
-              data-toggle="button"
-              role="group"
-              aria-label="Type of Recipes"
-            >
-              <button
-                onClick={() => this.handleOwnership("all")}
-                type="button"
-                className="btn btn-outline-dark active"
-              >
-                All
-              </button>
-              <button type="button" className="btn btn-outline-dark">
-                Saved
-              </button>
-              <button type="button" className="btn btn-outline-dark">
-                My Own
-              </button>
-            </div> */}
           </div>
           <div className="col-md-4">
             <select
