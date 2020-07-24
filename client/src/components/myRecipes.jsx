@@ -3,14 +3,15 @@ import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
-import { paginate } from '../utils/paginate';
+import { paginate } from "../utils/paginate";
 
 class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
     pageSize: 8,
-    currentPage: 1
+    currentPage: 1,
+    categoryFilter: null,
   };
 
   onNewRecipe = () => {
@@ -58,7 +59,7 @@ class MyRecipes extends Component {
     console.log("filter by category...");
   };
 
-  handlePageChange = page => {
+  handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
@@ -112,11 +113,9 @@ class MyRecipes extends Component {
               className="form-control"
               id="mr-category"
               name="mr-category"
-              // onChange="this.handleFilterByCategory"
+              value="Filter by Category"
             >
-              <option selected disabled value="">
-                Filter by Category
-              </option>
+              <option disabled>Filter by Category</option>
               {options.map((option) => (
                 <option key={option._id} value={option.name}>
                   {option.name}

@@ -58,6 +58,46 @@ class RecipeForm extends Form {
     itemId: Joi.string().label("Item").required(),
     notes: Joi.string().label("Notes").allow(""),
   };
+
+  async componentDidMount() {
+    // Bind the this context to the handler function
+    this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
+    this.handleDeleteRecipe = this.handleDeleteRecipe.bind(this);
+    // this.handleValidation = this.handleValidation.bind(this);
+
+    // load the recipe (unless new)
+    await this.populateRecipe();
+
+    // load the units and quantitiy options for select boxes into local state
+    this.setState({ units: getUnits(), quantities: getQuantities() });
+  }
+
+  // populates recipe in state if valid recipe id
+  async populateRecipe() {
+    try {
+      const recipeId = this.props.match.params.id;
+      //   console.log("recipeId", recipeId);
+      if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
+
+      const { data: recipe } = await getRecipe(recipeId);
+      this.setState({
+        recipeId: recipe[0]._id,
+        ingredients: recipe[0].ingredients,
+        // ingredients: this.mapToViewModel(recipe),
+      });
+
+      const data = { ...this.state.data };
+      data.title = recipe[0].title;
+      data.category = recipe[0].category;
+      data.instructions = recipe[0].instructions;
+      data.isPublished = recipe[0].isPublished;
+      this.setState({ data });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
+  }
+
   // This is used to make the images picker/uploader
   ImagePreviews = (props) => (
     <div>
@@ -130,44 +170,6 @@ class RecipeForm extends Form {
     } else {
       return <h2>Edit Recipe</h2>;
     }
-  }
-  // populates recipe in state if valid recipe id
-  async populateRecipe() {
-    try {
-      const recipeId = this.props.match.params.id;
-      //   console.log("recipeId", recipeId);
-      if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
-
-      const { data: recipe } = await getRecipe(recipeId);
-      this.setState({
-        recipeId: recipe[0]._id,
-        ingredients: recipe[0].ingredients,
-        // ingredients: this.mapToViewModel(recipe),
-      });
-
-      const data = { ...this.state.data };
-      data.title = recipe[0].title;
-      data.category = recipe[0].category;
-      data.instructions = recipe[0].instructions;
-      data.isPublished = recipe[0].isPublished;
-      this.setState({ data });
-    } catch (ex) {
-      if (ex.response && ex.response.status === 404)
-        return this.props.history.replace("/not-found");
-    }
-  }
-
-  async componentDidMount() {
-    // Bind the this context to the handler function
-    this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
-    this.handleDeleteRecipe = this.handleDeleteRecipe.bind(this);
-    // this.handleValidation = this.handleValidation.bind(this);
-
-    // load the recipe (unless new)
-    await this.populateRecipe();
-
-    // load the units and quantitiy options for select boxes into local state
-    this.setState({ units: getUnits(), quantities: getQuantities() });
   }
 
   // handle adding a new row to the ingredients table
@@ -250,7 +252,9 @@ class RecipeForm extends Form {
     console.log("state errors", this.state.errors);
     if (this.state.validateIgredientsRow) return;
     console.log("maded it past state errosr!");
+
     let imageLinks = [];
+    console.log("files to upload", this.state.data.filesToUpload);
 
     for (const imageFile of this.state.data.filesToUpload) {
       var formData = new FormData();
@@ -270,8 +274,6 @@ class RecipeForm extends Form {
       imageLinks.push(imageData.data);
     }
 
-    // console.log("ingredients", this.state.ingredients);
-
     let recipeRecord = {
       title: this.state.data.title,
       userId: this.props.user._id,
@@ -283,17 +285,21 @@ class RecipeForm extends Form {
       instructions: this.state.data.instructions,
       ingredients: this.state.ingredients,
     };
-    // console.log("recipeRecord", recipeRecord);
 
+    const { id } = this.props.match.params;
     try {
-      if (this.props.match.params.id === "new") {
-        console.log("saving new recipe", recipeRecord);
+      if (id === "new") {
+        // console.log("saving new recipe", recipeRecord);
         await newRecipe(recipeRecord);
       } else {
-        recipeRecord = {
-          title: this.state.data.title,
-        };
-        await updateRecipe(recipeRecord);
+        // console.log("call update record", recipeRecord);
+        // const patchBody = {
+        //   title: this.state.data.title,
+        // };
+        delete recipeRecord.images;
+        // console.log("patch body", recipeRecord);
+        await updateRecipe(id, recipeRecord);
+        // console.log("patch success");
       }
 
       //   console.log(res);
@@ -319,7 +325,11 @@ class RecipeForm extends Form {
         />
 
         <section id="add-recipe-form">
-          {this.renderHeader()}
+          <div className="row sl-page-heading">
+            <div className="col-md-4">{this.renderHeader()}</div>
+          </div>
+          <hr className="divider" />
+          {/* {this.renderHeader()} */}
           <form onSubmit={this.handleSubmit}>
             {this.renderInput("title", "Title")}
 
@@ -343,7 +353,7 @@ class RecipeForm extends Form {
 
             <div className="form-group mb-5 mt-5 ingredients-form">
               <div>
-                <label htmlFor="addImg">Ingredients</label>
+                <label className="ingredients-label">Ingredients</label>
               </div>
               {ingredients.length > 0 && (
                 <table className="table table-hover">

@@ -87,9 +87,12 @@ Custom media queries
   .ingredients-form .btn {
     margin-left: 15px;
   }
+  .ingredients-form label {
+    margin-left: 15px;
+  }
 
-  ingredients-form:nth-child(1) {
-    background-color: red;
+  .ingredients-label {
+    margin-bottom: 0;
   }
 }
 

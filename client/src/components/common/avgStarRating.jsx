@@ -12,13 +12,13 @@ const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
           const ratingValue = i + 1;
           if (roundedRating - ratingValue === -0.5) {
             return (
-              <label>
+              <label key={i}>
                 <FaStarHalfAlt size={starSize} color={"#ffc107"} />
               </label>
             );
           } else {
             return (
-              <label>
+              <label key={i}>
                 <FaStar
                   size={starSize}
                   color={ratingValue <= roundedRating ? "#ffc107" : "#DDDDDD"}
