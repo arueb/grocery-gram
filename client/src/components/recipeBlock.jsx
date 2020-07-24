@@ -25,9 +25,9 @@ class RecipeBlock extends Component {
     }
   }
   render(props) {
-    console.log(
-      this.props.recipe.user[0] ? this.props.recipe.user[0].username : "name"
-    );
+    // console.log(
+    //   this.props.recipe.user[0] ? this.props.recipe.user[0].username : "name"
+    // );
     return (
       <React.Fragment>
         <div className="col-md-4 col-lg-3 mb-4 recipe-block">

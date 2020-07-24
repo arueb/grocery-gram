@@ -413,7 +413,7 @@ footer {
   margin-bottom: 2em;
 }
 
-.mr-button-row {
+.list-group-row {
   margin-bottom: 2em;
 }
 
@@ -458,11 +458,19 @@ footer {
   margin-top: 0.2rem;
   font-size: 0.9rem;
 }
-/* style active page in pagination and buttons in btn-group */
+
+/* style active page in pagination */
 .page-item.active .page-link {
   background-color: #343a40;
   border-color: #343a40;
 }
+
+/* style active page in list-group */
+.list-group-item.active {
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
 .recipe-block {
   padding: 0 8px;
   margin-bottom: 1rem !important;
@@ -470,4 +478,14 @@ footer {
 
 tbody .form-group {
   margin-bottom: 0;
+}
+
+/* style all pagination links */
+.page-item .page-link {
+  cursor: pointer;
+}
+
+/* style all My Recipes list-group links */
+.list-group-item {
+  cursor: pointer;
 }
