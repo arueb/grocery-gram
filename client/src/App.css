@@ -52,23 +52,29 @@ Custom media queries
   .ingredients-form .unit {
     width: 50%;
     padding-top: 1em;
+    padding-left: 15px;
   }
   .ingredients-form .qty {
     padding-right: 0.5rem;
   }
   .ingredients-form .unit {
     padding-left: 0.5rem;
+    padding-right: 15px;
   }
 
   .ingredients-form .item {
     width: 100%;
     min-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   .ingredients-form .notes {
     width: 85%;
     padding-bottom: 1em;
     padding-right: 0.5rem;
+    padding-left: 15px;
+    padding-right: 15px;
   }
   .ingredients-form .delete {
     padding-left: 0.5rem;
@@ -80,6 +86,13 @@ Custom media queries
 
   .ingredients-form .btn {
     margin-left: 15px;
+  }
+  .ingredients-form label {
+    margin-left: 15px;
+  }
+
+  .ingredients-label {
+    margin-bottom: 0;
   }
 }
 
@@ -461,6 +474,10 @@ footer {
 .recipe-block {
   padding: 0 8px;
   margin-bottom: 1rem !important;
+}
+
+tbody .form-group {
+  margin-bottom: 0;
 }
 
 /* style all pagination links */

@@ -3,8 +3,8 @@ import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
-import { paginate } from '../utils/paginate';
-import ListGroup from './common/listGroup';
+import { paginate } from "../utils/paginate";
+import ListGroup from "./common/listGroup";
 
 class MyRecipes extends Component {
   state = {
@@ -13,7 +13,7 @@ class MyRecipes extends Component {
     pageSize: 8,
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
-    selectedOwnerType: "All"
+    selectedOwnerType: "All",
   };
 
   onNewRecipe = () => {
@@ -28,7 +28,7 @@ class MyRecipes extends Component {
         this.setState({ recipes });
       }
     } catch (ex) {
-        console.log("Something failed", ex);
+      console.log("Something failed", ex);
     }
   }
 
@@ -55,24 +55,27 @@ class MyRecipes extends Component {
   };
 
   render() {
-    const { recipes: allRecipes, pageSize, currentPage,
-        listGroupLabels, selectedOwnerType} = this.state;
+    const {
+      recipes: allRecipes,
+      pageSize,
+      currentPage,
+      listGroupLabels,
+      selectedOwnerType,
+    } = this.state;
 
     const { user } = this.props;
 
     const options = getCategories();
     // const optionsPlus = ["Filter by Category", ...options]
-    
+
     let filtered;
 
     if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
-        filtered = allRecipes.filter(r => r.userId !== user._id);
-      }
-      else if (selectedOwnerType === "My Own") {
-        filtered = allRecipes.filter(r => r.userId === user._id);
-      }
-      else {
+        filtered = allRecipes.filter((r) => r.userId !== user._id);
+      } else if (selectedOwnerType === "My Own") {
+        filtered = allRecipes.filter((r) => r.userId === user._id);
+      } else {
         filtered = allRecipes;
       }
     }
@@ -123,11 +126,9 @@ class MyRecipes extends Component {
               className="form-control"
               id="mr-category"
               name="mr-category"
-              // onChange="this.handleFilterByCategory"
+              value="Filter by Category"
             >
-              <option selected disabled value="">
-                Filter by Category
-              </option>
+              <option disabled>Filter by Category</option>
               {options.map((option) => (
                 <option key={option._id} value={option.name}>
                   {option.name}
