@@ -4,6 +4,7 @@ import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
 import { paginate } from '../utils/paginate';
+import ListGroup from './common/listGroup';
 
 class MyRecipes extends Component {
   state = {
@@ -19,10 +20,10 @@ class MyRecipes extends Component {
   };
 
   async componentDidMount() {
-    console.log("CDM props:", this.props);
-    console.log(this.state);
+    // console.log("CDM props:", this.props);
+    // console.log(this.state);
     try {
-      console.log("predownload");
+      // console.log("predownload");
       //   const { data: recipes } = await recipeService.getRecipes();
       const user = this.props.user;
       if (user) {
@@ -35,7 +36,7 @@ class MyRecipes extends Component {
     } catch (ex) {
       // console.log(ex);
     }
-    console.log(this.state);
+    // console.log(this.state);
   }
 
   renderRecipeBlocks(recipes) {
@@ -70,6 +71,8 @@ class MyRecipes extends Component {
 
     const recipes = paginate(allRecipes, currentPage, pageSize);
 
+    const listGroupLabels = ["All", "Saved", "My Own"];
+
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
@@ -84,9 +87,10 @@ class MyRecipes extends Component {
           </div>
         </div>
         <hr className="divider" />
-        <div className="row mr-button-row">
+        <div className="row mr-list-group-row">
           <div className="col-md-3">
-            <div
+            <ListGroup items={listGroupLabels} />
+            {/* <div
               className="btn-group"
               data-toggle="button"
               role="group"
@@ -105,7 +109,7 @@ class MyRecipes extends Component {
               <button type="button" className="btn btn-outline-dark">
                 My Own
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="col-md-3">
             <select
