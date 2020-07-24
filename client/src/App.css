@@ -440,6 +440,12 @@ footer {
   transition: background-color 300ms linear;
 }
 
+.avg-star-rating span {
+  position: absolute;
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+}
+
 /* style active page in pagination */
 .page-item.active .page-link {
   background-color: #343a40;
@@ -450,4 +456,9 @@ footer {
 .list-group-item.active {
   background-color: #343a40;
   border-color: #343a40;
+}
+
+.recipe-block {
+  padding: 0 8px;
+  margin-bottom: 1rem !important;
 }

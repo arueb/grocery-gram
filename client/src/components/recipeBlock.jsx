@@ -30,7 +30,7 @@ class RecipeBlock extends Component {
     // );
     return (
       <React.Fragment>
-        <div className="col-md-4 col-lg-3 mb-4">
+        <div className="col-md-4 col-lg-3 mb-4 recipe-block">
           <Link
             to={"/my-recipes/" + this.props.recipe._id}
             className="card-link"
