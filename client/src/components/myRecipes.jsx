@@ -10,34 +10,26 @@ class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
-    pageSize: 8,
+    pageSize: 1,
     currentPage: 1,
+    listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All"
   };
 
   onNewRecipe = () => {
-    // test for user logged in?
     window.location = "/my-recipes/new";
   };
 
   async componentDidMount() {
-    // console.log("CDM props:", this.props);
-    // console.log(this.state);
     try {
-      // console.log("predownload");
-      //   const { data: recipes } = await recipeService.getRecipes();
       const user = this.props.user;
       if (user) {
         const { data: recipes } = await getUserRecipes(user._id);
         this.setState({ recipes });
       }
-      // console.log("postdownload");
-      // console.log(this.state.recipes[0]);
-      //this.renderRecipeBlocks()
     } catch (ex) {
-      // console.log(ex);
+        console.log("Something failed", ex);
     }
-    // console.log(this.state);
   }
 
   renderRecipeBlocks(recipes) {
@@ -51,7 +43,7 @@ class MyRecipes extends Component {
   }
 
   handleOwnerSelect = (ownerType) => {
-    this.setState({ selectedOwnerType: ownerType });
+    this.setState({ selectedOwnerType: ownerType, currentPage: 1 });
   };
 
   handleFilterByCategory = ({ currentTarget: input }) => {
@@ -63,18 +55,30 @@ class MyRecipes extends Component {
   };
 
   render() {
-    const options = getCategories();
-    // const optionsPlus = ["Filter by Category", ...options]
-
     const { recipes: allRecipes, pageSize, currentPage,
-        selectedOwnerType} = this.state;
+        listGroupLabels, selectedOwnerType} = this.state;
 
-    // const filtered = selectedOwnerType ? allRecipes.filter(r =>
-    //   r.)  // should I create a state variable filtered?
+    const { user } = this.props;
 
-    const recipes = paginate(allRecipes, currentPage, pageSize);
+    // const options = getCategories();
+    // const optionsPlus = ["Filter by Category", ...options]
+    
+    let filtered;
 
-    const listGroupLabels = ["All", "Saved", "My Own"];
+    if (selectedOwnerType) {
+      if (selectedOwnerType === "Saved") {
+        filtered = allRecipes.filter(r => r.userId !== user._id);
+      }
+      else if (selectedOwnerType === "My Own") {
+        filtered = allRecipes.filter(r => r.userId === user._id);
+      }
+      else {
+        filtered = allRecipes;
+      }
+    }
+    // console.log("filtered:", filtered);
+
+    const recipes = paginate(filtered, currentPage, pageSize);
 
     return (
       <React.Fragment>
@@ -99,7 +103,8 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-            <select
+            Category Dropdown Coming Soon...
+            {/* <select
               className="form-control"
               id="mr-category"
               name="mr-category"
@@ -113,15 +118,16 @@ class MyRecipes extends Component {
                   {option.name}
                 </option>
               ))}
-            </select>
+            </select> */}
           </div>
           <div className="col-md-4">
-            <input type="text" value="Search" className="form-control"></input>
+            Search Box Coming Soon...
+            {/* <input type="text" value="Search" className="form-control"></input> */}
           </div>
         </div>
         <div className="row">{this.renderRecipeBlocks(recipes)}</div>
         <Pagination
-          recipesCount={allRecipes.length}
+          recipesCount={filtered.length}
           pageSize={pageSize}
           currentPage={currentPage}
           onPageChange={this.handlePageChange}

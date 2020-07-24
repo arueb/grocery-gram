@@ -462,3 +462,13 @@ footer {
   padding: 0 8px;
   margin-bottom: 1rem !important;
 }
+
+/* style all pagination links */
+.page-item .page-link {
+  cursor: pointer;
+}
+
+/* style all My Recipes list-group links */
+.list-group-item {
+  cursor: pointer;
+}
