@@ -292,19 +292,14 @@ class RecipeForm extends Form {
         // console.log("saving new recipe", recipeRecord);
         await newRecipe(recipeRecord);
       } else {
-        // console.log("call update record", recipeRecord);
-        // const patchBody = {
-        //   title: this.state.data.title,
-        // };
+        // update an existing record via patch
         delete recipeRecord.images;
         // console.log("patch body", recipeRecord);
         await updateRecipe(id, recipeRecord);
         // console.log("patch success");
       }
-
-      //   console.log(res);
+      // redirect to my-recipes page
       this.props.history.push("/my-recipes");
-      // This should bounce page over to the view recipe page
     } catch (ex) {
       console.log("Something went wrong with uploading a recipe");
       console.log(ex);
