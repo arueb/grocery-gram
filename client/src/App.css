@@ -445,3 +445,7 @@ footer {
   background-color: #343a40;
   border-color: #343a40;
 }
+.recipe-block {
+  padding: 0 8px;
+  margin-bottom: 1rem !important;
+}
