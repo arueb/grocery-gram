@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
-import { getCategories } from "../services/categoryService";
+// import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
 import { paginate } from '../utils/paginate';
 import ListGroup from './common/listGroup';
@@ -10,7 +10,7 @@ class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
-    pageSize: 1,
+    pageSize: 8,
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All"
