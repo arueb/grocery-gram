@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
-// import { getCategories } from "../services/categoryService";
+import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
 import { paginate } from '../utils/paginate';
 import ListGroup from './common/listGroup';
@@ -47,7 +47,7 @@ class MyRecipes extends Component {
   };
 
   handleFilterByCategory = ({ currentTarget: input }) => {
-    console.log("filter by category...");
+    console.log("you chose", input);
   };
 
   handlePageChange = (page) => {
@@ -60,7 +60,7 @@ class MyRecipes extends Component {
 
     const { user } = this.props;
 
-    // const options = getCategories();
+    const options = getCategories();
     // const optionsPlus = ["Filter by Category", ...options]
     
     let filtered;
@@ -89,7 +89,7 @@ class MyRecipes extends Component {
           <div className="col-md-4"></div>
           <div className="col-md-4 new-recipe">
             <button onClick={this.onNewRecipe} className="btn btn-dark">
-              + New Recipe
+              New Recipe +
             </button>
           </div>
         </div>
@@ -103,7 +103,22 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-            Category Dropdown Coming Soon...
+            <label htmlFor="addImg">
+              Filter by Category: 
+              <select
+                className="form-control"
+                id="mr-category"
+                name="mr-category"
+                onChange={this.handleFilterByCategory(currentTarget)}
+              >
+                {options.map((option) => (
+                  <option key={option._id} value={option.name}>
+                  {/* <option> */}
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            </label>
             {/* <select
               className="form-control"
               id="mr-category"
