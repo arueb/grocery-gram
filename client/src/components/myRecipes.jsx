@@ -3,12 +3,14 @@ import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
+import { paginate } from '../utils/paginate';
 
 class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
-    pageSize: 4,
+    pageSize: 8,
+    currentPage: 1
   };
 
   onNewRecipe = () => {
@@ -57,13 +59,16 @@ class MyRecipes extends Component {
   };
 
   handlePageChange = page => {
-    console.log(page);
+    this.setState({ currentPage: page });
   };
 
   render() {
     const options = getCategories();
     // const optionsPlus = ["Filter by Category", ...options]
-    const { recipes, pageSize } = this.state;
+
+    const { recipes: allRecipes, pageSize, currentPage } = this.state;
+
+    const recipes = paginate(allRecipes, currentPage, pageSize);
 
     return (
       <React.Fragment>
@@ -123,11 +128,13 @@ class MyRecipes extends Component {
             <input type="text" value="Search" className="form-control"></input>
           </div>
         </div>
-        <div className="row">{this.renderRecipeBlocks(this.state.recipes)}</div>
+        <div className="row">{this.renderRecipeBlocks(recipes)}</div>
         <Pagination
+          recipesCount={allRecipes.length}
+          pageSize={pageSize}
+          currentPage={currentPage}
           onPageChange={this.handlePageChange}
-          recipesCount={recipes.length}
-          pageSize={pageSize} />
+        />
       </React.Fragment>
     );
   }

@@ -439,3 +439,9 @@ footer {
   -ms-transition: background-color 300ms linear;
   transition: background-color 300ms linear;
 }
+
+/* style active page in pagination and buttons in btn-group */
+.page-item.active .page-link {
+  background-color: #343a40;
+  border-color: #343a40;
+}
