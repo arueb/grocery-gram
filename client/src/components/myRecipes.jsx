@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
+import Pagination from "./common/pagination";
+import { paginate } from '../utils/paginate';
 
 class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
+    pageSize: 8,
+    currentPage: 1
   };
 
   onNewRecipe = () => {
@@ -44,13 +48,27 @@ class MyRecipes extends Component {
     return items;
   }
 
+  handleOwnership = (type) => {
+    if (type === "all") {
+      console.log("showing all ");
+    }
+  };
+
   handleFilterByCategory = ({ currentTarget: input }) => {
     console.log("filter by category...");
+  };
+
+  handlePageChange = page => {
+    this.setState({ currentPage: page });
   };
 
   render() {
     const options = getCategories();
     // const optionsPlus = ["Filter by Category", ...options]
+
+    const { recipes: allRecipes, pageSize, currentPage } = this.state;
+
+    const recipes = paginate(allRecipes, currentPage, pageSize);
 
     return (
       <React.Fragment>
@@ -70,10 +88,15 @@ class MyRecipes extends Component {
           <div className="col-md-3">
             <div
               className="btn-group"
+              data-toggle="button"
               role="group"
               aria-label="Type of Recipes"
             >
-              <button type="button" className="btn btn-outline-dark">
+              <button
+                onClick={() => this.handleOwnership("all")}
+                type="button"
+                className="btn btn-outline-dark active"
+              >
                 All
               </button>
               <button type="button" className="btn btn-outline-dark">
@@ -105,7 +128,13 @@ class MyRecipes extends Component {
             <input type="text" value="Search" className="form-control"></input>
           </div>
         </div>
-        <div className="row">{this.renderRecipeBlocks(this.state.recipes)}</div>
+        <div className="row">{this.renderRecipeBlocks(recipes)}</div>
+        <Pagination
+          recipesCount={allRecipes.length}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={this.handlePageChange}
+        />
       </React.Fragment>
     );
   }
