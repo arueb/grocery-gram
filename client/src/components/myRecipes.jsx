@@ -79,7 +79,6 @@ class MyRecipes extends Component {
         filtered = allRecipes;
       }
     }
-    // console.log("filtered:", filtered);
 
     const recipes = paginate(filtered, currentPage, pageSize);
 
@@ -112,7 +111,7 @@ class MyRecipes extends Component {
                 className="form-control"
                 id="mr-category"
                 name="mr-category"
-                onChange={this.handleFilterByCategory(currentTarget)}
+                // onChange={this.handleFilterByCategory(currentTarget)}
               >
                 {options.map((option) => (
                   <option key={option._id} value={option.name}>
