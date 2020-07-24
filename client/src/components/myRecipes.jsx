@@ -119,23 +119,20 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-            {/* <label htmlFor="addImg">
-              Filter by Category  */}
               <select
                 className="form-control"
                 id="mr-category"
                 name="mr-category"
                 onChange={this.handleFilterByCategory}
-                value={this.state.selectValue}
+                value={selectValue}
               >
-                <option disabled>Select a Category</option>
+                <option disabled>{this.getInitialSelectVal()}</option>
                 {options.map((option) => (
                   <option key={option._id} value={option.name}>
                     {option.name}
                   </option>
                 ))}
               </select>
-            {/* </label> */}
           </div>
           <div className="col-md-4">
             Search Box Coming Soon...
