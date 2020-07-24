@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
+import Pagination from "./common/pagination";
 
 class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
+    pageSize: 4,
   };
 
   onNewRecipe = () => {
@@ -44,13 +46,24 @@ class MyRecipes extends Component {
     return items;
   }
 
+  handleOwnership = (type) => {
+    if (type === "all") {
+      console.log("showing all ");
+    }
+  };
+
   handleFilterByCategory = ({ currentTarget: input }) => {
     console.log("filter by category...");
+  };
+
+  handlePageChange = page => {
+    console.log(page);
   };
 
   render() {
     const options = getCategories();
     // const optionsPlus = ["Filter by Category", ...options]
+    const { recipes, pageSize } = this.state;
 
     return (
       <React.Fragment>
@@ -70,10 +83,15 @@ class MyRecipes extends Component {
           <div className="col-md-3">
             <div
               className="btn-group"
+              data-toggle="button"
               role="group"
               aria-label="Type of Recipes"
             >
-              <button type="button" className="btn btn-outline-dark">
+              <button
+                onClick={() => this.handleOwnership("all")}
+                type="button"
+                className="btn btn-outline-dark active"
+              >
                 All
               </button>
               <button type="button" className="btn btn-outline-dark">
@@ -106,6 +124,10 @@ class MyRecipes extends Component {
           </div>
         </div>
         <div className="row">{this.renderRecipeBlocks(this.state.recipes)}</div>
+        <Pagination
+          onPageChange={this.handlePageChange}
+          recipesCount={recipes.length}
+          pageSize={pageSize} />
       </React.Fragment>
     );
   }
