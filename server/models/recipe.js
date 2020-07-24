@@ -8,7 +8,7 @@ const recipeSchema = new Schema({
   //   userId: { type: String, max: 128, required: true },
   userId: { type: mongoose.Schema.ObjectId, ref: "User", required: true },
   category: { type: String, max: 128, required: true },
-  avgRating: { type: Number, min: 0, max: 5, default: 0 },
+  avgRating: { type: Number, min: 0, max: 5, default: 0.0 },
   numReviews: { type: Number, min: 0, default: 0 },
   images: [
     {

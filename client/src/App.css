@@ -439,3 +439,9 @@ footer {
   -ms-transition: background-color 300ms linear;
   transition: background-color 300ms linear;
 }
+
+.avg-star-rating span {
+  position: absolute;
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+}
