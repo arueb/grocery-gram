@@ -10,8 +10,8 @@ class ExploreRecipes extends Component {
             <h2>Explore Recipes</h2>
           </div>
           <div className="col-md-6 new-recipe"></div>
-        </div>       
-        <div className="row mr-button-row">
+        </div>
+        <div className="row list-group-row">
           <div className="col-md-6">
             <button>Filter by Category - this is a really long button, </button>
           </div>
