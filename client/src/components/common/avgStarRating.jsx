@@ -7,7 +7,7 @@ const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
   const roundedRating = Math.round(avgRating * 2) / 2; // round to nearest half
   return (
     numReviews > 0 && (
-      <div>
+      <div className="avg-star-rating">
         {[...Array(5)].map((star, i) => {
           const ratingValue = i + 1;
           if (roundedRating - ratingValue === -0.5) {
@@ -27,7 +27,7 @@ const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
             );
           }
         })}
-        <span>{avgRating}</span>
+        <span className="ml-2">{avgRating}</span>
         <div>{numReviews + (numReviews === 1 ? " Review" : " Reviews")}</div>
       </div>
     )
