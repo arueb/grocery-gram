@@ -14,7 +14,7 @@ class MyRecipes extends Component {
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All",
-    selectValue: null
+    selectValue: ""
   };
 
   getInitialSelectVal() {
@@ -54,7 +54,7 @@ class MyRecipes extends Component {
   };
 
   handleFilterByCategory = (event) => {
-    console.log("you chose", event.target.value);
+    // console.log("you chose", event.target.value);
     this.setState({ selectValue: event.target.value })
   };
 
