@@ -9,6 +9,9 @@ function recipeUrl(id) {
 export function getRecipe(recipeId) {
   return http.get(recipeUrl(recipeId));
 }
+export function updateRecipe(recipeId) {
+  return http.patch(recipeUrl(recipeId));
+}
 
 export function getRecipes() {
   return http.get(apiEndpoint);

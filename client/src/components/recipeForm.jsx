@@ -5,10 +5,15 @@ import http from "../services/httpService";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
 import { getCategories } from "../services/categoryService";
-import { getRecipe, deleteRecipe } from "../services/recipeService";
+import {
+  getRecipe,
+  deleteRecipe,
+  updateRecipe,
+  newRecipe,
+} from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
-import * as recipeService from "../services/recipeService";
+// import * as recipeService from "../services/recipeService";
 
 //const UPLOAD_LIST_PLACEHOLDER =
 //  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
@@ -281,7 +286,15 @@ class RecipeForm extends Form {
     // console.log("recipeRecord", recipeRecord);
 
     try {
-      await recipeService.newRecipe(recipeRecord);
+      if (this.props.match.params.id === "new") {
+        console.log("saving new recipe", recipeRecord);
+        await newRecipe(recipeRecord);
+      } else {
+        recipeRecord = {
+          title: this.state.data.title,
+        };
+        await updateRecipe(recipeRecord);
+      }
 
       //   console.log(res);
       this.props.history.push("/my-recipes");
@@ -328,7 +341,7 @@ class RecipeForm extends Form {
               </button>
             </div>
 
-            <div className="form-group mb-5 mt-5 ingredients">
+            <div className="form-group mb-5 mt-5 ingredients-form">
               <div>
                 <label htmlFor="addImg">Ingredients</label>
               </div>
