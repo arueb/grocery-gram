@@ -1,5 +1,6 @@
 {
-  "name": "grocery-gram-frontend-test",
+  "name": "grocery-gram-frontend",
+  "description": "GroceryGram Frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

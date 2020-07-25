@@ -14,7 +14,7 @@ class MyRecipes extends Component {
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All",
-    selectValue: ""
+    selectValue: "",
   };
 
   getInitialSelectVal() {
@@ -39,11 +39,13 @@ class MyRecipes extends Component {
     }
   }
 
-  renderRecipeBlocks(recipes) {
+  renderRecipeBlocks(recipes, userId) {
     let items = [];
     if (recipes) {
       recipes.forEach(function (recipe) {
-        items.push(<RecipeBlock key={recipe._id} recipe={recipe} />);
+        items.push(
+          <RecipeBlock userId={userId} key={recipe._id} recipe={recipe} />
+        );
       });
     }
     return items;
@@ -55,7 +57,7 @@ class MyRecipes extends Component {
 
   handleFilterByCategory = (event) => {
     // console.log("you chose", event.target.value);
-    this.setState({ selectValue: event.target.value })
+    this.setState({ selectValue: event.target.value });
   };
 
   handlePageChange = (page) => {
@@ -69,7 +71,7 @@ class MyRecipes extends Component {
       currentPage,
       listGroupLabels,
       selectedOwnerType,
-      selectValue
+      selectValue,
     } = this.state;
 
     const { user } = this.props;
@@ -90,10 +92,10 @@ class MyRecipes extends Component {
     let filteredByCat = filtered;
     if (selectValue === this.getInitialSelectVal() || selectValue === "") {
       filteredByCat = filtered;
-    } else { 
-      filteredByCat = filtered.filter(r => r.category === selectValue);
+    } else {
+      filteredByCat = filtered.filter((r) => r.category === selectValue);
     }
-      
+
     const recipes = paginate(filteredByCat, currentPage, pageSize);
 
     return (
@@ -119,27 +121,30 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-              <select
-                className="form-control"
-                id="mr-category"
-                name="mr-category"
-                onChange={this.handleFilterByCategory}
-                value={selectValue}
-              >
-                <option disabled>{this.getInitialSelectVal()}</option>
-                {options.map((option) => (
-                  <option key={option._id} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
+            <select
+              className="form-control"
+              id="mr-category"
+              name="mr-category"
+              onChange={this.handleFilterByCategory}
+              value={selectValue}
+            >
+              <option disabled>{this.getInitialSelectVal()}</option>
+              {options.map((option) => (
+                <option key={option._id} value={option.name}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="col-md-4">
             Search Box Coming Soon...
             {/* <input type="text" value="Search" className="form-control"></input> */}
           </div>
         </div>
-        <div className="row">{this.renderRecipeBlocks(recipes)}</div>
+        <div className="row">
+          {console.log("userId:", this.props.user._id)}
+          {this.renderRecipeBlocks(recipes, this.props.user._id)}
+        </div>
         <Pagination
           recipesCount={filtered.length}
           pageSize={pageSize}
