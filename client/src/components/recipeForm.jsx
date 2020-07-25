@@ -13,6 +13,8 @@ import {
 } from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
+import SortableComponent from "../components/sortableComponent"
+import arrayMove from 'array-move';
 // import * as recipeService from "../services/recipeService";
 
 //const UPLOAD_LIST_PLACEHOLDER =
@@ -22,6 +24,7 @@ class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
+      testItems: ['1025', '1003', '300', '400', '500', '600'],
       errors: {},
       units: [],
       quantities: [],
@@ -161,7 +164,7 @@ class RecipeForm extends Form {
     try {
       await deleteRecipe(recipeId);
       this.props.history.push("/my-recipes");
-    } catch (err) {}
+    } catch (err) { }
   }
 
   renderHeader() {
@@ -306,6 +309,16 @@ class RecipeForm extends Form {
     }
   };
 
+  imgClick = (value) => {
+    console.log("Clicked ", value);
+  }
+
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(({ testItems }) => ({
+      testItems: arrayMove(testItems, oldIndex, newIndex),
+    }));
+  };
+
   render() {
     const { ingredients } = this.state;
 
@@ -318,7 +331,6 @@ class RecipeForm extends Form {
           onChange={this.handleThumbnailAdd}
           style={{ display: "none" }}
         />
-
         <section id="add-recipe-form">
           <div className="row sl-page-heading">
             <div className="col-md-4">{this.renderHeader()}</div>
@@ -335,12 +347,14 @@ class RecipeForm extends Form {
                 onClick={this.handleThumbnailRemove.bind(this)}
                 fileInputClick={this.triggerInputFile}
               />
+              <SortableComponent images={this.state.testItems} imgClick={this.imgClick} onSortEnd={this.onSortEnd}/>
               <button
                 name="addImg"
                 className="btn btn-outline-dark"
                 onClick={(event) => {
                   this.triggerInputFile(event);
                 }}
+                style={{ display: "block" }}
               >
                 Add Image +
               </button>
@@ -421,7 +435,7 @@ class RecipeForm extends Form {
                               <FaTrash
                                 className="hover-icon"
                                 onClick={this.handleRemoveSpecificRow(i)}
-                                // onClick={this.handleRemoveSpecificRow(i)} ********
+                              // onClick={this.handleRemoveSpecificRow(i)} ********
                               />
                             </td>
                           </tr>
