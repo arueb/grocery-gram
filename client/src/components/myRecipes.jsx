@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { getUserRecipes } from "../services/userService";
 import RecipeBlock from "./recipeBlock";
-// import { getCategories } from "../services/categoryService";
+import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
@@ -14,13 +14,20 @@ class MyRecipes extends Component {
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All",
+    selectValue: ""
   };
+
+  getInitialSelectVal() {
+    return "Select a Category";
+  }
 
   onNewRecipe = () => {
     window.location = "/my-recipes/new";
   };
 
   async componentDidMount() {
+    this.setState({ selectValue: this.getInitialSelectVal() });
+
     try {
       const user = this.props.user;
       if (user) {
@@ -46,8 +53,9 @@ class MyRecipes extends Component {
     this.setState({ selectedOwnerType: ownerType, currentPage: 1 });
   };
 
-  handleFilterByCategory = ({ currentTarget: input }) => {
-    console.log("filter by category...");
+  handleFilterByCategory = (event) => {
+    // console.log("you chose", event.target.value);
+    this.setState({ selectValue: event.target.value })
   };
 
   handlePageChange = (page) => {
@@ -61,15 +69,14 @@ class MyRecipes extends Component {
       currentPage,
       listGroupLabels,
       selectedOwnerType,
+      selectValue
     } = this.state;
 
     const { user } = this.props;
 
-    // const options = getCategories();
-    // const optionsPlus = ["Filter by Category", ...options]
+    const options = getCategories();
 
     let filtered;
-
     if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
         filtered = allRecipes.filter((r) => r.userId !== user._id);
@@ -79,9 +86,15 @@ class MyRecipes extends Component {
         filtered = allRecipes;
       }
     }
-    // console.log("filtered:", filtered);
 
-    const recipes = paginate(filtered, currentPage, pageSize);
+    let filteredByCat = filtered;
+    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
+      filteredByCat = filtered;
+    } else { 
+      filteredByCat = filtered.filter(r => r.category === selectValue);
+    }
+      
+    const recipes = paginate(filteredByCat, currentPage, pageSize);
 
     return (
       <React.Fragment>
@@ -92,7 +105,7 @@ class MyRecipes extends Component {
           <div className="col-md-4"></div>
           <div className="col-md-4 new-recipe">
             <button onClick={this.onNewRecipe} className="btn btn-dark">
-              + New Recipe
+              New Recipe +
             </button>
           </div>
         </div>
@@ -106,20 +119,20 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-            Category Dropdown Coming Soon...
-            {/* <select
-              className="form-control"
-              id="mr-category"
-              name="mr-category"
-              value="Filter by Category"
-            >
-              <option disabled>Filter by Category</option>
-              {options.map((option) => (
-                <option key={option._id} value={option.name}>
-                  {option.name}
-                </option>
-              ))}
-            </select> */}
+              <select
+                className="form-control"
+                id="mr-category"
+                name="mr-category"
+                onChange={this.handleFilterByCategory}
+                value={selectValue}
+              >
+                <option disabled>{this.getInitialSelectVal()}</option>
+                {options.map((option) => (
+                  <option key={option._id} value={option.name}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
           </div>
           <div className="col-md-4">
             Search Box Coming Soon...
