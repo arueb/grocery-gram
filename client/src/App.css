@@ -489,3 +489,30 @@ tbody .form-group {
 .list-group-item {
   cursor: pointer;
 }
+
+.edit-icon {
+  position: absolute;
+  right: 16px;
+  /* bottom: 16px; */
+  top: 8px;
+  display: none;
+}
+
+.card:hover .edit-icon,
+.card:hover .saved-icon {
+  display: block !important;
+}
+
+.edit-icon a {
+  color: white !important;
+}
+
+.saved-icon {
+  color: white;
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 1.2em;
+  display: none;
+  /* opacity: 0.75; */
+}
