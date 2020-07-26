@@ -9,93 +9,6 @@ M E D I A  Q U E R I E S
 Bootstrap 4 breakpoints
 */
 
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) {
-}
-
-/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
-@media (min-width: 768px) {
-  /*  Add Recipe Form  */
-  #add-recipe-form {
-    padding: 5em 5em;
-  }
-}
-
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-}
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
-}
-
-/*
-::::::::::::::::::::::::::::::::::::::::::::::::::::
-Custom media queries
-*/
-
-/* Set width to make card deck cards 100% width */
-@media (max-width: 575px) {
-  .ingredients-form {
-    margin: 0 -15px;
-  }
-
-  .ingredients-form thead {
-    display: none;
-  }
-  .ingredients-form td {
-    display: inline-block;
-    padding: 0.4rem 1rem;
-  }
-
-  .ingredients-form .qty,
-  .ingredients-form .unit {
-    width: 50%;
-    padding-top: 1em;
-    padding-left: 15px;
-  }
-  .ingredients-form .qty {
-    padding-right: 0.5rem;
-  }
-  .ingredients-form .unit {
-    padding-left: 0.5rem;
-    padding-right: 15px;
-  }
-
-  .ingredients-form .item {
-    width: 100%;
-    min-width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .ingredients-form .notes {
-    width: 85%;
-    padding-bottom: 1em;
-    padding-right: 0.5rem;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  .ingredients-form .delete {
-    padding-left: 0.5rem;
-    padding-top: 0.6rem;
-  }
-  .ingredients-form tr {
-    border-bottom: 1px solid #ddd;
-  }
-
-  .ingredients-form .btn {
-    margin-left: 15px;
-  }
-  .ingredients-form label {
-    margin-left: 15px;
-  }
-
-  .ingredients-label {
-    margin-bottom: 0;
-  }
-}
-
 /* 
 GLOBAL DEVICE STYLES - All devices (portrait phones, less than 576px) and larger
 No media query since this is the default in Bootstrap because it is "mobile first"
@@ -192,7 +105,7 @@ tr:hover .hover-icon {
 }
 
 .pie {
-  margin-bottom: 3em;
+  margin-bottom: 2em;
 }
 
 .react-autosuggest__container {
@@ -381,12 +294,17 @@ footer {
 
 .category-legend {
   list-style: none;
-  margin-top: -42px;
-  background: white;
-  width: 100%;
-  position: absolute;
 }
 
+.trial-cover {
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  top: 420px;
+  width: 100%;
+  height: 20px;
+  /* bottom: 108px; */
+}
 .list-group-item {
   padding: 0.6rem 1.25rem;
 }
@@ -397,7 +315,26 @@ footer {
 }
 
 #canvasjs-react-chart-container-0 {
-  margin-top: -25px;
+  margin-top: 35px;
+}
+
+.totals {
+  position: absolute;
+  z-index: 10000;
+  top: 208px;
+  right: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.totals span {
+  display: block;
+  font-weight: 300;
+  font-size: 1rem;
+  margin-top: -8px;
 }
 
 .pie h5 {
@@ -515,4 +452,143 @@ tbody .form-group {
   font-size: 1.2em;
   display: none;
   /* opacity: 0.75; */
+}
+
+/* 
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* 
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  /*  Add Recipe Form  */
+  #add-recipe-form {
+    padding: 5em 5em;
+  }
+  #canvasjs-react-chart-container-0 {
+    height: 220px !important;
+  }
+
+  .trial-cover {
+    position: absolute;
+    height: 10px;
+    background-color: white;
+    top: 240px;
+    width: 100%;
+    height: 11px;
+    /* bottom: 51px; */
+  }
+
+  .totals {
+    top: 116px;
+  }
+  /* .category-legend {
+    margin-top: -72px;
+  }
+
+
+
+  .totals {
+    top: 114px;
+  } */
+}
+
+/* 
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  #canvasjs-react-chart-container-0 {
+    height: 300px !important;
+  }
+
+  .trial-cover {
+    top: 322px;
+    height: 10px;
+  }
+
+  .totals {
+    top: 154px;
+  }
+}
+/* 
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  #canvasjs-react-chart-container-0 {
+    margin-top: 35px !important;
+  }
+}
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries
+*/
+
+/* Set width to make card deck cards 100% width */
+@media (max-width: 575px) {
+  .ingredients-form {
+    margin: 0 -15px;
+  }
+
+  .ingredients-form thead {
+    display: none;
+  }
+  .ingredients-form td {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+  }
+
+  .ingredients-form .qty,
+  .ingredients-form .unit {
+    width: 50%;
+    padding-top: 1em;
+    padding-left: 15px;
+  }
+  .ingredients-form .qty {
+    padding-right: 0.5rem;
+  }
+  .ingredients-form .unit {
+    padding-left: 0.5rem;
+    padding-right: 15px;
+  }
+
+  .ingredients-form .item {
+    width: 100%;
+    min-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .ingredients-form .notes {
+    width: 85%;
+    padding-bottom: 1em;
+    padding-right: 0.5rem;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .ingredients-form .delete {
+    padding-left: 0.5rem;
+    padding-top: 0.6rem;
+  }
+  .ingredients-form tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  .ingredients-form .btn {
+    margin-left: 15px;
+  }
+  .ingredients-form label {
+    margin-left: 15px;
+  }
+
+  .ingredients-label {
+    margin-bottom: 0;
+  }
+
+  /* .category-legend {
+    margin-top: -12px;
+  } */
 }
