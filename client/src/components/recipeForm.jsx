@@ -24,7 +24,7 @@ class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
-      testItems: ['1025', '1003', '300', '400', '500', '600'],
+      recipeImages: [],
       errors: {},
       units: [],
       quantities: [],
@@ -127,27 +127,24 @@ class RecipeForm extends Form {
 
     newFile.fileId = Date.now();
 
-    let updatedFiles = this.state.data.filesToUpload;
+    let oldFiles = this.state.recipeImages;
     this.setState({
-      data: {
-        ...this.state.data,
-        filesToUpload: [newFile].concat(updatedFiles),
-      },
+      recipeImages: [newFile].concat(oldFiles),
+      });
+  }
+  
+  imgClick = (e) => {
+    const remainingFiles = this.state.recipeImages.filter((el) => {
+      return el.fileId !== e.fileId;
     });
+    this.setState({ recipeImages: remainingFiles });
   }
 
-  handleThumbnailRemove(e) {
-    let originalArray = [...this.state.data.filesToUpload];
-    const remainingFiles = originalArray.filter((el) => {
-      return el.fileId.toString() !== e.target.id;
-    });
-    this.setState({
-      data: {
-        ...this.state.data,
-        filesToUpload: remainingFiles,
-      },
-    });
-  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(({ recipeImages }) => ({
+      recipeImages: arrayMove(recipeImages, oldIndex, newIndex),
+    }));
+  };
 
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
@@ -257,9 +254,8 @@ class RecipeForm extends Form {
     console.log("maded it past state errosr!");
 
     let imageLinks = [];
-    console.log("files to upload", this.state.data.filesToUpload);
 
-    for (const imageFile of this.state.data.filesToUpload) {
+    for (const imageFile of this.state.recipeImages) {
       var formData = new FormData();
       formData.append("name", "file");
       formData.append("file", imageFile);
@@ -309,16 +305,6 @@ class RecipeForm extends Form {
     }
   };
 
-  imgClick = (value) => {
-    console.log("Clicked ", value);
-  }
-
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState(({ testItems }) => ({
-      testItems: arrayMove(testItems, oldIndex, newIndex),
-    }));
-  };
-
   render() {
     const { ingredients } = this.state;
 
@@ -341,13 +327,8 @@ class RecipeForm extends Form {
             {this.renderInput("title", "Title")}
 
             <div className="form-group">
-              <label htmlFor="addImg">Recipe Images</label>
-              <this.ImagePreviews
-                items={this.state.data.filesToUpload}
-                onClick={this.handleThumbnailRemove.bind(this)}
-                fileInputClick={this.triggerInputFile}
-              />
-              <SortableComponent images={this.state.testItems} imgClick={this.imgClick} onSortEnd={this.onSortEnd}/>
+              <label htmlFor="addImg" style={{display: "block"}}>Recipe Images</label>
+              <SortableComponent images={this.state.recipeImages} imgClick={this.imgClick} onSortEnd={this.onSortEnd}/>
               <button
                 name="addImg"
                 className="btn btn-outline-dark"
