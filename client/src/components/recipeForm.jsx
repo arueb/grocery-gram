@@ -95,28 +95,17 @@ class RecipeForm extends Form {
       data.instructions = recipe[0].instructions;
       data.isPublished = recipe[0].isPublished;
       this.setState({ data });
+
+      recipe[0].images.forEach(image => {
+        image.fileId = image.fullsizeUrl
+      });
+
+      this.setState({ recipeImages : recipe[0].images});
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
     }
   }
-
-  // This is used to make the images picker/uploader
-  ImagePreviews = (props) => (
-    <div>
-      {props.items.map((item, index) => (
-        <img
-          key={item + index}
-          id={item.fileId}
-          src={URL.createObjectURL(item)}
-          alt={index}
-          //   style={{ height: "50px" }}
-          style={{ height: "80px" }}
-          onClick={props.onClick}
-        />
-      ))}
-    </div>
-  );
 
   handleThumbnailAdd(e) {
     if (e.target.files.length === 0) {
@@ -129,11 +118,11 @@ class RecipeForm extends Form {
 
     let oldFiles = this.state.recipeImages;
     this.setState({
-      recipeImages: [newFile].concat(oldFiles),
-      });
+      recipeImages: oldFiles.concat(newFile),
+    });
   }
-  
-  imgClick = (e) => {
+
+  handleThumbnailRemove = (e) => {
     const remainingFiles = this.state.recipeImages.filter((el) => {
       return el.fileId !== e.fileId;
     });
@@ -256,21 +245,27 @@ class RecipeForm extends Form {
     let imageLinks = [];
 
     for (const imageFile of this.state.recipeImages) {
-      var formData = new FormData();
-      formData.append("name", "file");
-      formData.append("file", imageFile);
+      if (imageFile instanceof File) {
+        var formData = new FormData();
+        formData.append("name", "file");
+        formData.append("file", imageFile);
+  
+        const imageData = await http.post(
+          process.env.REACT_APP_API_URL + "/img",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-      const imageData = await http.post(
-        process.env.REACT_APP_API_URL + "/img",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+        imageLinks.push(imageData.data);
+      } else {
 
-      imageLinks.push(imageData.data);
+        imageLinks.push(imageFile);
+      }
+
     }
 
     let recipeRecord = {
@@ -292,8 +287,6 @@ class RecipeForm extends Form {
         await newRecipe(recipeRecord);
       } else {
         // update an existing record via patch
-        delete recipeRecord.images;
-        // console.log("patch body", recipeRecord);
         await updateRecipe(id, recipeRecord);
         // console.log("patch success");
       }
@@ -327,8 +320,8 @@ class RecipeForm extends Form {
             {this.renderInput("title", "Title")}
 
             <div className="form-group">
-              <label htmlFor="addImg" style={{display: "block"}}>Recipe Images</label>
-              <SortableComponent images={this.state.recipeImages} imgClick={this.imgClick} onSortEnd={this.onSortEnd}/>
+              <label htmlFor="addImg" style={{ display: "block" }}>Recipe Images <small><em>(First image is thumbnail)</em></small></label>
+              <SortableComponent images={this.state.recipeImages} imgClick={this.handleThumbnailRemove} onSortEnd={this.onSortEnd} />
               <button
                 name="addImg"
                 className="btn btn-outline-dark"

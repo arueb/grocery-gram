@@ -1,28 +1,17 @@
 import React, { Component } from 'react';
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 
-
-// const SortableItem = sortableElement(({ value, imgClick }) =>
-//   <img
-//     className="m-1"
-//     style={{ float: "left", cursor: "move" }}
-//     src={"https://picsum.photos/id/" + value + "/50"}
-//     alt={"Picsum id " + value}
-//     onClick={() => imgClick(value)}
-//   />);
-
 const SortableItem = sortableElement(({ index, item, imgClick }) =>
-  <img
-    key={String(item.fileId) + String(index)}
-    id={item.fileId}
-    src={URL.createObjectURL(item)}
-    alt={item.fileId}
-    //   style={{ height: "50px" }}
-    style={{ height: "80px" }}
-    onClick={() => imgClick(item)}
-  />
+    <img
+      key={String(item.fileId) + String(index)}
+      id={item.fileId}
+      src={item instanceof File ? URL.createObjectURL(item) : item.thumbUrl }
+      alt={item.fileId}
+      //   style={{ height: "50px" }}
+      style={{ height: "80px" }}
+      onClick={() => imgClick(item)}
+    />
 );
-
 
 const SortableContainer = sortableContainer(({ children }) => {
   return <div style={{ display: "inline-block" }}>{children}</div>;
