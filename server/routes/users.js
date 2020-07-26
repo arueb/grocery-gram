@@ -130,6 +130,7 @@ router.get("/:id", async (req, res) => {
         "addedItems",
         "removedItems",
         "itemCounts",
+        "savedRecipes"
       ])
     );
   } catch (err) {
