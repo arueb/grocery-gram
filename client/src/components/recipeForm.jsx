@@ -15,6 +15,7 @@ import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 import SortableComponent from "../components/sortableComponent"
 import arrayMove from 'array-move';
+import { toast } from "react-toastify";
 // import * as recipeService from "../services/recipeService";
 
 //const UPLOAD_LIST_PLACEHOLDER =
@@ -123,6 +124,10 @@ class RecipeForm extends Form {
   }
 
   handleThumbnailRemove = (e) => {
+    if (this.state.recipeImages.length < 2) {
+      toast.error("Must have at least 1 image");
+      return;
+    }
     const remainingFiles = this.state.recipeImages.filter((el) => {
       return el.fileId !== e.fileId;
     });
@@ -320,7 +325,7 @@ class RecipeForm extends Form {
             {this.renderInput("title", "Title")}
 
             <div className="form-group">
-              <label htmlFor="addImg" style={{ display: "block" }}>Recipe Images <small><em>(First image is thumbnail)</em></small></label>
+              <label htmlFor="addImg" style={{ display: "block" }}>Recipe Images <small><em>(First image is thumbnail, click an image to remove)</em></small></label>
               <SortableComponent images={this.state.recipeImages} imgClick={this.handleThumbnailRemove} onSortEnd={this.onSortEnd} />
               <button
                 name="addImg"
