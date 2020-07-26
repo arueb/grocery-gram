@@ -5,8 +5,8 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class PieChart extends Component {
   render() {
-    const { catPercents, totalNumItems, totalPriceItems } = this.props;
-    const itemFormat = totalNumItems === 1 ? "item" : "items";
+    const { catPercents, totalNumItems } = this.props;
+    // const itemFormat = totalNumItems === 1 ? "item" : "items";
 
     const options = {
       animationEnabled: true,
