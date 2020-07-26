@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { getPublishedRecipes } from "../services/recipeService";
 
 class ExploreRecipes extends Component {
   state = {
@@ -12,8 +13,8 @@ class ExploreRecipes extends Component {
 
 
     try {
-      // const { data: recipes } = await getPublishedRecipes();
-      // this.setState({ recipes });
+      const { data: recipes } = await getPublishedRecipes();
+      this.setState({ recipes });
     }
     catch(ex) {
       console.log("Something failed", ex);
