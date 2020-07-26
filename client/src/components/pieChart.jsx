@@ -5,8 +5,8 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class PieChart extends Component {
   render() {
-    const { catPercents, totalNumItems, totalPriceItems } = this.props;
-    const itemFormat = totalNumItems === 1 ? "item" : "items";
+    const { catPercents } = this.props;
+    // const itemFormat = totalNumItems === 1 ? "item" : "items";
 
     const options = {
       animationEnabled: true,
@@ -17,16 +17,16 @@ class PieChart extends Component {
       //     fontWeight: 500,
       //     lineHeight: 1.2,
       //   },
-      subtitles: [
-        {
-          text: `${totalNumItems} ${itemFormat}: $${totalPriceItems}`,
-          verticalAlign: "center",
-          fontSize: 24,
-          fontFamily: "Roboto, sans-serif",
-          fontWeight: 700,
-          dockInsidePlotArea: true,
-        },
-      ],
+      //   subtitles: [
+      //     {
+      //       text: `${totalNumItems} ${itemFormat}: $${totalPriceItems}`,
+      //       verticalAlign: "center",
+      //       fontSize: 24,
+      //       fontFamily: "Roboto, sans-serif",
+      //       fontWeight: 700,
+      //       dockInsidePlotArea: true,
+      //     },
+      //   ],
       data: [
         {
           type: "doughnut",

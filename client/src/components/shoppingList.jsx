@@ -432,12 +432,21 @@ class ShoppingList extends Component {
           <div className="col-md-4 order-md-12 pie">
             <h5>List Summary</h5>
             {totalNumItems > 0 && (
-              <PieChart
-                totalNumItems={totalNumItems}
-                totalPriceItems={totalPriceItems}
-                catPercents={catPercents}
-              />
+              <React.Fragment>
+                <div className="totals">
+                  ${totalPriceItems}
+                  <span className="num-items">
+                    {totalNumItems} Item{totalNumItems > 1 ? "s" : ""}
+                  </span>
+                </div>
+                <PieChart
+                  totalNumItems={totalNumItems}
+                  totalPriceItems={totalPriceItems}
+                  catPercents={catPercents}
+                />
+              </React.Fragment>
             )}
+            <div className="trial-cover"></div>
             <ul className="category-legend">
               {totalNumItems &&
                 catPercents.map((cat, i) => {
@@ -458,6 +467,7 @@ class ShoppingList extends Component {
                 })}
             </ul>
           </div>
+
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover myStaples">
