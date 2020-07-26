@@ -1,7 +1,26 @@
 import React, { Component } from "react";
 
 class ExploreRecipes extends Component {
-  state = {};
+  state = {
+    data: "",
+    recipes: [],
+    pageSize: 8,
+    currentPage: 1
+  };
+
+  async componentDidMount() {
+
+
+    try {
+      // const { data: recipes } = await getPublishedRecipes();
+      // this.setState({ recipes });
+    }
+    catch(ex) {
+      console.log("Something failed", ex);
+    }
+  }
+
+
   render() {
     return (
       <React.Fragment>
@@ -11,6 +30,7 @@ class ExploreRecipes extends Component {
           </div>
           <div className="col-md-6 new-recipe"></div>
         </div>
+        <hr className="divider" />
         <div className="row list-group-row">
           <div className="col-md-6">
             <button>Filter by Category - this is a really long button, </button>
@@ -19,7 +39,6 @@ class ExploreRecipes extends Component {
             <button>Search - this is also a fairly long button</button>
           </div>
         </div>
-        <hr className="divider" />
         <div className="row">
           <div className="col-md-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
