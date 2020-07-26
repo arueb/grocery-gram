@@ -1,7 +1,7 @@
 {
   "name": "testgrocerygramapi",
   "version": "1.0.0",
-  "description": "test",
+  "description": "GroceryGram Backend",
   "main": "index.js",
   "engines": {
     "node": "12.x.x"
