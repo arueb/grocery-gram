@@ -8,7 +8,7 @@ import MyRecipes from "./components/myRecipes";
 import ExploreRecipes from "./components/exploreRecipes";
 import NotFound from "./components/notFound";
 import RegisterForm from "./components/registerForm";
-//import RecipeForm from "./components/recipeForm";
+import RecipeDetail from "./components/recipeDetail";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeForm";
@@ -57,7 +57,7 @@ class App extends Component {
                 path="/explore-recipes"
                 render={(props) => <ExploreRecipes {...props} user={user} />}
               />
-              {/* <Route path="/recipes/:id" component={RecipeDetail} /> */}
+              <Route path="/recipes/:id" component={RecipeDetail} />
               <Route
                 path="/shopping-list"
                 render={(props) => (
