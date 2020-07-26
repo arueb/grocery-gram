@@ -29,24 +29,16 @@ router.get("/", async (req, res) => {
       },
       {
         $project: {
-          _id: 1,
-          avgRating: 1,
-          numReviews: 1,
-          isPublished: 1,
-          userId: 1,
-          category: 1,
-          images: 1,
-          instructions: 1,
-          title: 1,
-          ingredients: 1,
-          createdOn: 1,
-          "user.username": 1,
-          "user._id": 1,
+          "user.password": 0,
+          "user.addedItems": 0,
+          "user.removedItems": 0,
+          "user.email": 0,
+          "user.itemCounts": 0,
+          "user.date": 0,
+          "user.savedRecipes": 0,
         },
       },
     ]);
-
-    console.log(recipes);
 
     res.send(recipes);
   } catch (err) {

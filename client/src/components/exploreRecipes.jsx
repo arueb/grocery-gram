@@ -23,6 +23,10 @@ class ExploreRecipes extends Component {
 
 
   render() {
+
+    const { recipes } = this.state;
+    console.log('published recipes:', recipes);
+
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
