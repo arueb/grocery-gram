@@ -314,7 +314,7 @@ footer {
   padding: 0.3rem 1.25rem;
 }
 
-#canvasjs-react-chart-container-0 {
+.pie-chart-container > div {
   margin-top: 35px;
 }
 
@@ -468,7 +468,8 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   #add-recipe-form {
     padding: 5em 5em;
   }
-  #canvasjs-react-chart-container-0 {
+
+  .pie-chart-container > div {
     height: 220px !important;
   }
 
@@ -500,7 +501,7 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  #canvasjs-react-chart-container-0 {
+  .pie-chart-container > div {
     height: 300px !important;
   }
 
@@ -517,7 +518,7 @@ Large devices (desktops, 992px and up) */
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  #canvasjs-react-chart-container-0 {
+  .pie-chart-container > div {
     margin-top: 35px !important;
   }
 }
