@@ -18,7 +18,7 @@ export function getRecipes() {
 }
 
 export function getPublishedRecipes() {
-  return http.get(apiEndpoint + "/published")
+  return http.get(apiEndpoint)
 }
 
 export function deleteRecipe(recipeId) {

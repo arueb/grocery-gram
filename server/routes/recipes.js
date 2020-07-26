@@ -14,10 +14,11 @@ const mongoose = require("mongoose");
 //   }
 // });
 
-// get all recipes
+// get all PUBLISHED recipes
 router.get("/", async (req, res) => {
   try {
     const recipes = await Recipe.aggregate([
+      { $match: { isPublished: true } },
       {
         $lookup: {
           from: "users",
@@ -44,6 +45,8 @@ router.get("/", async (req, res) => {
         },
       },
     ]);
+
+    console.log(recipes);
 
     res.send(recipes);
   } catch (err) {
