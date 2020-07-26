@@ -13,6 +13,9 @@ import {
 } from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
+import SortableComponent from "../components/sortableComponent"
+import arrayMove from 'array-move';
+import { toast } from "react-toastify";
 // import * as recipeService from "../services/recipeService";
 
 //const UPLOAD_LIST_PLACEHOLDER =
@@ -22,6 +25,7 @@ class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
+      recipeImages: [],
       errors: {},
       units: [],
       quantities: [],
@@ -92,28 +96,17 @@ class RecipeForm extends Form {
       data.instructions = recipe[0].instructions;
       data.isPublished = recipe[0].isPublished;
       this.setState({ data });
+
+      recipe[0].images.forEach(image => {
+        image.fileId = image.fullsizeUrl
+      });
+
+      this.setState({ recipeImages : recipe[0].images});
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
     }
   }
-
-  // This is used to make the images picker/uploader
-  ImagePreviews = (props) => (
-    <div>
-      {props.items.map((item, index) => (
-        <img
-          key={item + index}
-          id={item.fileId}
-          src={URL.createObjectURL(item)}
-          alt={index}
-          //   style={{ height: "50px" }}
-          style={{ height: "80px" }}
-          onClick={props.onClick}
-        />
-      ))}
-    </div>
-  );
 
   handleThumbnailAdd(e) {
     if (e.target.files.length === 0) {
@@ -124,27 +117,28 @@ class RecipeForm extends Form {
 
     newFile.fileId = Date.now();
 
-    let updatedFiles = this.state.data.filesToUpload;
+    let oldFiles = this.state.recipeImages;
     this.setState({
-      data: {
-        ...this.state.data,
-        filesToUpload: [newFile].concat(updatedFiles),
-      },
+      recipeImages: oldFiles.concat(newFile),
     });
   }
 
-  handleThumbnailRemove(e) {
-    let originalArray = [...this.state.data.filesToUpload];
-    const remainingFiles = originalArray.filter((el) => {
-      return el.fileId.toString() !== e.target.id;
+  handleThumbnailRemove = (e) => {
+    if (this.state.recipeImages.length < 2) {
+      toast.error("Must have at least 1 image");
+      return;
+    }
+    const remainingFiles = this.state.recipeImages.filter((el) => {
+      return el.fileId !== e.fileId;
     });
-    this.setState({
-      data: {
-        ...this.state.data,
-        filesToUpload: remainingFiles,
-      },
-    });
+    this.setState({ recipeImages: remainingFiles });
   }
+
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(({ recipeImages }) => ({
+      recipeImages: arrayMove(recipeImages, oldIndex, newIndex),
+    }));
+  };
 
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
@@ -161,7 +155,7 @@ class RecipeForm extends Form {
     try {
       await deleteRecipe(recipeId);
       this.props.history.push("/my-recipes");
-    } catch (err) {}
+    } catch (err) { }
   }
 
   renderHeader() {
@@ -254,24 +248,29 @@ class RecipeForm extends Form {
     console.log("maded it past state errosr!");
 
     let imageLinks = [];
-    console.log("files to upload", this.state.data.filesToUpload);
 
-    for (const imageFile of this.state.data.filesToUpload) {
-      var formData = new FormData();
-      formData.append("name", "file");
-      formData.append("file", imageFile);
+    for (const imageFile of this.state.recipeImages) {
+      if (imageFile instanceof File) {
+        var formData = new FormData();
+        formData.append("name", "file");
+        formData.append("file", imageFile);
+  
+        const imageData = await http.post(
+          process.env.REACT_APP_API_URL + "/img",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-      const imageData = await http.post(
-        process.env.REACT_APP_API_URL + "/img",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+        imageLinks.push(imageData.data);
+      } else {
 
-      imageLinks.push(imageData.data);
+        imageLinks.push(imageFile);
+      }
+
     }
 
     let recipeRecord = {
@@ -293,8 +292,6 @@ class RecipeForm extends Form {
         await newRecipe(recipeRecord);
       } else {
         // update an existing record via patch
-        delete recipeRecord.images;
-        // console.log("patch body", recipeRecord);
         await updateRecipe(id, recipeRecord);
         // console.log("patch success");
       }
@@ -318,7 +315,6 @@ class RecipeForm extends Form {
           onChange={this.handleThumbnailAdd}
           style={{ display: "none" }}
         />
-
         <section id="add-recipe-form">
           <div className="row sl-page-heading">
             <div className="col-md-4">{this.renderHeader()}</div>
@@ -329,18 +325,15 @@ class RecipeForm extends Form {
             {this.renderInput("title", "Title")}
 
             <div className="form-group">
-              <label htmlFor="addImg">Recipe Images</label>
-              <this.ImagePreviews
-                items={this.state.data.filesToUpload}
-                onClick={this.handleThumbnailRemove.bind(this)}
-                fileInputClick={this.triggerInputFile}
-              />
+              <label htmlFor="addImg" style={{ display: "block" }}>Recipe Images <small><em>(First image is thumbnail, click an image to remove)</em></small></label>
+              <SortableComponent images={this.state.recipeImages} imgClick={this.handleThumbnailRemove} onSortEnd={this.onSortEnd} />
               <button
                 name="addImg"
                 className="btn btn-outline-dark"
                 onClick={(event) => {
                   this.triggerInputFile(event);
                 }}
+                style={{ display: "block" }}
               >
                 Add Image +
               </button>
@@ -421,7 +414,7 @@ class RecipeForm extends Form {
                               <FaTrash
                                 className="hover-icon"
                                 onClick={this.handleRemoveSpecificRow(i)}
-                                // onClick={this.handleRemoveSpecificRow(i)} ********
+                              // onClick={this.handleRemoveSpecificRow(i)} ********
                               />
                             </td>
                           </tr>
