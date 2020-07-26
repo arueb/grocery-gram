@@ -6,6 +6,13 @@ import AvgStarRating from "./common/avgStarRating";
 import { FaPen, FaHeart } from "react-icons/fa";
 
 class RecipeBlock extends Component {
+
+  getUsername() {
+    if (this.props.forExplore === true) {
+      return this.props.recipe.user[0].username;
+    }     
+    return this.props.recipe.user.username;
+  }
   placeholderOrImage() {
     if (this.props.recipe.images && this.props.recipe.images[0].thumbUrl) {
       return (
@@ -44,9 +51,10 @@ class RecipeBlock extends Component {
               {/* <p className="card-text">{this.props.recipe.instructions}</p> */}
               <p className="card-text">
                 By{" "}
-                {this.props.recipe.user
+                {this.getUsername()}
+                {/* {this.props.recipe.user
                   ? this.props.recipe.user.username
-                  : this.props.recipe.userId}
+                  : this.props.recipe.userId} */}
               </p>
               <AvgStarRating
                 avgRating={this.props.recipe.avgRating}

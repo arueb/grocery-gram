@@ -33,12 +33,17 @@ class ExploreRecipes extends Component {
     }
   }
 
-  renderExploreRecipeBlocks(recipes) {
+  renderExploreRecipeBlocks(recipes, userId) {
     let items = [];
     if (recipes) {
-      recipes.forEach(function (recipe, userId) {
+      recipes.forEach(function (recipe) {
         items.push(
-          <RecipeBlock userId={userId} key={recipe._id} recipe={recipe} />
+          <RecipeBlock
+            userId={userId}
+            key={recipe._id}
+            recipe={recipe}
+            forExplore={true}
+          />
         );
       });
     }
@@ -62,7 +67,9 @@ class ExploreRecipes extends Component {
       currentPage,
     } = this.state;
 
-    const { user } = this.props;
+    console.log('allRecipes from render:', allRecipes);
+
+    // const { user } = this.props;
 
     const options = getCategories();
 
@@ -103,7 +110,8 @@ class ExploreRecipes extends Component {
           <div className="col-md-6">Search Box Coming Soon...</div>
         </div>
         <div className="row">
-          {this.renderExploreRecipeBlocks(recipes, user._id)}
+          {console.log('userId:', this.props.user._id)}
+          {this.renderExploreRecipeBlocks(recipes, this.props.user._id)}
         </div>
         <Pagination
           recipesCount={filtered.length}

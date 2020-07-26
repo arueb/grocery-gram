@@ -44,7 +44,12 @@ class MyRecipes extends Component {
     if (recipes) {
       recipes.forEach(function (recipe) {
         items.push(
-          <RecipeBlock userId={userId} key={recipe._id} recipe={recipe} />
+          <RecipeBlock
+            userId={userId}
+            key={recipe._id}
+            recipe={recipe}
+            forExplore={false}
+          />
         );
       });
     }
