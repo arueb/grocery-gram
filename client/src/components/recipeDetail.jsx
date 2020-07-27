@@ -5,6 +5,7 @@ import ReviewRow from "./common/reviewRow"
 // import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { getRecipe, getReviews } from "../services/recipeService"
+import { newReview } from "../services/reviewService"
 import AvgStarRating from "./common/avgStarRating";
 import StarRating from "./common/starRating";
 
@@ -13,7 +14,8 @@ class RecipeDetail extends Form {
     super(props);
     this.state = {
       data: {
-        reviewNotes: "Blanks",
+        reviewNotes: "",
+        reviewStars: 0,
         title: "",
         author: "",
         category: "",
@@ -27,20 +29,28 @@ class RecipeDetail extends Form {
 
   schema = {
     reviewNotes: Joi.string().required().label("Review Notes"),
+    reviewStars: Joi.number().min(0).max(5).required(),
+    author: Joi.any(),
+    title: Joi.any(),
+    category: Joi.any(),
+    isPublished: Joi.any(),
+    instructions: Joi.any(),
+    avgRating: Joi.any(),
+    numReviews: Joi.any(),
   };
 
   async componentDidMount() {
-    // load the reviews
-    await this.populateReviews();
+    // Load the Page
+    await this.populateRecipe();
+
+    // Load the reviews
+    await this.populateReviews()
   }
 
   // populates reviews in state if valid recipe id
-  async populateReviews() {
+  async populateRecipe() {
     try {
       const recipeId = this.props.match.params.id;
-
-      const { data: reviews } = await getReviews(recipeId);
-      this.setState({ reviews });
 
       const { data: recipe } = await getRecipe(recipeId);
 
@@ -53,21 +63,41 @@ class RecipeDetail extends Form {
       data.avgRating = recipe[0].avgRating;
       data.numReviews = recipe[0].numReviews;
       this.setState({ data });
-
-      /*           recipe[0].images.forEach(image => {
-                   image.fileId = image.fullsizeUrl
-                 });
-           
-                 this.setState({ recipeImages : recipe[0].images});
-                 */
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
     }
   }
 
+  // populates reviews in state if valid recipe id
+  async populateReviews() {
+    try {
+      const recipeId = this.props.match.params.id;
+
+      const { data: reviews } = await getReviews(recipeId);
+      this.setState({ reviews });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
+  }
+
+  handleStarChange = (clickedStars) => {
+    const data = { ...this.state.data };
+    data.reviewStars = clickedStars
+    this.setState({ data });
+  }
+
   doSubmit = async () => {
-    console.log("we did a submit!")
+    let toSubmit = {};
+    toSubmit.comments = this.state.data.reviewNotes;
+    toSubmit.rating = this.state.data.reviewStars
+    toSubmit.userId = this.props.user._id;
+    toSubmit.recipeId = this.props.match.params.id;
+    await newReview(toSubmit);
+
+    // Get the page again
+    await this.populateReviews();
   }
 
   render() {
@@ -103,8 +133,7 @@ class RecipeDetail extends Form {
           </div>
           <div className="row">
             <div className="col-6">
-              <p>Bacon ipsum dolor amet bresaola shank rump tongue tri-tip. Ball tip bacon prosciutto boudin frankfurter swine filet mignon ground round.</p>
-              <p>Landjaeger cow rump chuck sausage. Beef sirloin tongue ham pork cow biltong shank drumstick kevin.</p>
+              <p>{this.state.data.instructions}</p>
             </div>
             <div className="col-6">
               <table className="table table-striped">
@@ -138,8 +167,8 @@ class RecipeDetail extends Form {
           <hr style={{ "borderTop": "5px solid #8c8b8b" }} />
           <h1>Review The Recipe</h1>
           <form onSubmit={this.handleSubmit}>
-            <StarRating starSize={25} />
-            {this.renderTextArea("reviewNotes", "Enter Review", 3)}
+            <StarRating starSize={25} onChange={this.handleStarChange} />
+            {this.renderTextArea("reviewNotes", "Enter Review", 3, "Add your review here")}
             {this.renderButton("Submit Review")}
           </form>
 

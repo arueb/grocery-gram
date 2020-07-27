@@ -57,7 +57,9 @@ class App extends Component {
                 path="/explore-recipes"
                 render={(props) => <ExploreRecipes {...props} user={user} />}
               />
-              <Route path="/recipes/:id" component={RecipeDetail} />
+              <Route path="/recipes/:id" 
+              render={(props) => <RecipeDetail {...props} user={user} />}
+              />
               <Route
                 path="/shopping-list"
                 render={(props) => (
