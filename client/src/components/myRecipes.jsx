@@ -81,102 +81,111 @@ class MyRecipes extends Component {
   // }
 
   render() {
-    const {
-      recipes: allRecipes,
-      pageSize,
-      currentPage,
-      listGroupLabels,
-      selectedOwnerType,
-      selectValue,
-    } = this.state;
-    
-    const { user } = this.props;
+             const {
+               recipes: allRecipes,
+               pageSize,
+               currentPage,
+               listGroupLabels,
+               selectedOwnerType,
+               selectValue,
+             } = this.state;
 
-    let filtered;
-    if (selectedOwnerType) {
-      if (selectedOwnerType === "Saved") {
-        filtered = allRecipes.filter((r) => r.userId !== user._id);
-      } else if (selectedOwnerType === "My Own") {
-        filtered = allRecipes.filter((r) => r.userId === user._id);
-      } else {
-        filtered = allRecipes;
-      }
-    }
-    const options = getCategories(filtered);
-    // const options = this.handleGetCategories(filtered);
+             const options = getCategories(allRecipes); // best
 
-    let filteredByCat = filtered;
-    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
-      filteredByCat = filtered;      
-    } else {
-      filteredByCat = filtered.filter((r) => r.category === selectValue);
-    }    
-    // const options = this.handleGetCategories(filteredByCat); // this works better
+             const { user } = this.props;
 
-    const recipes = paginate(filteredByCat, currentPage, pageSize);
+             let filtered;
+             if (selectedOwnerType) {
+               if (selectedOwnerType === "Saved") {
+                 filtered = allRecipes.filter((r) => r.userId !== user._id);
+               } else if (selectedOwnerType === "My Own") {
+                 filtered = allRecipes.filter((r) => r.userId === user._id);
+               } else {
+                 filtered = allRecipes;
+               }
+             }
+             // const options = getCategories(filtered); // next best IMHO
 
-    // const options = this.handleGetCategories(recipes); // this kinda works
+             let filteredByCat = filtered;
+             if (
+               selectValue === this.getInitialSelectVal() ||
+               selectValue === ""
+             ) {
+               filteredByCat = filtered;
+             } else {
+               filteredByCat = filtered.filter(
+                 (r) => r.category === selectValue
+               );
+             }
+             // const options = getCategories(filteredByCat); // okay
 
-    return (
-      <React.Fragment>
-        <div className="row sl-page-heading">
-          <div className="col-md-4">
-            <h2>My Recipes</h2>
-          </div>
-          <div className="col-md-4"></div>
-          <div className="col-md-4 new-recipe">
-            <button onClick={this.onNewRecipe} className="btn btn-dark">
-              New Recipe +
-            </button>
-          </div>
-        </div>
-        <hr className="divider" />
-        <div className="row list-group-row">
-          <div className="col-md-4">
-            <ListGroup
-              items={listGroupLabels}
-              selectedItem={selectedOwnerType}
-              onItemSelect={this.handleOwnerSelect}
-            />
-          </div>
-          <div className="col-md-4">
-            {/* {console.log("recipes from render:", recipes)} */}
-            {/* {options = this.handleGetCategories(recipes)} */}
-            {/* {console.log("options from render:", options)} */}
-            {options &&
-              <select
-                className="form-control"
-                id="mr-category"
-                name="mr-category"
-                onChange={this.handleFilterByCategory}
-                value={selectValue}
-              >
-                <option disabled>{this.getInitialSelectVal()}</option>
-                {options.map((option, i) => (
-                  <option key={i} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            }
-          </div>
-          <div className="col-md-4">
-            Search Box Coming Soon...
-            {/* <input type="text" value="Search" className="form-control"></input> */}
-          </div>
-        </div>
-        <div className="row">
-          {this.renderRecipeBlocks(recipes, this.props.user._id)}
-        </div>
-        <Pagination
-          recipesCount={filtered.length}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={this.handlePageChange}
-        />
-      </React.Fragment>
-    );
-  }
+             const recipes = paginate(filteredByCat, currentPage, pageSize);
+
+             // const options = getCategories(recipes); // nope
+
+             return (
+               <React.Fragment>
+                 <div className="row sl-page-heading">
+                   <div className="col-md-4">
+                     <h2>My Recipes</h2>
+                   </div>
+                   <div className="col-md-4"></div>
+                   <div className="col-md-4 new-recipe">
+                     <button
+                       onClick={this.onNewRecipe}
+                       className="btn btn-dark"
+                     >
+                       New Recipe +
+                     </button>
+                   </div>
+                 </div>
+                 <hr className="divider" />
+                 <div className="row list-group-row">
+                   <div className="col-md-4">
+                     <ListGroup
+                       items={listGroupLabels}
+                       selectedItem={selectedOwnerType}
+                       onItemSelect={this.handleOwnerSelect}
+                     />
+                   </div>
+                   <div className="col-md-4">
+                     {/* {console.log("recipes from render:", recipes)} */}
+                     {/* {options = this.handleGetCategories(recipes)} */}
+                     {/* {console.log("options from render:", options)} */}
+                     {options && (
+                       <select
+                         className="form-control"
+                         id="mr-category"
+                         name="mr-category"
+                         onChange={this.handleFilterByCategory}
+                         value={selectValue}
+                       >
+                         <option disabled>{this.getInitialSelectVal()}</option>
+                         {options.map((option, i) => (
+                           <option key={i} value={option}>
+                             {option}
+                           </option>
+                         ))}
+                       </select>
+                     )}
+                   </div>
+                   <div className="col-md-4">
+                     Search Box Coming Soon...
+                     {/* <input type="text" value="Search" className="form-control"></input> */}
+                   </div>
+                 </div>
+                 <div className="row">
+                   {this.renderRecipeBlocks(recipes, this.props.user._id)}
+                 </div>
+                 <Pagination
+                   recipesCount={filtered.length}
+                   pageSize={pageSize}
+                   currentPage={currentPage}
+                   onPageChange={this.handlePageChange}
+                 />
+               </React.Fragment>
+             );
+           }
 }
 
 export default MyRecipes;
