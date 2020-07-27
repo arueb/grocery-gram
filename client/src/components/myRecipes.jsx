@@ -80,19 +80,20 @@ class MyRecipes extends Component {
       selectValue,
     } = this.state;
 
-    const options = getCategories(allRecipes); // best
+    let options = getCategories(allRecipes); // start with combined cats
 
     const { user } = this.props;
 
     let filtered;
     if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
-        filtered = allRecipes.filter((r) => r.userId !== user._id);
+        filtered = allRecipes.filter((r) => r.userId !== user._id);        
       } else if (selectedOwnerType === "My Own") {
         filtered = allRecipes.filter((r) => r.userId === user._id);
       } else {
         filtered = allRecipes;
       }
+      options = getCategories(filtered);
     }
     // const options = getCategories(filtered); // next best IMHO
 
@@ -100,13 +101,13 @@ class MyRecipes extends Component {
     if (
       selectValue === this.getInitialSelectVal() ||
       selectValue === ""
-    ) {
+    ) { 
       filteredByCat = filtered;
     } else {
       filteredByCat = filtered.filter(
         (r) => r.category === selectValue
       );
-    }
+    } 
     // const options = getCategories(filteredByCat); // okay
 
     const recipes = paginate(filteredByCat, currentPage, pageSize);
