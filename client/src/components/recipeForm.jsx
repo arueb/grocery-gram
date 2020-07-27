@@ -4,7 +4,7 @@ import Joi from "joi-browser";
 import http from "../services/httpService";
 import { getUnits } from "../services/unitService";
 import { getQuantities } from "../services/qtyService";
-import { getCategories } from "../services/categoryService";
+import { getAllCategories } from "../services/categoryService";
 import {
   getRecipe,
   deleteRecipe,
@@ -13,8 +13,8 @@ import {
 } from "../services/recipeService";
 import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
-import SortableComponent from "../components/sortableComponent"
-import arrayMove from 'array-move';
+import SortableComponent from "../components/sortableComponent";
+import arrayMove from "array-move";
 import { toast } from "react-toastify";
 // import * as recipeService from "../services/recipeService";
 
@@ -97,11 +97,11 @@ class RecipeForm extends Form {
       data.isPublished = recipe[0].isPublished;
       this.setState({ data });
 
-      recipe[0].images.forEach(image => {
-        image.fileId = image.fullsizeUrl
+      recipe[0].images.forEach((image) => {
+        image.fileId = image.fullsizeUrl;
       });
 
-      this.setState({ recipeImages : recipe[0].images});
+      this.setState({ recipeImages: recipe[0].images });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
@@ -132,7 +132,7 @@ class RecipeForm extends Form {
       return el.fileId !== e.fileId;
     });
     this.setState({ recipeImages: remainingFiles });
-  }
+  };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     this.setState(({ recipeImages }) => ({
@@ -155,7 +155,7 @@ class RecipeForm extends Form {
     try {
       await deleteRecipe(recipeId);
       this.props.history.push("/my-recipes");
-    } catch (err) { }
+    } catch (err) {}
   }
 
   renderHeader() {
@@ -254,7 +254,7 @@ class RecipeForm extends Form {
         var formData = new FormData();
         formData.append("name", "file");
         formData.append("file", imageFile);
-  
+
         const imageData = await http.post(
           process.env.REACT_APP_API_URL + "/img",
           formData,
@@ -267,10 +267,8 @@ class RecipeForm extends Form {
 
         imageLinks.push(imageData.data);
       } else {
-
         imageLinks.push(imageFile);
       }
-
     }
 
     let recipeRecord = {
@@ -325,8 +323,17 @@ class RecipeForm extends Form {
             {this.renderInput("title", "Title")}
 
             <div className="form-group">
-              <label htmlFor="addImg" style={{ display: "block" }}>Recipe Images <small><em>(First image is thumbnail, click an image to remove)</em></small></label>
-              <SortableComponent images={this.state.recipeImages} imgClick={this.handleThumbnailRemove} onSortEnd={this.onSortEnd} />
+              <label htmlFor="addImg" style={{ display: "block" }}>
+                Recipe Images{" "}
+                <small>
+                  <em>(First image is thumbnail, click an image to remove)</em>
+                </small>
+              </label>
+              <SortableComponent
+                images={this.state.recipeImages}
+                imgClick={this.handleThumbnailRemove}
+                onSortEnd={this.onSortEnd}
+              />
               <button
                 name="addImg"
                 className="btn btn-outline-dark"
@@ -414,7 +421,7 @@ class RecipeForm extends Form {
                               <FaTrash
                                 className="hover-icon"
                                 onClick={this.handleRemoveSpecificRow(i)}
-                              // onClick={this.handleRemoveSpecificRow(i)} ********
+                                // onClick={this.handleRemoveSpecificRow(i)} ********
                               />
                             </td>
                           </tr>
@@ -433,7 +440,7 @@ class RecipeForm extends Form {
               </button>
             </div>
 
-            {this.renderSelect("category", "Category", getCategories())}
+            {this.renderSelect("category", "Category", getAllCategories())}
 
             {this.renderTextArea("instructions", "Recipe Instructions", 5)}
 
