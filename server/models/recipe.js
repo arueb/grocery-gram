@@ -59,6 +59,12 @@ const recipeSchema = new Schema({
     required: true,
     default: Date.now,
   },
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    }
+  ],
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);

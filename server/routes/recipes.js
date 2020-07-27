@@ -3,6 +3,7 @@ const router = express.Router();
 const _ = require("lodash");
 const { Recipe, validate } = require("../models/recipe");
 const { User } = require("../models/user");
+const { Review } = require("../models/review")
 const mongoose = require("mongoose");
 // get all recipes
 // router.get("/", async (req, res) => {
@@ -167,6 +168,42 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).send("Something failed.", err);
   }
+});
+
+router.get("/:id/reviews", async (req, res) => {
+  let recipe = await Recipe.findById(req.params.id);
+  if (!recipe) return res.status(404).send("The recipeId could not be found.");
+
+  const reviews = await Review.aggregate([
+    {$match: {_id: {$in : recipe.reviews } } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $project: {
+        "user.password": 0,
+        "user.addedItems": 0,
+        "user.removedItems": 0,
+        "user.email": 0,
+        "user.itemCounts": 0,
+        "user.date": 0,
+        "user.savedRecipes": 0,
+      },
+    },
+  ]);
+
+  // remove user data except username
+  reviews.forEach(review => {
+    review.username = review.user[0].username;
+    delete review.user;
+  });
+
+  res.json(reviews);
 });
 
 module.exports = router;

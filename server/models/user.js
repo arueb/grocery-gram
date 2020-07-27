@@ -41,6 +41,12 @@ const userSchema = new Schema({
     },
   ],
   date: { type: Date, default: Date.now },
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Review",
+    }
+  ],
 });
 
 userSchema.methods.generateAuthToken = function () {
