@@ -1,8 +1,10 @@
 import React from 'react'
 import Form from './common/form'
 import Joi from "joi-browser";
+import ReviewRow from "./common/reviewRow"
 // import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { getReviews } from "../services/recipeService"
 
 class RecipeDetail extends Form {
   constructor(props) {
@@ -11,6 +13,7 @@ class RecipeDetail extends Form {
       data: {
         reviewNotes: "Blanks",
       },
+      reviews: [],
       errors: {},
     }
   }
@@ -18,6 +21,42 @@ class RecipeDetail extends Form {
   schema = {
     reviewNotes: Joi.string().required().label("Review Notes"),
   };
+
+  async componentDidMount() {
+    // load the reviews
+    await this.populateReviews();
+  }
+
+  // populates reviews in state if valid recipe id
+  async populateReviews() {
+    try {
+      const recipeId = this.props.match.params.id;
+
+      const { data: reviews } = await getReviews(recipeId);
+      this.setState({ reviews });
+      /*
+            const data = { ...this.state.data };
+            data.title = recipe[0].title;
+            data.category = recipe[0].category;
+            data.instructions = recipe[0].instructions;
+            data.isPublished = recipe[0].isPublished;
+            this.setState({ data });
+      
+            recipe[0].images.forEach(image => {
+              image.fileId = image.fullsizeUrl
+            });
+      
+            this.setState({ recipeImages : recipe[0].images});
+            */
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
+  }
+
+  doSubmit = async () => {
+    console.log("we did a submit!")
+  }
 
   render() {
     return (
@@ -57,7 +96,7 @@ class RecipeDetail extends Form {
               <p>Landjaeger cow rump chuck sausage. Beef sirloin tongue ham pork cow biltong shank drumstick kevin.</p>
             </div>
             <div className="col-md-6">
-              <table class="table table-striped">
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th scope="col">Amount</th>
@@ -85,34 +124,23 @@ class RecipeDetail extends Form {
               </table>
             </div>
           </div>
-          <hr style={{ "border-top": "5px solid #8c8b8b" }} />
+          <hr style={{ "borderTop": "5px solid #8c8b8b" }} />
           <h1>Review The Recipe</h1>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <h1>Star rater goes here</h1>
             {this.renderTextArea("reviewNotes", "Enter Review", 3)}
             {this.renderButton("Submit Review")}
           </form>
 
-
-          <div className="row mt-5">
-            <div className="col-1">
-              <img className="text-center" src="https://picsum.photos/20" alt="lorem" />
-            </div>
-            <div className="col-11">
-              <div className="row">
-                <div className="col-6 align-left">
-                  <h3>Username</h3>
-                  <h3>Star Rated</h3>
-                </div>
-                <div className="col-6 align-right ">
-                  <h3>Review Date</h3>
-                </div>
-              </div>
-              <div className="row">
-                <p>Bacon ipsum dolor amet porchetta brisket shank, pork chop pig hamburger rump shankle andouille prosciutto sausage ham picanha. Venison shoulder turkey tenderloin andouille short ribs drumstick ball tip pig chislic. Tongue shankle shoulder spare ribs picanha kevin pancetta short ribs andouille. Shank picanha fatback turducken rump buffalo sausage cow. Bresaola cupim swine hamburger jowl venison kielbasa ribeye. Flank ham hock tri-tip shank, meatball beef tongue ground round. Bacon t-bone flank pork, kielbasa tenderloin picanha.</p>
-              </div>
-            </div>
-          </div>
+          {this.state.reviews.map((review) => 
+            <ReviewRow 
+            key={review._id}
+            username={review.username}
+            comments={review.comments}
+            date={review.date}
+            rating={review.rating}
+            />
+          )}
         </div>
       </React.Fragment>
     )
