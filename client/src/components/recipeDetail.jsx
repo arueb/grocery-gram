@@ -98,6 +98,11 @@ class RecipeDetail extends Form {
 
     // Get the page again
     await this.populateReviews();
+
+    const data = { ...this.state.data };
+    data.reviewNotes = "";
+    data.reviewStars = 0;
+    this.setState({ data });
   }
 
   render() {
