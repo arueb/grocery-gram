@@ -31,12 +31,14 @@ class MyRecipes extends Component {
     try {
       const user = this.props.user;
       if (user) {
-        const { data: recipes } = await getUserRecipes(user._id);
-        this.setState({ recipes });
+        const { data: recipes } = await getUserRecipes(user._id);       
+        this.setState({ recipes });        
       }
     } catch (ex) {
       console.log("Something failed", ex);
     }
+    
+    
   }
 
   renderRecipeBlocks(recipes, userId) {
@@ -69,6 +71,15 @@ class MyRecipes extends Component {
     this.setState({ currentPage: page });
   };
 
+  // handleGetCategories = (recipes) => {
+  //   let categories = [];
+  //   recipes.forEach(r => categories.push(r.category));
+  //   const sorted = categories.sort((a, b) => (a > b ? 1 : -1));
+  //   const withBlankFirst = ["", ...sorted];
+  //   return withBlankFirst;
+  //   // this.setState({ options: withBlankFirst })
+  // }
+
   render() {
     const {
       recipes: allRecipes,
@@ -78,10 +89,8 @@ class MyRecipes extends Component {
       selectedOwnerType,
       selectValue,
     } = this.state;
-
+    
     const { user } = this.props;
-
-    const options = getCategories();
 
     let filtered;
     if (selectedOwnerType) {
@@ -93,15 +102,20 @@ class MyRecipes extends Component {
         filtered = allRecipes;
       }
     }
+    const options = getCategories(filtered);
+    // const options = this.handleGetCategories(filtered);
 
     let filteredByCat = filtered;
     if (selectValue === this.getInitialSelectVal() || selectValue === "") {
-      filteredByCat = filtered;
+      filteredByCat = filtered;      
     } else {
       filteredByCat = filtered.filter((r) => r.category === selectValue);
-    }
+    }    
+    // const options = this.handleGetCategories(filteredByCat); // this works better
 
     const recipes = paginate(filteredByCat, currentPage, pageSize);
+
+    // const options = this.handleGetCategories(recipes); // this kinda works
 
     return (
       <React.Fragment>
@@ -126,20 +140,25 @@ class MyRecipes extends Component {
             />
           </div>
           <div className="col-md-4">
-            <select
-              className="form-control"
-              id="mr-category"
-              name="mr-category"
-              onChange={this.handleFilterByCategory}
-              value={selectValue}
-            >
-              <option disabled>{this.getInitialSelectVal()}</option>
-              {options.map((option) => (
-                <option key={option._id} value={option.name}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
+            {/* {console.log("recipes from render:", recipes)} */}
+            {/* {options = this.handleGetCategories(recipes)} */}
+            {/* {console.log("options from render:", options)} */}
+            {options &&
+              <select
+                className="form-control"
+                id="mr-category"
+                name="mr-category"
+                onChange={this.handleFilterByCategory}
+                value={selectValue}
+              >
+                <option disabled>{this.getInitialSelectVal()}</option>
+                {options.map((option, i) => (
+                  <option key={i} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            }
           </div>
           <div className="col-md-4">
             Search Box Coming Soon...

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getPublishedRecipes } from "../services/recipeService";
-import { getCategories } from "../services/categoryService";
+import { getAllCategories } from "../services/categoryService";
 import RecipeBlock from "./recipeBlock";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
@@ -71,7 +71,7 @@ class ExploreRecipes extends Component {
 
     // const { user } = this.props;
 
-    const options = getCategories();
+    const options = getAllCategories();
 
     let filtered = allRecipes;
     if (selectValue === this.getInitialSelectVal() || selectValue === "") {
