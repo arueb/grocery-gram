@@ -67,10 +67,6 @@ class ExploreRecipes extends Component {
       currentPage,
     } = this.state;
 
-    console.log('allRecipes from render:', allRecipes);
-
-    // const { user } = this.props;
-
     const options = getCategories(allRecipes);
 
     let filtered = allRecipes;
@@ -110,7 +106,6 @@ class ExploreRecipes extends Component {
           <div className="col-md-6">Search Box Coming Soon...</div>
         </div>
         <div className="row">
-          {console.log('userId:', this.props.user._id)}
           {this.renderExploreRecipeBlocks(recipes, this.props.user._id)}
         </div>
         <Pagination

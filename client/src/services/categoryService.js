@@ -38,7 +38,6 @@ export const categories = [
 export function getCategories(recipes) {
   let categories = [];
   recipes.forEach(r => {
-    console.log(r);
     if (!categories.includes(r.category)) {
       categories.push(r.category);
     }
