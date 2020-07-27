@@ -14,7 +14,7 @@ const mongoose = require("mongoose");
 //   }
 // });
 
-// get all recipes
+// get all PUBLISHED recipes
 router.get("/", async (req, res) => {
   try {
     const recipes = await Recipe.aggregate([

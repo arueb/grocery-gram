@@ -44,7 +44,12 @@ class MyRecipes extends Component {
     if (recipes) {
       recipes.forEach(function (recipe) {
         items.push(
-          <RecipeBlock userId={userId} key={recipe._id} recipe={recipe} />
+          <RecipeBlock
+            userId={userId}
+            key={recipe._id}
+            recipe={recipe}
+            forExplore={false}
+          />
         );
       });
     }
@@ -142,7 +147,6 @@ class MyRecipes extends Component {
           </div>
         </div>
         <div className="row">
-          {console.log("userId:", this.props.user._id)}
           {this.renderRecipeBlocks(recipes, this.props.user._id)}
         </div>
         <Pagination

@@ -39,7 +39,7 @@ class PieChart extends Component {
       ],
     };
     return (
-      <div>
+      <div className="pie-chart-container">
         <CanvasJSChart
           options={options}
           // onRef={ref => this.chart = ref}
