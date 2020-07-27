@@ -31,12 +31,12 @@ class MyRecipes extends Component {
     try {
       const user = this.props.user;
       if (user) {
-        const { data: recipes } = await getUserRecipes(user._id);
-        this.setState({ recipes });
+        const { data: recipes } = await getUserRecipes(user._id);       
+        this.setState({ recipes });        
       }
     } catch (ex) {
       console.log("Something failed", ex);
-    }
+    }    
   }
 
   renderRecipeBlocks(recipes, userId) {
@@ -62,7 +62,8 @@ class MyRecipes extends Component {
 
   handleFilterByCategory = (event) => {
     // console.log("you chose", event.target.value);
-    this.setState({ selectValue: event.target.value });
+    // this.setState({ selectValue: event.target.value });
+    this.setState({ selectValue: event.target.value, currentPage: 1 });
   };
 
   handlePageChange = (page) => {
@@ -79,9 +80,9 @@ class MyRecipes extends Component {
       selectValue,
     } = this.state;
 
-    const { user } = this.props;
+    const options = getCategories(allRecipes); // best
 
-    const options = getCategories();
+    const { user } = this.props;
 
     let filtered;
     if (selectedOwnerType) {
@@ -93,15 +94,24 @@ class MyRecipes extends Component {
         filtered = allRecipes;
       }
     }
+    // const options = getCategories(filtered); // next best IMHO
 
     let filteredByCat = filtered;
-    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
+    if (
+      selectValue === this.getInitialSelectVal() ||
+      selectValue === ""
+    ) {
       filteredByCat = filtered;
     } else {
-      filteredByCat = filtered.filter((r) => r.category === selectValue);
+      filteredByCat = filtered.filter(
+        (r) => r.category === selectValue
+      );
     }
+    // const options = getCategories(filteredByCat); // okay
 
     const recipes = paginate(filteredByCat, currentPage, pageSize);
+
+    // const options = getCategories(recipes); // nope
 
     return (
       <React.Fragment>
@@ -111,7 +121,10 @@ class MyRecipes extends Component {
           </div>
           <div className="col-md-4"></div>
           <div className="col-md-4 new-recipe">
-            <button onClick={this.onNewRecipe} className="btn btn-dark">
+            <button
+              onClick={this.onNewRecipe}
+              className="btn btn-dark"
+            >
               New Recipe +
             </button>
           </div>
@@ -134,9 +147,9 @@ class MyRecipes extends Component {
               value={selectValue}
             >
               <option disabled>{this.getInitialSelectVal()}</option>
-              {options.map((option) => (
-                <option key={option._id} value={option.name}>
-                  {option.name}
+              {options.map((option, i) => (
+                <option key={i} value={option}>
+                  {option}
                 </option>
               ))}
             </select>
