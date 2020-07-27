@@ -37,7 +37,12 @@ export const categories = [
 
 export function getCategories(recipes) {
   let categories = [];
-  recipes.forEach(r => categories.push(r.category));
+  recipes.forEach(r => {
+    console.log(r);
+    if (!categories.includes(r.category)) {
+      categories.push(r.category);
+    }
+  });
   let sorted = categories.sort((a, b) => (a > b ? 1 : -1));
   return ["", ...sorted];
 }
