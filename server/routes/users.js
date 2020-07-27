@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
 const { Recipe } = require("../models/recipe");
+const { Review } = require("../models/review")
 const mongoose = require("mongoose");
 
 // create new user
@@ -242,5 +243,41 @@ router.get("/:id/recipes", async (req, res) => {
     res.status(500).send("Something failed.");
   }
 });
+
+router.get('/:userId/reviews', async (req, res) => {
+  let user = await User.findById(req.params.userId);
+  if (!user) return res.status(404).send("The userId could not be found.");
+
+  const reviews = await Review.aggregate([
+    {$match: {_id: {$in : user.reviews } } },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $project: {
+        "user.password": 0,
+        "user.addedItems": 0,
+        "user.removedItems": 0,
+        "user.email": 0,
+        "user.itemCounts": 0,
+        "user.date": 0,
+        "user.savedRecipes": 0,
+      },
+    },
+  ]);
+
+  // remove user data except username
+  reviews.forEach(review => {
+    review.username = review.user[0].username;
+    delete review.user;
+  });
+
+  res.json(reviews);
+})
 
 module.exports = router;
