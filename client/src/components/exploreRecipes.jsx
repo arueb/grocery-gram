@@ -67,11 +67,7 @@ class ExploreRecipes extends Component {
       currentPage,
     } = this.state;
 
-    console.log('allRecipes from render:', allRecipes);
-
-    // const { user } = this.props;
-
-    const options = getCategories();
+    const options = getCategories(allRecipes);
 
     let filtered = allRecipes;
     if (selectValue === this.getInitialSelectVal() || selectValue === "") {
@@ -100,9 +96,9 @@ class ExploreRecipes extends Component {
               value={selectValue}
             >
               <option disabled>{this.getInitialSelectVal()}</option>
-              {options.map((option) => (
-                <option key={option._id} value={option.name}>
-                  {option.name}
+              {options.map((option, i) => (
+                <option key={i} value={option}>
+                  {option}
                 </option>
               ))}
             </select>
@@ -110,7 +106,6 @@ class ExploreRecipes extends Component {
           <div className="col-md-6">Search Box Coming Soon...</div>
         </div>
         <div className="row">
-          {console.log('userId:', this.props.user._id)}
           {this.renderExploreRecipeBlocks(recipes, this.props.user._id)}
         </div>
         <Pagination

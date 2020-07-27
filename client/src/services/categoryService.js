@@ -30,8 +30,19 @@ export const categories = [
     { _id: "29", name: "Drinks" },    
   ];
   
-  export function getCategories() {
+  export function getAllCategories() {
     return categories.sort((a, b) => (a.name > b.name ? 1 : -1));
     //   .map(unit => { return unit.});
   }
+
+export function getCategories(recipes) {
+  let categories = [];
+  recipes.forEach(r => {
+    if (!categories.includes(r.category)) {
+      categories.push(r.category);
+    }
+  });
+  let sorted = categories.sort((a, b) => (a > b ? 1 : -1));
+  return ["", ...sorted];
+}
   
