@@ -1,63 +1,147 @@
 import React from 'react'
 import Form from './common/form'
 import Joi from "joi-browser";
+import ReviewRow from "./common/reviewRow"
 // import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { getRecipe, getReviews } from "../services/recipeService"
+import { newReview } from "../services/reviewService"
+import AvgStarRating from "./common/avgStarRating";
+import StarRating from "./common/starRating";
 
 class RecipeDetail extends Form {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        reviewNotes: "Blanks",
+        reviewNotes: "",
+        reviewStars: 0,
+        title: "",
+        author: "",
+        category: "",
+        isPublished: false,
+        instructions: "",
       },
+      reviews: [],
       errors: {},
     }
   }
 
   schema = {
     reviewNotes: Joi.string().required().label("Review Notes"),
+    reviewStars: Joi.number().min(0).max(5).required(),
+    author: Joi.any(),
+    title: Joi.any(),
+    category: Joi.any(),
+    isPublished: Joi.any(),
+    instructions: Joi.any(),
+    avgRating: Joi.any(),
+    numReviews: Joi.any(),
   };
+
+  async componentDidMount() {
+    // Load the Page
+    await this.populateRecipe();
+
+    // Load the reviews
+    await this.populateReviews()
+  }
+
+  // populates reviews in state if valid recipe id
+  async populateRecipe() {
+    try {
+      const recipeId = this.props.match.params.id;
+
+      const { data: recipe } = await getRecipe(recipeId);
+
+      const data = { ...this.state.data };
+      data.title = recipe[0].title;
+      data.category = recipe[0].category;
+      data.instructions = recipe[0].instructions;
+      data.isPublished = recipe[0].isPublished;
+      data.author = recipe[0].username;
+      data.avgRating = recipe[0].avgRating;
+      data.numReviews = recipe[0].numReviews;
+      this.setState({ data });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
+  }
+
+  // populates reviews in state if valid recipe id
+  async populateReviews() {
+    try {
+      const recipeId = this.props.match.params.id;
+
+      const { data: reviews } = await getReviews(recipeId);
+      this.setState({ reviews });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        return this.props.history.replace("/not-found");
+    }
+  }
+
+  handleStarChange = (clickedStars) => {
+    const data = { ...this.state.data };
+    data.reviewStars = clickedStars
+    this.setState({ data });
+  }
+
+  doSubmit = async () => {
+    let toSubmit = {};
+    toSubmit.comments = this.state.data.reviewNotes;
+    toSubmit.rating = this.state.data.reviewStars
+    toSubmit.userId = this.props.user._id;
+    toSubmit.recipeId = this.props.match.params.id;
+    await newReview(toSubmit);
+
+    // Get the page again
+    await this.populateReviews();
+
+    const data = { ...this.state.data };
+    data.reviewNotes = "";
+    data.reviewStars = 0;
+    this.setState({ data });
+  }
 
   render() {
     return (
       <React.Fragment>
-        <div className="container" id={console.log(this.state)}>
-          <h1>Recipe Title</h1>
-          <p>Recipe Author</p>
-          <p>Number of stars</p>
-          <p>
-            <span style={{ float: "left" }}>Number of reviews</span>
+        <div className="container">
+          <h1>{this.state.data.title}</h1>
+          <p>{"by " + this.state.data.author}</p>
+          <div>
+            <span style={{ float: "left" }}><AvgStarRating avgRating={this.state.data.avgRating} numReviews={this.state.data.numReviews} starSize={35} /></span>
             <span style={{ float: "right" }}>Like this recipe<FaHeart /><FaRegHeart /></span>
-          </p>
+          </div>
           <img className="img-fluid text-center" src="https://picsum.photos/1000/150" alt="lorem" />
           <div className="row">
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
           </div>
           <div className="row">
-            <div className="col-md-6">
-              <p>Bacon ipsum dolor amet bresaola shank rump tongue tri-tip. Ball tip bacon prosciutto boudin frankfurter swine filet mignon ground round.</p>
-              <p>Landjaeger cow rump chuck sausage. Beef sirloin tongue ham pork cow biltong shank drumstick kevin.</p>
+            <div className="col-6">
+              <p>{this.state.data.instructions}</p>
             </div>
-            <div className="col-md-6">
-              <table class="table table-striped">
+            <div className="col-6">
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th scope="col">Amount</th>
@@ -85,34 +169,24 @@ class RecipeDetail extends Form {
               </table>
             </div>
           </div>
-          <hr style={{ "border-top": "5px solid #8c8b8b" }} />
+          <hr style={{ "borderTop": "5px solid #8c8b8b" }} />
           <h1>Review The Recipe</h1>
-          <form>
-            <h1>Star rater goes here</h1>
-            {this.renderTextArea("reviewNotes", "Enter Review", 3)}
+          <form onSubmit={this.handleSubmit}>
+            <StarRating starSize={25} onChange={this.handleStarChange} />
+            {this.renderTextArea("reviewNotes", "Enter Review", 3, "Add your review here")}
             {this.renderButton("Submit Review")}
           </form>
 
-
-          <div className="row mt-5">
-            <div className="col-1">
-              <img className="text-center" src="https://picsum.photos/20" alt="lorem" />
-            </div>
-            <div className="col-11">
-              <div className="row">
-                <div className="col-6 align-left">
-                  <h3>Username</h3>
-                  <h3>Star Rated</h3>
-                </div>
-                <div className="col-6 align-right ">
-                  <h3>Review Date</h3>
-                </div>
-              </div>
-              <div className="row">
-                <p>Bacon ipsum dolor amet porchetta brisket shank, pork chop pig hamburger rump shankle andouille prosciutto sausage ham picanha. Venison shoulder turkey tenderloin andouille short ribs drumstick ball tip pig chislic. Tongue shankle shoulder spare ribs picanha kevin pancetta short ribs andouille. Shank picanha fatback turducken rump buffalo sausage cow. Bresaola cupim swine hamburger jowl venison kielbasa ribeye. Flank ham hock tri-tip shank, meatball beef tongue ground round. Bacon t-bone flank pork, kielbasa tenderloin picanha.</p>
-              </div>
-            </div>
-          </div>
+          {this.state.reviews.map((review) =>
+            <ReviewRow
+              key={review._id}
+              username={review.username}
+              comments={review.comments}
+              date={review.date}
+              rating={review.rating}
+              starSize={25}
+            />
+          )}
         </div>
       </React.Fragment>
     )

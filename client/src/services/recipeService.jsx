@@ -42,3 +42,8 @@ export function newRecipe(recipe) {
   });
   */
 }
+
+export function getReviews(recipe) {
+  let reviewsUrl = apiEndpoint + "/" + recipe + "/reviews";
+  return http.get(reviewsUrl);
+}

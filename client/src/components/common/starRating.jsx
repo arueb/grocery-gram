@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import "../../css/starRating.css";
 
-const StarRating = ({ starSize = 50 }) => {
+const StarRating = ({ starSize = 50, onChange}) => {
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
@@ -15,8 +15,10 @@ const StarRating = ({ starSize = 50 }) => {
             <input
               type="radio"
               name="rating"
+              style={{display: "none"}}
               value={ratingValue}
               onClick={() => setRating(ratingValue)}
+              onChange={() => onChange(ratingValue)}
             />
             <FaStar
               size={starSize}
