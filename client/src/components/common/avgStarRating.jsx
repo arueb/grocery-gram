@@ -21,6 +21,7 @@ const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
   }
 
   return (
+    <React.Fragment>
       <div className="avg-star-rating">
         {[...Array(5)].map((star, i) => {
           const ratingValue = i + 1;
@@ -44,6 +45,7 @@ const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
         {ratingNumber}
         {reviewCount}
       </div>
+    </React.Fragment>
   );
 };
 

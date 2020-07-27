@@ -70,7 +70,14 @@ router.get("/:id", async (req, res) => {
           as: "ingredients.item", // this is the name of the new property
         },
       },
-
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
       // converts newly added 'item' property to a single object instead of an object array
       { $unwind: "$ingredients.item" },
 
@@ -96,9 +103,13 @@ router.get("/:id", async (req, res) => {
       },
     ]);
 
+    recipe[0].username = recipe[0].user[0].username;
+    delete recipe[0].user;
+
     res.send(recipe);
   } catch (err) {
-    res.status(500).send("Something failed.", err);
+    console.log(err);
+    res.status(500).send("Something failed getting the recipe");
   }
 });
 
@@ -175,7 +186,7 @@ router.get("/:id/reviews", async (req, res) => {
   if (!recipe) return res.status(404).send("The recipeId could not be found.");
 
   const reviews = await Review.aggregate([
-    {$match: {_id: {$in : recipe.reviews } } },
+    { $match: { _id: { $in: recipe.reviews } } },
     {
       $lookup: {
         from: "users",

@@ -15,6 +15,7 @@ const StarRating = ({ starSize = 50 }) => {
             <input
               type="radio"
               name="rating"
+              style={{display: "none"}}
               value={ratingValue}
               onClick={() => setRating(ratingValue)}
             />

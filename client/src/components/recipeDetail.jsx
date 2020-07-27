@@ -4,7 +4,9 @@ import Joi from "joi-browser";
 import ReviewRow from "./common/reviewRow"
 // import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { getReviews } from "../services/recipeService"
+import { getRecipe, getReviews } from "../services/recipeService"
+import AvgStarRating from "./common/avgStarRating";
+import StarRating from "./common/starRating";
 
 class RecipeDetail extends Form {
   constructor(props) {
@@ -12,6 +14,11 @@ class RecipeDetail extends Form {
     this.state = {
       data: {
         reviewNotes: "Blanks",
+        title: "",
+        author: "",
+        category: "",
+        isPublished: false,
+        instructions: "",
       },
       reviews: [],
       errors: {},
@@ -34,20 +41,25 @@ class RecipeDetail extends Form {
 
       const { data: reviews } = await getReviews(recipeId);
       this.setState({ reviews });
-      /*
-            const data = { ...this.state.data };
-            data.title = recipe[0].title;
-            data.category = recipe[0].category;
-            data.instructions = recipe[0].instructions;
-            data.isPublished = recipe[0].isPublished;
-            this.setState({ data });
-      
-            recipe[0].images.forEach(image => {
-              image.fileId = image.fullsizeUrl
-            });
-      
-            this.setState({ recipeImages : recipe[0].images});
-            */
+
+      const { data: recipe } = await getRecipe(recipeId);
+
+      const data = { ...this.state.data };
+      data.title = recipe[0].title;
+      data.category = recipe[0].category;
+      data.instructions = recipe[0].instructions;
+      data.isPublished = recipe[0].isPublished;
+      data.author = recipe[0].username;
+      data.avgRating = recipe[0].avgRating;
+      data.numReviews = recipe[0].numReviews;
+      this.setState({ data });
+
+      /*           recipe[0].images.forEach(image => {
+                   image.fileId = image.fullsizeUrl
+                 });
+           
+                 this.setState({ recipeImages : recipe[0].images});
+                 */
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
@@ -61,41 +73,40 @@ class RecipeDetail extends Form {
   render() {
     return (
       <React.Fragment>
-        <div className="container" id={console.log(this.state)}>
-          <h1>Recipe Title</h1>
-          <p>Recipe Author</p>
-          <p>Number of stars</p>
-          <p>
-            <span style={{ float: "left" }}>Number of reviews</span>
+        <div className="container">
+          <h1>{this.state.data.title}</h1>
+          <p>{"by " + this.state.data.author}</p>
+          <div>
+            <span style={{ float: "left" }}><AvgStarRating avgRating={this.state.data.avgRating} numReviews={this.state.data.numReviews} starSize={35} /></span>
             <span style={{ float: "right" }}>Like this recipe<FaHeart /><FaRegHeart /></span>
-          </p>
+          </div>
           <img className="img-fluid text-center" src="https://picsum.photos/1000/150" alt="lorem" />
           <div className="row">
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
-            <div className="col-md-2">
+            <div className="col-2">
               <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
             </div>
           </div>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-6">
               <p>Bacon ipsum dolor amet bresaola shank rump tongue tri-tip. Ball tip bacon prosciutto boudin frankfurter swine filet mignon ground round.</p>
               <p>Landjaeger cow rump chuck sausage. Beef sirloin tongue ham pork cow biltong shank drumstick kevin.</p>
             </div>
-            <div className="col-md-6">
+            <div className="col-6">
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -127,18 +138,19 @@ class RecipeDetail extends Form {
           <hr style={{ "borderTop": "5px solid #8c8b8b" }} />
           <h1>Review The Recipe</h1>
           <form onSubmit={this.handleSubmit}>
-            <h1>Star rater goes here</h1>
+            <StarRating starSize={25} />
             {this.renderTextArea("reviewNotes", "Enter Review", 3)}
             {this.renderButton("Submit Review")}
           </form>
 
-          {this.state.reviews.map((review) => 
-            <ReviewRow 
-            key={review._id}
-            username={review.username}
-            comments={review.comments}
-            date={review.date}
-            rating={review.rating}
+          {this.state.reviews.map((review) =>
+            <ReviewRow
+              key={review._id}
+              username={review.username}
+              comments={review.comments}
+              date={review.date}
+              rating={review.rating}
+              starSize={25}
             />
           )}
         </div>
