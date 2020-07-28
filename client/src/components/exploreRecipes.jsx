@@ -87,7 +87,7 @@ class ExploreRecipes extends Component {
     let filtered = allRecipes;
     if (searchQuery) {
       filtered = allRecipes.filter(r =>
-        r.title.toLowerCase().startsWith(searchQuery.toLowerCase()));
+        r.title.toLowerCase().includes(searchQuery.toLowerCase()));
     }
     else if (
       selectValue === this.getInitialSelectVal() ||

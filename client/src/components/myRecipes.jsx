@@ -108,7 +108,8 @@ class MyRecipes extends Component {
     let filtered = allRecipes;
     if (searchQuery) {
       filtered = allRecipes.filter((r) =>
-        r.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+        // r.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+        r.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     else if (selectedOwnerType) {
@@ -127,7 +128,6 @@ class MyRecipes extends Component {
       selectValue === this.getInitialSelectVal() ||
       selectValue === "All Categories"
     ) {
-      // selectValue === this.getInitialSelectVal()) {
       filteredByCat = filtered;
     } else {
       filteredByCat = filtered.filter((r) => r.category === selectValue);
