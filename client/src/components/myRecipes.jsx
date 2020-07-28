@@ -15,6 +15,7 @@ class MyRecipes extends Component {
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All",
     selectValue: "",
+    options: [],
   };
 
   getInitialSelectVal() {
@@ -31,12 +32,13 @@ class MyRecipes extends Component {
     try {
       const user = this.props.user;
       if (user) {
-        const { data: recipes } = await getUserRecipes(user._id);       
-        this.setState({ recipes });        
+        const { data: recipes } = await getUserRecipes(user._id);
+        const options = getCategories(recipes);
+        this.setState({ recipes, options });
       }
     } catch (ex) {
       console.log("Something failed", ex);
-    }    
+    }
   }
 
   renderRecipeBlocks(recipes, userId) {
@@ -57,7 +59,30 @@ class MyRecipes extends Component {
   }
 
   handleOwnerSelect = (ownerType) => {
-    this.setState({ selectedOwnerType: ownerType, currentPage: 1 });
+    // const { recipes } = this.state;
+    // const { user } = this.props;
+    // let filtered = recipes;
+    // let options = getCategories(recipes);
+    // let selectValue = "";
+
+    // if (ownerType === "Saved") {
+    //   filtered = recipes.filter((r) => r.userId !== user._id);
+    //   options = getCategories(filtered);
+    //   selectValue = options[1];
+    // } else if (ownerType === "My Own") {
+    //   filtered = recipes.filter((r) => r.userId === user._id);
+    //   options = getCategories(filtered);
+    //   selectValue = options[1];
+    // // } else {
+    // //   filtered = recipes;
+    // }
+    // console.log('options from HOS:', options);
+    // this.setState({ selectedOwnerType: ownerType, currentPage: 1, options, selectValue });
+    this.setState({
+      selectedOwnerType: ownerType,
+      currentPage: 1,
+      selectValue: "",
+    });
   };
 
   handleFilterByCategory = (event) => {
@@ -78,6 +103,7 @@ class MyRecipes extends Component {
       listGroupLabels,
       selectedOwnerType,
       selectValue,
+      // options,
     } = this.state;
 
     let options = getCategories(allRecipes); // start with combined cats
@@ -87,32 +113,23 @@ class MyRecipes extends Component {
     let filtered;
     if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
-        filtered = allRecipes.filter((r) => r.userId !== user._id);        
+        filtered = allRecipes.filter((r) => r.userId !== user._id);
       } else if (selectedOwnerType === "My Own") {
         filtered = allRecipes.filter((r) => r.userId === user._id);
       } else {
         filtered = allRecipes;
       }
-      options = getCategories(filtered);
+      options = getCategories(filtered); // HOW ABOUT THIS?
     }
-    // const options = getCategories(filtered); // next best IMHO
 
     let filteredByCat = filtered;
-    if (
-      selectValue === this.getInitialSelectVal() ||
-      selectValue === ""
-    ) { 
+    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
       filteredByCat = filtered;
     } else {
-      filteredByCat = filtered.filter(
-        (r) => r.category === selectValue
-      );
-    } 
-    // const options = getCategories(filteredByCat); // okay
+      filteredByCat = filtered.filter((r) => r.category === selectValue);
+    }
 
     const recipes = paginate(filteredByCat, currentPage, pageSize);
-
-    // const options = getCategories(recipes); // nope
 
     return (
       <React.Fragment>
@@ -122,10 +139,7 @@ class MyRecipes extends Component {
           </div>
           <div className="col-md-4"></div>
           <div className="col-md-4 new-recipe">
-            <button
-              onClick={this.onNewRecipe}
-              className="btn btn-dark"
-            >
+            <button onClick={this.onNewRecipe} className="btn btn-dark">
               New Recipe +
             </button>
           </div>
