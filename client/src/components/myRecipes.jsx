@@ -81,7 +81,9 @@ class MyRecipes extends Component {
     this.setState({
       selectedOwnerType: ownerType,
       currentPage: 1,
-      selectValue: "",
+      // selectValue: "",
+      selectValue: "All Categories",
+      // selectValue: this.getInitialSelectVal(),
     });
   };
 
@@ -123,7 +125,9 @@ class MyRecipes extends Component {
     }
 
     let filteredByCat = filtered;
-    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
+    if (selectValue === this.getInitialSelectVal() ||
+      selectValue === "All Categories" ||
+      selectValue === this.getInitialSelectVal()) {
       filteredByCat = filtered;
     } else {
       filteredByCat = filtered.filter((r) => r.category === selectValue);

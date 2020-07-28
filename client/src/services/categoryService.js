@@ -43,6 +43,6 @@ export function getCategories(recipes) {
     }
   });
   let sorted = categories.sort((a, b) => (a > b ? 1 : -1));
-  return ["", ...sorted];
+  return ["All Categories", ...sorted];
 }
   
