@@ -70,7 +70,8 @@ class ExploreRecipes extends Component {
     const options = getCategories(allRecipes);
 
     let filtered = allRecipes;
-    if (selectValue === this.getInitialSelectVal() || selectValue === "") {
+    if (selectValue === this.getInitialSelectVal() ||
+      selectValue === "All Categories") {
       filtered = allRecipes;
     } else {
       filtered = allRecipes.filter((r) => r.category === selectValue);

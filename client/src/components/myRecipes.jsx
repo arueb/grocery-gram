@@ -59,31 +59,12 @@ class MyRecipes extends Component {
   }
 
   handleOwnerSelect = (ownerType) => {
-    // const { recipes } = this.state;
-    // const { user } = this.props;
-    // let filtered = recipes;
-    // let options = getCategories(recipes);
-    // let selectValue = "";
-
-    // if (ownerType === "Saved") {
-    //   filtered = recipes.filter((r) => r.userId !== user._id);
-    //   options = getCategories(filtered);
-    //   selectValue = options[1];
-    // } else if (ownerType === "My Own") {
-    //   filtered = recipes.filter((r) => r.userId === user._id);
-    //   options = getCategories(filtered);
-    //   selectValue = options[1];
-    // // } else {
-    // //   filtered = recipes;
-    // }
-    // console.log('options from HOS:', options);
-    // this.setState({ selectedOwnerType: ownerType, currentPage: 1, options, selectValue });
-    this.setState({
+      this.setState({
       selectedOwnerType: ownerType,
       currentPage: 1,
       // selectValue: "",
-      selectValue: "All Categories",
-      // selectValue: this.getInitialSelectVal(),
+      // selectValue: "All Categories",
+      selectValue: this.getInitialSelectVal(),
     });
   };
 
@@ -126,8 +107,8 @@ class MyRecipes extends Component {
 
     let filteredByCat = filtered;
     if (selectValue === this.getInitialSelectVal() ||
-      selectValue === "All Categories" ||
-      selectValue === this.getInitialSelectVal()) {
+      selectValue === "All Categories") {
+      // selectValue === this.getInitialSelectVal()) {
       filteredByCat = filtered;
     } else {
       filteredByCat = filtered.filter((r) => r.category === selectValue);
