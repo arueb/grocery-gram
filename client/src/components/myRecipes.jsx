@@ -102,7 +102,7 @@ class MyRecipes extends Component {
       } else {
         filtered = allRecipes;
       }
-      options = getCategories(filtered); // HOW ABOUT THIS?
+      options = getCategories(filtered); 
     }
 
     let filteredByCat = filtered;
