@@ -4,6 +4,7 @@ import { getCategories } from "../services/categoryService";
 import RecipeBlock from "./recipeBlock";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
+import SearchBox from "./searchBox";
 
 class ExploreRecipes extends Component {
   state = {
@@ -12,6 +13,7 @@ class ExploreRecipes extends Component {
     pageSize: 8,
     currentPage: 1,
     selectValue: "",
+    searchQuery: "",
   };
 
   getInitialSelectVal() {
@@ -23,7 +25,6 @@ class ExploreRecipes extends Component {
 
     try {
       const user = this.props.user;
-
       if (user) {
         const { data: recipes } = await getPublishedRecipes();
         this.setState({ recipes });
@@ -52,11 +53,24 @@ class ExploreRecipes extends Component {
 
   handleFilterByCategory = (event) => {
     // console.log("you chose", event.target.value);
-    this.setState({ selectValue: event.target.value, currentPage: 1 });
+    this.setState({
+      selectValue: event.target.value,
+      currentPage: 1,
+      searchQuery: "",
+    });
   };
 
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
+  };
+
+  handleSearch = (query) => {
+    // console.log("searchQuery:", query);
+    this.setState({
+      searchQuery: query,
+      currentPage: 1,
+      selectValue: this.getInitialSelectVal(),
+    });
   };
 
   render() {
@@ -65,13 +79,20 @@ class ExploreRecipes extends Component {
       selectValue,
       pageSize,
       currentPage,
+      searchQuery,
     } = this.state;
 
     const options = getCategories(allRecipes);
 
     let filtered = allRecipes;
-    if (selectValue === this.getInitialSelectVal() ||
-      selectValue === "All Categories") {
+    if (searchQuery) {
+      filtered = allRecipes.filter(r =>
+        r.title.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+    else if (
+      selectValue === this.getInitialSelectVal() ||
+      selectValue === "All Categories"
+    ) {
       filtered = allRecipes;
     } else {
       filtered = allRecipes.filter((r) => r.category === selectValue);
@@ -104,7 +125,9 @@ class ExploreRecipes extends Component {
               ))}
             </select>
           </div>
-          <div className="col-md-6">Search Box Coming Soon...</div>
+          <div className="col-md-6">
+            <SearchBox value={searchQuery} onChange={this.handleSearch} />
+          </div>
         </div>
         <div className="row">
           {this.renderExploreRecipeBlocks(recipes, this.props.user._id)}

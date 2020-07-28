@@ -5,6 +5,7 @@ import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
+import SearchBox from './searchBox';
 
 class MyRecipes extends Component {
   state = {
@@ -16,6 +17,7 @@ class MyRecipes extends Component {
     selectedOwnerType: "All",
     selectValue: "",
     options: [],
+    searchQuery: "",
   };
 
   getInitialSelectVal() {
@@ -59,7 +61,7 @@ class MyRecipes extends Component {
   }
 
   handleOwnerSelect = (ownerType) => {
-      this.setState({
+    this.setState({
       selectedOwnerType: ownerType,
       currentPage: 1,
       // selectValue: "",
@@ -78,6 +80,16 @@ class MyRecipes extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleSearch = (query) => {
+    // console.log("searchQuery:", query);
+    this.setState({
+      searchQuery: query,
+      currentPage: 1,
+      selectedOwnerType: "All",
+      selectValue: this.getInitialSelectVal(),
+    });
+  };
+
   render() {
     const {
       recipes: allRecipes,
@@ -86,15 +98,21 @@ class MyRecipes extends Component {
       listGroupLabels,
       selectedOwnerType,
       selectValue,
-      // options,
+      searchQuery,
     } = this.state;
 
     let options = getCategories(allRecipes); // start with combined cats
 
     const { user } = this.props;
 
-    let filtered;
-    if (selectedOwnerType) {
+    let filtered = allRecipes;
+    if (searchQuery) {
+      filtered = allRecipes.filter((r) =>
+        // r.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+        r.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    else if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
         filtered = allRecipes.filter((r) => r.userId !== user._id);
       } else if (selectedOwnerType === "My Own") {
@@ -102,13 +120,14 @@ class MyRecipes extends Component {
       } else {
         filtered = allRecipes;
       }
-      options = getCategories(filtered); // HOW ABOUT THIS?
+      options = getCategories(filtered);
     }
 
     let filteredByCat = filtered;
-    if (selectValue === this.getInitialSelectVal() ||
-      selectValue === "All Categories") {
-      // selectValue === this.getInitialSelectVal()) {
+    if (
+      selectValue === this.getInitialSelectVal() ||
+      selectValue === "All Categories"
+    ) {
       filteredByCat = filtered;
     } else {
       filteredByCat = filtered.filter((r) => r.category === selectValue);
@@ -155,8 +174,7 @@ class MyRecipes extends Component {
             </select>
           </div>
           <div className="col-md-4">
-            Search Box Coming Soon...
-            {/* <input type="text" value="Search" className="form-control"></input> */}
+            <SearchBox value={searchQuery} onChange={this.handleSearch} />
           </div>
         </div>
         <div className="row">
