@@ -32,14 +32,10 @@ class RecipeBlock extends Component {
     }
   }
   render(props) {
-    // console.log(
-    //   this.props.recipe.user[0] ? this.props.recipe.user[0].username : "name"
-    // );
     return (
       <React.Fragment>
         <div className="col-md-4 col-lg-3 mb-4 recipe-block">
           <div className="card">
-            {/* <div className="card" style={{ width: "200px" }}> */}
             <Link
               to={"/recipes/" + this.props.recipe._id}
               className="card-link"
@@ -47,13 +43,7 @@ class RecipeBlock extends Component {
               <div className="img-hover-zoom">{this.placeholderOrImage()}</div>
               <div className="card-body bg-secondary text-white">
                 <h5 className="card-title">{this.props.recipe.title}</h5>
-                {/* <p className="card-text">{this.props.recipe.instructions}</p> */}
-                <p className="card-text">
-                  By {this.getUsername()}
-                  {/* {this.props.recipe.user
-                  ? this.props.recipe.user.username
-                  : this.props.recipe.userId} */}
-                </p>
+                <p className="card-text">By {this.getUsername()}</p>
                 <AvgStarRating
                   avgRating={this.props.recipe.avgRating}
                   numReviews={this.props.recipe.numReviews}
@@ -61,10 +51,10 @@ class RecipeBlock extends Component {
                 />
               </div>
             </Link>
+
             {this.props.recipe.userId === this.props.userId && (
               <div className="edit-icon">
                 <Link to={"/my-recipes/" + this.props.recipe._id}>
-                  {/* <Link to="#"> */}
                   <FaPen></FaPen>
                 </Link>
               </div>
@@ -72,14 +62,10 @@ class RecipeBlock extends Component {
 
             {this.props.recipe.userId !== this.props.userId && (
               <div className="saved-icon">
-                {/* <Link to={"/my-recipes/" + this.props.recipe._id}> */}
-                {/* <Link to="#"> */}
                 <FaHeart></FaHeart>
-                {/* </Link> */}
               </div>
             )}
           </div>
-          {/* </Link> */}
         </div>
       </React.Fragment>
     );
