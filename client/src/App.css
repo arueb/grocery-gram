@@ -454,6 +454,35 @@ tbody .form-group {
   /* opacity: 0.75; */
 }
 
+/* recipe detail header */
+h1 {
+  margin-top: 3rem;
+  font-size: 2rem;
+}
+
+/* recipe detail image carousel styling */
+.image-gallery-slides {
+  margin-top: 2rem;
+  max-height: 400px;
+  height: 400px;
+  width: 100%;
+}
+
+.fullscreen .image-gallery-slides {
+  margin-top: 2rem;
+  max-height: calc(100vh - 140px);
+  min-height: calc(100vh - 140px);
+  width: 100%;
+}
+
+.image-gallery-thumbnails-container {
+  text-align: left !important;
+}
+
+.image-gallery-content .image-gallery-slide .image-gallery-image {
+  max-height: initial;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
