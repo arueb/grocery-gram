@@ -12,6 +12,7 @@ import RecipeDetail from "./components/recipeDetail";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeForm";
+import UserProfile from "./components/userProfile"
 import auth from "./services/authService";
 import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
@@ -65,6 +66,10 @@ class App extends Component {
                 render={(props) => (
                   <ShoppingList {...props} user={user} items={items} />
                 )}
+              />
+              <Route
+                path="/profile"
+                render={(props) => <UserProfile {...props} user={user} />}
               />
               <Route path="/not-found" component={NotFound} />
               <Redirect exact from="/" to="/shopping-list" />
