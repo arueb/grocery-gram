@@ -593,3 +593,14 @@ Custom media queries
     margin-top: -12px;
   } */
 }
+
+.star-label {
+  font-size: 1.1em;
+  vertical-align: top;
+}
+
+.review-user {
+  margin-left: 15px;
+  font-size: 1.1em;
+  font-weight: 500;
+}
