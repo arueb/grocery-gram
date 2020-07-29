@@ -1,14 +1,18 @@
-import React from 'react'
-import Form from './common/form'
+import React from "react";
 import Joi from "joi-browser";
-import ReviewRow from "./common/reviewRow"
-// import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { getRecipe, getReviews } from "../services/recipeService"
-import { newReview } from "../services/reviewService"
+import ImageGallery from "react-image-gallery";
+import Form from "./common/form";
+import Like from "./common/like";
+import ReviewRow from "./common/reviewRow";
 import AvgStarRating from "./common/avgStarRating";
 import StarRating from "./common/starRating";
-
+// import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
+import { getUserData } from "../services/userService";
+import { FaPen } from "react-icons/fa";
+import { getRecipe, getReviews } from "../services/recipeService";
+import { newReview } from "../services/reviewService";
+import "react-image-gallery/styles/css/image-gallery.css";
+import { updateUserProperty } from "../services/userService";
 class RecipeDetail extends Form {
   constructor(props) {
     super(props);
@@ -17,19 +21,22 @@ class RecipeDetail extends Form {
         reviewNotes: "",
         reviewStars: 0,
         title: "",
+        userId: "",
         author: "",
         category: "",
         isPublished: false,
         instructions: "",
       },
       reviews: [],
+      isSaved: null,
       errors: {},
-    }
+    };
   }
 
   schema = {
     reviewNotes: Joi.string().required().label("Review Notes"),
     reviewStars: Joi.number().min(0).max(5).required(),
+    userId: Joi.any(),
     author: Joi.any(),
     title: Joi.any(),
     category: Joi.any(),
@@ -43,8 +50,15 @@ class RecipeDetail extends Form {
     // Load the Page
     await this.populateRecipe();
 
+    // Load the user
+    const user = await getUserData(this.props.user._id);
+
+    // figure out if the recipe is saved
+    const isSaved = user.data.savedRecipes.includes(this.state.data._id);
+    this.setState({ savedRecipes: user.data.savedRecipes, isSaved });
+
     // Load the reviews
-    await this.populateReviews()
+    await this.populateReviews();
   }
 
   // populates reviews in state if valid recipe id
@@ -60,8 +74,12 @@ class RecipeDetail extends Form {
       data.instructions = recipe[0].instructions;
       data.isPublished = recipe[0].isPublished;
       data.author = recipe[0].username;
+      data._id = recipe[0]._id;
+      data.userId = recipe[0].userId;
       data.avgRating = recipe[0].avgRating;
       data.numReviews = recipe[0].numReviews;
+      data.images = recipe[0].images;
+      data.reviews = recipe[0].reviews;
       this.setState({ data });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
@@ -84,14 +102,14 @@ class RecipeDetail extends Form {
 
   handleStarChange = (clickedStars) => {
     const data = { ...this.state.data };
-    data.reviewStars = clickedStars
+    data.reviewStars = clickedStars;
     this.setState({ data });
-  }
+  };
 
   doSubmit = async () => {
     let toSubmit = {};
     toSubmit.comments = this.state.data.reviewNotes;
-    toSubmit.rating = this.state.data.reviewStars
+    toSubmit.rating = this.state.data.reviewStars;
     toSubmit.userId = this.props.user._id;
     toSubmit.recipeId = this.props.match.params.id;
     await newReview(toSubmit);
@@ -103,90 +121,95 @@ class RecipeDetail extends Form {
     data.reviewNotes = "";
     data.reviewStars = 0;
     this.setState({ data });
-  }
+  };
 
-  render() {
+  returnImgArray = () => {
+    if (this.state.data.images) {
+      const images = this.state.data.images.map((i) => {
+        let imgObject = {};
+        imgObject.original = i.fullsizeUrl;
+        imgObject.thumbnail = i.thumbUrl;
+        return imgObject;
+      });
+
+      //   console.log(images);
+      return images;
+    }
+  };
+
+  handleSaveRecipe = async () => {
+    const {
+      isSaved,
+      data: recipe,
+      //   savedRecipes,
+      savedRecipes: origSavedRecipes,
+    } = this.state;
+    let savedRecipes = [];
+    this.setState({ isSaved: !isSaved });
+
+    if (isSaved) {
+      // remove from saved recipes
+      console.log("remove from saved recipes");
+      savedRecipes = this.state.savedRecipes.filter((r) => r !== recipe._id);
+    } else {
+      // add to saved recipes
+      console.log("add to saved recipes");
+      savedRecipes = [...this.state.savedRecipes, recipe._id];
+    }
+
+    this.setState({ savedRecipes });
+
+    try {
+      await updateUserProperty(this.props.user._id, {
+        savedRecipes,
+        //   savedRecipes: newSavedRecipes,
+      });
+    } catch (err) {
+      this.setState({ origSavedRecipes });
+    }
+  };
+
+  renderIcon = () => {
+    if (this.state.data.userId === this.props.user._id) return <FaPen />;
+
     return (
       <React.Fragment>
-        <div className="row rdp-heading">
-          <div className="col-md">
-            <h2>{this.state.data.title}</h2>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md rdp-author-block">
-            by:<span className="rdp-author">@{this.state.data.author}</span>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-10">
+        {this.state.isSaved ? "Recipe Saved " : "Save Recipe "}
+        <Like liked={this.state.isSaved} onClick={this.handleSaveRecipe} />
+      </React.Fragment>
+    );
+  };
+
+  render() {
+    const { data } = this.state;
+
+    return (
+      <React.Fragment>
+        <div className="recipe-detail-header">
+          <h1>{data.title}</h1>
+          <p>{"by " + data.author}</p>
+          <div>
             <AvgStarRating
-              avgRating={this.state.data.avgRating}
-              numReviews={this.state.data.numReviews}
+              //   avgRating={3.4}
+              //   numReviews={2}
+              avgRating={data.avgRating}
+              numReviews={data.numReviews}
               starSize={25}
             />
           </div>
-          <div className="col-2">
-            Like this recipe:{" "}
-            <span>
-              <FaHeart />
-              <FaRegHeart />
-            </span>
-          </div>
+          <span style={{ float: "right", marginTop: "-25px" }}>
+            {this.state.savedRecipes && this.renderIcon()}
+          </span>
         </div>
-        <div className="row">
-          <div className="container-fluid img-no-padding col-12">
-            <img
-              className=""
-              src="https://picsum.photos/1000/150"
-              alt="lorem"
+        <div className="image-gallery">
+          {data.images && (
+            <ImageGallery
+              items={this.returnImgArray()}
+              showPlayButton={false}
             />
-          </div>
+          )}
         </div>
-        <div className="row">
-          <div className="col-2">
-            <img
-              className="text-center"
-              src="https://picsum.photos/50"
-              alt="lorem"
-            />
-          </div>
-          <div className="col-2">
-            <img
-              className="text-center"
-              src="https://picsum.photos/50"
-              alt="lorem"
-            />
-          </div>
-          <div className="col-2">
-            <img
-              className="text-center"
-              src="https://picsum.photos/50"
-              alt="lorem"
-            />
-          </div>
-          <div className="col-2">
-            <img
-              className="text-center"
-              src="https://picsum.photos/50"
-              alt="lorem"
-            />
-          </div>
-          <div className="col-2">
-            <img
-              className="text-center"
-              src="https://picsum.photos/50"
-              alt="lorem"
-            />
-          </div>
-          <div className="col-2">
-            <img
-              className="text-center"
-              src="https://picsum.photos/50"
-              alt="lorem"
-            />
-          </div>
-        </div>
+
         <div className="row">
           <div className="col-6">
             <p>{this.state.data.instructions}</p>
