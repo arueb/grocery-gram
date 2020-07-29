@@ -41,7 +41,6 @@ class ReviewRow extends Component {
           <div className="col-auto ml-3">
             {this.props.comments}
           </div>
-          {/* <p>{this.props.comments}</p> */}
         </div>
       </React.Fragment>
 

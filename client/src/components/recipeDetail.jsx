@@ -108,126 +108,137 @@ class RecipeDetail extends Form {
   render() {
     return (
       <React.Fragment>
-        <div className="container sl-page-heading">
-          <h2>{this.state.data.title}</h2>
-          <p>{"by " + this.state.data.author}</p>
-          <div>
-            <span style={{ float: "left" }}>
-              <AvgStarRating
-                avgRating={this.state.data.avgRating}
-                numReviews={this.state.data.numReviews}
-                starSize={25}
-              />
-            </span>
-            <span style={{ float: "right" }}>
-              Like this recipe
+        <div className="row rdp-heading">
+          <div className="col-md">
+            <h2>{this.state.data.title}</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md rdp-author-block">
+            by:<span className="rdp-author">@{this.state.data.author}</span>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <AvgStarRating
+              avgRating={this.state.data.avgRating}
+              numReviews={this.state.data.numReviews}
+              starSize={25}
+            />
+          </div>
+          <div className="ml-auto">
+            Like this recipe{" "}
+            <span>
               <FaHeart />
               <FaRegHeart />
             </span>
           </div>
-          <img
-            className="img-fluid text-center"
-            src="https://picsum.photos/1000/150"
-            alt="lorem"
-          />
-          <div className="row">
-            <div className="col-2">
-              <img
-                className="text-center"
-                src="https://picsum.photos/50"
-                alt="lorem"
-              />
-            </div>
-            <div className="col-2">
-              <img
-                className="text-center"
-                src="https://picsum.photos/50"
-                alt="lorem"
-              />
-            </div>
-            <div className="col-2">
-              <img
-                className="text-center"
-                src="https://picsum.photos/50"
-                alt="lorem"
-              />
-            </div>
-            <div className="col-2">
-              <img
-                className="text-center"
-                src="https://picsum.photos/50"
-                alt="lorem"
-              />
-            </div>
-            <div className="col-2">
-              <img
-                className="text-center"
-                src="https://picsum.photos/50"
-                alt="lorem"
-              />
-            </div>
-            <div className="col-2">
-              <img
-                className="text-center"
-                src="https://picsum.photos/50"
-                alt="lorem"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-6">
-              <p>{this.state.data.instructions}</p>
-            </div>
-            <div className="col-6">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Measure</th>
-                    <th scope="col">Ingredient</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Cup</td>
-                    <td>Flour</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Gallons</td>
-                    <td>Milk</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Dash</td>
-                    <td>Coconut Oil</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <hr className="divider" />
-          {/* <hr style={{ borderTop: "5px solid #8c8b8b" }} /> */}
-          <h3 className="my-3">Review The Recipe</h3>
-          <form onSubmit={this.handleSubmit}>            
-            <StarRating starSize={25} onChange={this.handleStarChange} />
-            <br></br>
-            {this.renderTextArea("reviewNotes", "", 4, "Add your review here")}
-            {this.renderButton("Submit Review")}
-          </form>
-
-          {this.state.reviews.map((review) => (
-            <ReviewRow
-              key={review._id}
-              username={review.username}
-              comments={review.comments}
-              date={review.date}
-              rating={review.rating}
-              starSize={20}
-            />
-          ))}
         </div>
+        <div className="row">
+          <div className="col">
+            <img
+              className="img-fluid text-center"
+              src="https://picsum.photos/1000/150"
+              alt="lorem"
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-2">
+            <img
+              className="text-center"
+              src="https://picsum.photos/50"
+              alt="lorem"
+            />
+          </div>
+          <div className="col-2">
+            <img
+              className="text-center"
+              src="https://picsum.photos/50"
+              alt="lorem"
+            />
+          </div>
+          <div className="col-2">
+            <img
+              className="text-center"
+              src="https://picsum.photos/50"
+              alt="lorem"
+            />
+          </div>
+          <div className="col-2">
+            <img
+              className="text-center"
+              src="https://picsum.photos/50"
+              alt="lorem"
+            />
+          </div>
+          <div className="col-2">
+            <img
+              className="text-center"
+              src="https://picsum.photos/50"
+              alt="lorem"
+            />
+          </div>
+          <div className="col-2">
+            <img
+              className="text-center"
+              src="https://picsum.photos/50"
+              alt="lorem"
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-5">
+            <p>{this.state.data.instructions}</p>
+          </div>
+          <div className="col-6">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Measure</th>
+                  <th scope="col">Ingredient</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Cup</td>
+                  <td>Flour</td>
+                </tr>
+                <tr>
+                  <th scope="row">4</th>
+                  <td>Gallons</td>
+                  <td>Milk</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Dash</td>
+                  <td>Coconut Oil</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <hr className="divider" />
+        {/* <hr style={{ borderTop: "5px solid #8c8b8b" }} /> */}
+        <h3 className="my-3">Review The Recipe</h3>
+        <form onSubmit={this.handleSubmit}>
+          <StarRating starSize={25} onChange={this.handleStarChange} />
+          <br></br>
+          {this.renderTextArea("reviewNotes", "", 3, "Add your review here")}
+          {this.renderButton("Submit Review")}
+        </form>
+        {this.state.reviews.map((review) => (
+          <ReviewRow
+            key={review._id}
+            username={review.username}
+            comments={review.comments}
+            date={review.date}
+            rating={review.rating}
+            starSize={20}
+          />
+        ))}
       </React.Fragment>
     );
   }

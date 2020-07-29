@@ -599,8 +599,16 @@ Custom media queries
   vertical-align: top;
 }
 
-.review-user {
+.review-user, .rdp-author {
   margin-left: 15px;
   font-size: 1.1em;
   font-weight: 500;
+}
+
+.rdp-heading {
+  margin-top: 3em;
+}
+
+.rdp-author-block {
+  margin-bottom: 0.5em;
 }
