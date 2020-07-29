@@ -667,11 +667,11 @@ Custom media queries
   vertical-align: top;
 }
 
-.review-user, .rdp-author {
+/* .review-user, .rdp-author {
   margin-left: 15px;
   font-size: 1.1em;
   font-weight: 500;
-}
+} */
 
 .rdp-heading {
   margin-top: 3em;
@@ -679,4 +679,29 @@ Custom media queries
 
 .rdp-author-block {
   margin-bottom: 0.5em;
+}
+
+.review-row {
+  top: 4rem;
+  padding: 0 2rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.review-row img {
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+}
+
+.review-username {
+  margin-bottom: 0;
+  font-size: 1.1em;
+  /* font-weight: 400; */
+}
+
+.review-row span.review-date {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
