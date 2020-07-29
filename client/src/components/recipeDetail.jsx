@@ -243,16 +243,13 @@ class RecipeDetail extends Form {
             </table>
           </div>
         </div>
-        <hr style={{ borderTop: "5px solid #8c8b8b" }} />
-        <h1>Review The Recipe</h1>
+        <hr className="divider" />
+        {/* <hr style={{ borderTop: "5px solid #8c8b8b" }} /> */}
+        <h3 className="my-3">Review The Recipe</h3>
         <form onSubmit={this.handleSubmit}>
           <StarRating starSize={25} onChange={this.handleStarChange} />
-          {this.renderTextArea(
-            "reviewNotes",
-            "Enter Review",
-            3,
-            "Add your review here"
-          )}
+          <br></br>
+          {this.renderTextArea("reviewNotes", "", 4, "Add your review here")}
           {this.renderButton("Submit Review")}
         </form>
 
@@ -263,7 +260,7 @@ class RecipeDetail extends Form {
             comments={review.comments}
             date={review.date}
             rating={review.rating}
-            starSize={25}
+            starSize={20}
           />
         ))}
       </React.Fragment>
