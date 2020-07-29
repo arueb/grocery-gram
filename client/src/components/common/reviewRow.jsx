@@ -17,15 +17,29 @@ class ReviewRow extends Component {
 
     return (
       <React.Fragment>
-        <div className="row mt-5">
-          <div className="col-">
+        <div className="review-row">
+          <img
+            className="text-center rounded-circle"
+            src="https://picsum.photos/20"
+            alt="lorem"
+          />
+          <p className="review-username">@{this.props.username}</p>
+          <AvgStarRating
+            avgRating={this.props.rating}
+            starSize={starSize}
+          />
+          <span className="review-date">{this.prettyDate()}</span>
+          <p>{this.props.comments}</p>
+        </div>
+        {/* <div className="row mt-5">
+          <div className="col">
             <img
               className="text-center rounded-circle"
               src="https://picsum.photos/20"
               alt="lorem"
             />
           </div>
-          <div className="col-">
+          <div className="col- mr-3">
             <span className="review-user">@{this.props.username}</span>
           </div>
           <div className="ml-auto">{this.prettyDate()}</div>
@@ -35,34 +49,14 @@ class ReviewRow extends Component {
           <div className="col-auto ml-3">
             <AvgStarRating avgRating={this.props.rating} starSize={starSize} />
           </div>
+          <div className="col-"></div>
         </div>
         <div className="row">
           <div className="col-"></div>
-          <div className="col-auto ml-3">
-            {this.props.comments}
-          </div>
-        </div>
+          <div className="col-auto ml-3">{this.props.comments}</div>
+          <div className="col-"></div>
+        </div> */}
       </React.Fragment>
-
-      // <div className="row mt-5">
-      //   <div className="col-1">
-      //     <img className="text-center rounded-circle" src="https://picsum.photos/20" alt="lorem" />
-      //   </div>
-      //   <div className="col-11">
-      //     <div className="row">
-      //       <div className="col-9 align-left">
-      //         <h6>@{this.props.username}</h6>
-      //         <AvgStarRating avgRating={this.props.rating} starSize={starSize} />
-      //       </div>
-      //       <div className="align-right ">
-      //         <p>{this.prettyDate()}</p>
-      //       </div>
-      //     </div>
-      //     <div className="row">
-      //       <p>{this.props.comments}</p>
-      //     </div>
-      //   </div>
-      // </div>
     );
   }
 }
