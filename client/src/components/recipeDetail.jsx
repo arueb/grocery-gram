@@ -119,15 +119,15 @@ class RecipeDetail extends Form {
           </div>
         </div>
         <div className="row">
-          <div className="col">
+          <div className="col-10">
             <AvgStarRating
               avgRating={this.state.data.avgRating}
               numReviews={this.state.data.numReviews}
               starSize={25}
             />
           </div>
-          <div className="ml-auto">
-            Like this recipe{" "}
+          <div className="col-2">
+            Like this recipe:{" "}
             <span>
               <FaHeart />
               <FaRegHeart />
@@ -135,9 +135,9 @@ class RecipeDetail extends Form {
           </div>
         </div>
         <div className="row">
-          <div className="col">
+          <div className="container-fluid img-no-padding col-12">
             <img
-              className="img-fluid text-center"
+              className=""
               src="https://picsum.photos/1000/150"
               alt="lorem"
             />
@@ -188,7 +188,7 @@ class RecipeDetail extends Form {
           </div>
         </div>
         <div className="row">
-          <div className="col-5">
+          <div className="col-6">
             <p>{this.state.data.instructions}</p>
           </div>
           <div className="col-6">
