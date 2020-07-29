@@ -18,14 +18,14 @@ class ReviewRow extends Component {
     return (
       <React.Fragment>
         <div className="row mt-5">
-          <div className="col-">
+          <div className="col">
             <img
               className="text-center rounded-circle"
               src="https://picsum.photos/20"
               alt="lorem"
             />
           </div>
-          <div className="col-">
+          <div className="col- mr-3">
             <span className="review-user">@{this.props.username}</span>
           </div>
           <div className="ml-auto">{this.prettyDate()}</div>
@@ -35,13 +35,12 @@ class ReviewRow extends Component {
           <div className="col-auto ml-3">
             <AvgStarRating avgRating={this.props.rating} starSize={starSize} />
           </div>
+          <div className="col-"></div>
         </div>
         <div className="row">
           <div className="col-"></div>
-          <div className="col-auto ml-3">
-            {this.props.comments}
-          </div>
-          {/* <p>{this.props.comments}</p> */}
+          <div className="col-auto ml-3">{this.props.comments}</div>
+          <div className="col-"></div>
         </div>
       </React.Fragment>
 
