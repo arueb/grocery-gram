@@ -185,7 +185,7 @@ class RecipeDetail extends Form {
 
     return (
       <React.Fragment>
-        <div className="recipe-detail-header">
+        <section className="recipe-detail-header">
           <h1>{data.title}</h1>
           <p>{"by " + data.author}</p>
           <div>
@@ -198,15 +198,16 @@ class RecipeDetail extends Form {
           <span style={{ float: "right", marginTop: "-25px" }}>
             {this.state.savedRecipes && this.renderIcon()}
           </span>
-        </div>
-        <div className="image-gallery">
+        </section>
+        <section className="image-gallery">
           {data.images && (
             <ImageGallery
               items={this.returnImgArray()}
               showPlayButton={false}
+              showThumbnails={data.images.length > 1}
             />
           )}
-        </div>
+        </section>
 
         <div className="row">
           <div className="col-md-6 order-md-12">

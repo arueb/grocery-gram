@@ -463,16 +463,26 @@ h1 {
 /* recipe detail image carousel styling */
 .image-gallery-slides {
   margin-top: 2rem;
-  max-height: 400px;
-  height: 400px;
-  width: 100%;
+  max-height: 600px;
+  width: auto;
 }
 
 .fullscreen .image-gallery-slides {
-  margin-top: 2rem;
-  max-height: calc(100vh - 140px);
-  min-height: calc(100vh - 140px);
-  width: 100%;
+  /* margin-top: 2rem; */
+  /* max-height: calc(100vh - 140px); */
+  max-width: 100%;
+  /* min-height: calc(100vh - 140px); */
+  /* width: 100%; */
+  max-height: calc(90vh) !important;
+  width: initial;
+}
+.fullscreen .image-gallery-slides img {
+  /* margin-top: 2rem; */
+  /* max-height: calc(100vh - 140px); */
+  max-width: 100%;
+  /* min-height: calc(100vh - 140px); */
+  /* width: 100%; */
+  max-height: calc(90vh) !important;
 }
 
 .image-gallery-thumbnails-container {
@@ -481,6 +491,35 @@ h1 {
 
 .image-gallery-content .image-gallery-slide .image-gallery-image {
   max-height: initial;
+}
+
+.image-gallery-fullscreen-button .image-gallery-svg,
+.image-gallery-play-button .image-gallery-svg {
+  height: 24px;
+  width: 24px;
+}
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 60px;
+  width: 30px;
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:hover,
+.image-gallery-thumbnail:focus {
+  outline: none;
+  border: 1px solid #eee;
+}
+
+.fullscreen .image-gallery-thumbnails-wrapper {
+  position: fixed;
+  bottom: 0;
+  display: none;
+}
+
+section.image-gallery {
+  margin-bottom: 2rem;
 }
 
 /* 
