@@ -190,8 +190,6 @@ class RecipeDetail extends Form {
           <p>{"by " + data.author}</p>
           <div>
             <AvgStarRating
-              //   avgRating={3.4}
-              //   numReviews={2}
               avgRating={data.avgRating}
               numReviews={data.numReviews}
               starSize={25}
@@ -211,10 +209,7 @@ class RecipeDetail extends Form {
         </div>
 
         <div className="row">
-          <div className="col-6">
-            <p>{this.state.data.instructions}</p>
-          </div>
-          <div className="col-6">
+          <div className="col-md-6 order-md-12">
             <table className="table table-striped">
               <thead>
                 <tr>
@@ -242,9 +237,11 @@ class RecipeDetail extends Form {
               </tbody>
             </table>
           </div>
+          <div className="col-md-6">
+            <p>{this.state.data.instructions}</p>
+          </div>
         </div>
         <hr className="divider" />
-        {/* <hr style={{ borderTop: "5px solid #8c8b8b" }} /> */}
         <h3 className="my-3">Review The Recipe</h3>
         <form onSubmit={this.handleSubmit}>
           <StarRating starSize={25} onChange={this.handleStarChange} />
