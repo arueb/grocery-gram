@@ -108,32 +108,70 @@ class RecipeDetail extends Form {
   render() {
     return (
       <React.Fragment>
-        <div className="container">
-          <h1>{this.state.data.title}</h1>
+        <div className="container sl-page-heading">
+          <h2>{this.state.data.title}</h2>
           <p>{"by " + this.state.data.author}</p>
           <div>
-            <span style={{ float: "left" }}><AvgStarRating avgRating={this.state.data.avgRating} numReviews={this.state.data.numReviews} starSize={35} /></span>
-            <span style={{ float: "right" }}>Like this recipe<FaHeart /><FaRegHeart /></span>
+            <span style={{ float: "left" }}>
+              <AvgStarRating
+                avgRating={this.state.data.avgRating}
+                numReviews={this.state.data.numReviews}
+                starSize={25}
+              />
+            </span>
+            <span style={{ float: "right" }}>
+              Like this recipe
+              <FaHeart />
+              <FaRegHeart />
+            </span>
           </div>
-          <img className="img-fluid text-center" src="https://picsum.photos/1000/150" alt="lorem" />
+          <img
+            className="img-fluid text-center"
+            src="https://picsum.photos/1000/150"
+            alt="lorem"
+          />
           <div className="row">
             <div className="col-2">
-              <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
+              <img
+                className="text-center"
+                src="https://picsum.photos/50"
+                alt="lorem"
+              />
             </div>
             <div className="col-2">
-              <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
+              <img
+                className="text-center"
+                src="https://picsum.photos/50"
+                alt="lorem"
+              />
             </div>
             <div className="col-2">
-              <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
+              <img
+                className="text-center"
+                src="https://picsum.photos/50"
+                alt="lorem"
+              />
             </div>
             <div className="col-2">
-              <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
+              <img
+                className="text-center"
+                src="https://picsum.photos/50"
+                alt="lorem"
+              />
             </div>
             <div className="col-2">
-              <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
+              <img
+                className="text-center"
+                src="https://picsum.photos/50"
+                alt="lorem"
+              />
             </div>
             <div className="col-2">
-              <img className="text-center" src="https://picsum.photos/50" alt="lorem" />
+              <img
+                className="text-center"
+                src="https://picsum.photos/50"
+                alt="lorem"
+              />
             </div>
           </div>
           <div className="row">
@@ -169,27 +207,29 @@ class RecipeDetail extends Form {
               </table>
             </div>
           </div>
-          <hr style={{ "borderTop": "5px solid #8c8b8b" }} />
-          <h1>Review The Recipe</h1>
-          <form onSubmit={this.handleSubmit}>
+          <hr className="divider" />
+          {/* <hr style={{ borderTop: "5px solid #8c8b8b" }} /> */}
+          <h3 className="my-3">Review The Recipe</h3>
+          <form onSubmit={this.handleSubmit}>            
             <StarRating starSize={25} onChange={this.handleStarChange} />
-            {this.renderTextArea("reviewNotes", "Enter Review", 3, "Add your review here")}
+            <br></br>
+            {this.renderTextArea("reviewNotes", "", 4, "Add your review here")}
             {this.renderButton("Submit Review")}
           </form>
 
-          {this.state.reviews.map((review) =>
+          {this.state.reviews.map((review) => (
             <ReviewRow
               key={review._id}
               username={review.username}
               comments={review.comments}
               date={review.date}
               rating={review.rating}
-              starSize={25}
+              starSize={20}
             />
-          )}
+          ))}
         </div>
       </React.Fragment>
-    )
+    );
   }
 }
 

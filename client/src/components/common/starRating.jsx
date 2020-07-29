@@ -8,6 +8,7 @@ const StarRating = ({ starSize = 50, onChange}) => {
 
   return (
     <div>
+      <span className="star-label mr-2">Your Rating: </span>
       {[...Array(5)].map((star, i) => {
         const ratingValue = i + 1;
         return (
@@ -15,7 +16,7 @@ const StarRating = ({ starSize = 50, onChange}) => {
             <input
               type="radio"
               name="rating"
-              style={{display: "none"}}
+              style={{ display: "none" }}
               value={ratingValue}
               onClick={() => setRating(ratingValue)}
               onChange={() => onChange(ratingValue)}
