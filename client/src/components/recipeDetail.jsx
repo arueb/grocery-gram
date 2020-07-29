@@ -53,9 +53,8 @@ class RecipeDetail extends Form {
     // Load the user
     const user = await getUserData(this.props.user._id);
 
+    // figure out if the recipe is saved
     const isSaved = user.data.savedRecipes.includes(this.state.data._id);
-    // if (this.state.savedRecipes.includes(this.state.data._id))
-    // console.log("user:", user.data.savedRecipes);
     this.setState({ savedRecipes: user.data.savedRecipes, isSaved });
 
     // Load the reviews
@@ -191,17 +190,14 @@ class RecipeDetail extends Form {
           <p>{"by " + data.author}</p>
           <div>
             <AvgStarRating
-              avgRating={3.4}
-              numReviews={2}
-              // avgRating={data.avgRating}
-              // numReviews={data.numReviews}
+              //   avgRating={3.4}
+              //   numReviews={2}
+              avgRating={data.avgRating}
+              numReviews={data.numReviews}
               starSize={25}
             />
-            {/* {data.userId && this.renderIcon()} */}
-
-            {/* {data.userId === this.props.userId ? <FaPen /> : <FaRegHeart />} */}
           </div>
-          <span style={{ float: "right" }}>
+          <span style={{ float: "right", marginTop: "-25px" }}>
             {this.state.savedRecipes && this.renderIcon()}
           </span>
         </div>
