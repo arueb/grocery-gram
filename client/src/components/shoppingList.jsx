@@ -4,11 +4,13 @@ import {
   getUserData,
   getUserRecipes,
   updateShoppingList,
+  deleteItemFromShoppingList,
   updateItemCounts,
 } from "../services/userService";
 import { getColor } from "../services/itemService";
 import ItemSearch from "../components/itemSearch";
 import PieChart from "./pieChart";
+import { FaTrash } from "react-icons/fa";
 
 class ShoppingList extends Component {
   state = {
@@ -25,11 +27,6 @@ class ShoppingList extends Component {
     isLoading: true,
     errors: {},
   };
-
-  //   async componentDidUpdate() {
-  //     alert("component did update");
-  //     await this.expandShoppingLists();
-  //   }
 
   async componentDidMount() {
     // Bind the this context to the handler function
@@ -311,11 +308,6 @@ class ShoppingList extends Component {
     this.setState({ staples });
   };
 
-  // updateMyRecipes
-
-  // handleChooseStaple
-
-  // handleChooseRecipe
   handleAddRecipeIngredients = async (recipe) => {
     // console.log(recipe);
     let itemsToAdd = recipe.ingredients.map((ingredient) => {
@@ -346,6 +338,22 @@ class ShoppingList extends Component {
       // revert state back to original
       this.setState({ addedItems: prevAddedItems });
       this.handleUpdatePieChart();
+      console.log("Something went wrong.", err);
+    }
+  };
+
+  handlePermDelete = async (idx) => {
+    const prevRemovedItems = [...this.state.removedItems];
+    const newRemovedItems = [...this.state.removedItems];
+    newRemovedItems.splice(idx, 1);
+    const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
+    this.setState({ removedItems: newRemovedItems });
+
+    try {
+      await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
+    } catch (err) {
+      // revert state back to original
+      this.setState({ removedItems: prevRemovedItems });
       console.log("Something went wrong.", err);
     }
   };
@@ -406,28 +414,36 @@ class ShoppingList extends Component {
                       >
                         {item.name}
                       </span>
-                    <span className="sl-price">
-                      ${(item.price).toFixed(2)}
-                    </span>
+                      <span className="sl-price">${item.price.toFixed(2)}</span>
                     </li>
                   ))}
             </div>
-            <div className="removed list-group lst-grp-hover">
+            <div className="list-group lst-grp-hover lst-grp-removed">
               {!removedItems
                 ? null
                 : removedItems.map((item, i) => (
                     <li
                       key={i}
-                      onClick={() => this.handleAddBackItem(item._id)}
+                      className="list-group-item"
                       style={{
                         borderTop: 0,
                         borderBottom: 0,
                         borderRight: 0,
                         borderLeft: "15px solid #fff",
                       }}
-                      className="list-group-item"
                     >
-                      {item.name}
+                      <span
+                        className="removed"
+                        onClick={() => this.handleAddBackItem(item._id)}
+                      >
+                        {item.name}
+                      </span>
+                      <span className="perm-delete">
+                        <FaTrash
+                          className="hover-icon"
+                          onClick={() => this.handlePermDelete(i)}
+                        />
+                      </span>
                     </li>
                   ))}
             </div>

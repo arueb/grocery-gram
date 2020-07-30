@@ -759,3 +759,31 @@ collapse
     margin-bottom: 1rem;
   }
 }
+
+/* permanently delete from removed items */
+span.perm-delete .hover-icon {
+  margin-top: 0.3rem;
+  opacity: 0;
+  /* opacity: 0; */
+  transition: opacity 0.1s ease-out;
+  cursor: default;
+  transition-delay: 0.2s;
+  float: right;
+}
+
+/* .hover-icon li:hover  { */
+li:hover span.perm-delete .hover-icon {
+  /* opacity: 1 !important; */
+  opacity: 1;
+  transition-delay: 0.2s;
+  cursor:pointer;
+}
+
+/* on hover over non-span areas */
+.list-group.lst-grp-hover.lst-grp-removed .list-group-item {
+  cursor: default;
+}
+
+.list-group-item .removed {
+  cursor: pointer;
+}

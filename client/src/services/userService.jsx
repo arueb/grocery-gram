@@ -26,6 +26,10 @@ export function updateShoppingList(userId, addedItems, removedItems) {
   return http.patch(userUrl(userId), { addedItems, removedItems });
 }
 
+export function deleteItemFromShoppingList(userId, removedItems) {
+  return http.patch(userUrl(userId), { removedItems });
+}
+
 export function updateUserProperty(userId, data) {
   return http.patch(userUrl(userId), data);
 }
