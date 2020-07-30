@@ -5,7 +5,7 @@ import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
-import SearchBox from './searchBox';
+import SearchBox from "./searchBox";
 
 class MyRecipes extends Component {
   state = {
@@ -111,8 +111,7 @@ class MyRecipes extends Component {
         // r.title.toLowerCase().startsWith(searchQuery.toLowerCase())
         r.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
-    }
-    else if (selectedOwnerType) {
+    } else if (selectedOwnerType) {
       if (selectedOwnerType === "Saved") {
         filtered = allRecipes.filter((r) => r.userId !== user._id);
       } else if (selectedOwnerType === "My Own") {
@@ -138,15 +137,21 @@ class MyRecipes extends Component {
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
-          <div className="col-md-4">
-            <h2>My Recipes</h2>
-          </div>
-          <div className="col-md-4"></div>
+          {/* <div className="col-md-4"> */}
+          <h2>My Recipes</h2>
+          <button
+            onClick={this.onNewRecipe}
+            className="btn btn-dark new-recipe"
+          >
+            New Recipe +
+          </button>
+          {/* </div> */}
+          {/* <div className="col-md-4"></div>
           <div className="col-md-4 new-recipe">
             <button onClick={this.onNewRecipe} className="btn btn-dark">
               New Recipe +
             </button>
-          </div>
+          </div> */}
         </div>
         <hr className="divider" />
         <div className="row list-group-row">
