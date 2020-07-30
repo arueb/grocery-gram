@@ -142,7 +142,7 @@ router.get("/:id", async (req, res) => {
     if (!user.hasOwnProperty("profileImageUrl")) {
       user.profileImageUrl = ""
     }
-    console.log(user);
+
     res.send(
       _.pick(user, [
         "_id",
