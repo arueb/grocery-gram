@@ -258,7 +258,7 @@ class RecipeDetail extends Form {
             key={review._id}
             username={review.username}
             comments={review.comments}
-            userImage={review.profileImageUrl || "/blank-profile.png"}
+            userImage={review.profileImageUrl || (process.env.PUBLIC_URL + "/blank-profile.png")}
             date={review.date}
             rating={review.rating}
             starSize={20}

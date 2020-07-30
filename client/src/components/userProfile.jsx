@@ -11,7 +11,7 @@ class UserProfile extends Form {
     super(props);
 
     this.state = {
-      profileImageUrl: "/blank-profile.png",
+      profileImageUrl: process.env.PUBLIC_URL + "/blank-profile.png",
       imageFileToUpload: "",
       data: { email: "", password: "" },
       errors: {},
