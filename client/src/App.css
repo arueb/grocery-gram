@@ -463,16 +463,26 @@ h1 {
 /* recipe detail image carousel styling */
 .image-gallery-slides {
   margin-top: 2rem;
-  max-height: 400px;
-  height: 400px;
-  width: 100%;
+  max-height: 600px;
+  width: auto;
 }
 
 .fullscreen .image-gallery-slides {
-  margin-top: 2rem;
-  max-height: calc(100vh - 140px);
-  min-height: calc(100vh - 140px);
-  width: 100%;
+  /* margin-top: 2rem; */
+  /* max-height: calc(100vh - 140px); */
+  max-width: 100%;
+  /* min-height: calc(100vh - 140px); */
+  /* width: 100%; */
+  max-height: calc(90vh) !important;
+  width: initial;
+}
+.fullscreen .image-gallery-slides img {
+  /* margin-top: 2rem; */
+  /* max-height: calc(100vh - 140px); */
+  max-width: 100%;
+  /* min-height: calc(100vh - 140px); */
+  /* width: 100%; */
+  max-height: calc(90vh) !important;
 }
 
 .image-gallery-thumbnails-container {
@@ -481,6 +491,35 @@ h1 {
 
 .image-gallery-content .image-gallery-slide .image-gallery-image {
   max-height: initial;
+}
+
+.image-gallery-fullscreen-button .image-gallery-svg,
+.image-gallery-play-button .image-gallery-svg {
+  height: 24px;
+  width: 24px;
+}
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 60px;
+  width: 30px;
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:hover,
+.image-gallery-thumbnail:focus {
+  outline: none;
+  border: 1px solid #eee;
+}
+
+.fullscreen .image-gallery-thumbnails-wrapper {
+  position: fixed;
+  bottom: 0;
+  display: none;
+}
+
+section.image-gallery {
+  margin-bottom: 2rem;
 }
 
 /* 
@@ -628,11 +667,11 @@ Custom media queries
   vertical-align: top;
 }
 
-.review-user, .rdp-author {
+/* .review-user, .rdp-author {
   margin-left: 15px;
   font-size: 1.1em;
   font-weight: 500;
-}
+} */
 
 .rdp-heading {
   margin-top: 3em;
@@ -640,4 +679,29 @@ Custom media queries
 
 .rdp-author-block {
   margin-bottom: 0.5em;
+}
+
+.review-row {
+  top: 4rem;
+  padding: 0 2rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.review-row img {
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+}
+
+.review-username {
+  margin-bottom: 0;
+  font-size: 1.1em;
+  /* font-weight: 400; */
+}
+
+.review-row span.review-date {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
