@@ -28,7 +28,6 @@ class App extends Component {
   async componentDidMount() {
     const user = auth.getCurrentUser();
     const { data: items } = await item.getItems();
-    console.log("App.js user", user)
     this.setState({ user, items, isLoading: false });
   }
 
