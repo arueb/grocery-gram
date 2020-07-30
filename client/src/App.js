@@ -77,7 +77,7 @@ class App extends Component {
               />
               <Route
                 path="/profile"
-                render={(props) => <UserProfile {...props} user={user} />}
+                render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)}/>}
               />
               <Route path="/not-found" component={NotFound} />
               <Redirect exact from="/" to="/shopping-list" />
