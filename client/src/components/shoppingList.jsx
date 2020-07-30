@@ -373,6 +373,7 @@ class ShoppingList extends Component {
           </div>
           <div className="col-md"></div>
         </div>
+        <hr className="divider" />
         <div className="row">
           <div className="col-md-5 order-md-4 shop-list">
             <div className="itemSearch pb-3">
