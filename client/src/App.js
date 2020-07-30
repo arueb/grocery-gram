@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./components/protectedRoute"
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import ShoppingList from "./components/shoppingList";
@@ -50,16 +51,23 @@ class App extends Component {
                   <RecipeForm {...props} user={user} items={items} />
                 )}
               />
-              <Route
+              <ProtectedRoute
+                path="/my-recipes"
+                component={MyRecipes}
+                props={this.props}
+                user={user}
+                // render={(props) => <MyRecipes {...props} user={user} />}
+              />
+          {/* <Route
                 path="/my-recipes"
                 render={(props) => <MyRecipes {...props} user={user} />}
-              />
+              /> */}
               <Route
                 path="/explore-recipes"
                 render={(props) => <ExploreRecipes {...props} user={user} />}
               />
-              <Route path="/recipes/:id" 
-              render={(props) => <RecipeDetail {...props} user={user} />}
+              <Route path="/recipes/:id"
+                render={(props) => <RecipeDetail {...props} user={user} />}
               />
               <Route
                 path="/shopping-list"
