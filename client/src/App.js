@@ -52,13 +52,12 @@ class App extends Component {
                 )}
               />
               <ProtectedRoute
-                path="/my-recipes"
+                path={'/my-recipes'}
                 component={MyRecipes}
-                props={this.props}
+                // props={this.props}
                 user={user}
-                // render={(props) => <MyRecipes {...props} user={user} />}
               />
-          {/* <Route
+              {/* <Route
                 path="/my-recipes"
                 render={(props) => <MyRecipes {...props} user={user} />}
               /> */}
@@ -77,7 +76,7 @@ class App extends Component {
               />
               <Route
                 path="/profile"
-                render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)}/>}
+                render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)} />}
               />
               <Route path="/not-found" component={NotFound} />
               <Redirect exact from="/" to="/shopping-list" />
