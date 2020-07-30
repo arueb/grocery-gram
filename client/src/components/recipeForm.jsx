@@ -315,7 +315,8 @@ class RecipeForm extends Form {
         />
         <section id="add-recipe-form">
           <div className="row sl-page-heading">
-            <div className="col-md-4">{this.renderHeader()}</div>
+            {/* <div className="col-md-4">{this.renderHeader()}</div> */}
+            <div className="col">{this.renderHeader()}</div>
           </div>
           <hr className="divider" />
           {/* {this.renderHeader()} */}
