@@ -406,7 +406,9 @@ class ShoppingList extends Component {
                       >
                         {item.name}
                       </span>
-                      <span className="sl-price">${item.price}</span>
+                    <span className="sl-price">
+                      ${(item.price).toFixed(2)}
+                    </span>
                     </li>
                   ))}
             </div>
