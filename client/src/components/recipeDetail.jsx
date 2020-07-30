@@ -37,6 +37,9 @@ class RecipeDetail extends Form {
     reviewNotes: Joi.string().required().label("Review Notes"),
     reviewStars: Joi.number().min(0).max(5).required(),
     userId: Joi.any(),
+    _id: Joi.any(),
+    reviews: Joi.any(),
+    images: Joi.any(),          // I am not sure if it's correct to just be ignoring all this stuff
     author: Joi.any(),
     title: Joi.any(),
     category: Joi.any(),
