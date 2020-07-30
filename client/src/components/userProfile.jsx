@@ -1,8 +1,10 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
+import { toast } from "react-toastify";
 import http from "../services/httpService";
-import { getUserData, updateUserProperty } from "../services/userService";
+import { updateUserProperty } from "../services/userService";
+import { loginWithJwt } from "../services/authService"
 
 class UserProfile extends Form {
   constructor(props) {
@@ -40,7 +42,6 @@ class UserProfile extends Form {
   async handleImageSubmit(e) {
     var formData = new FormData();
     formData.append("name", "file");
-    console.log(this);
     formData.append("file", this.state.imageFileToUpload);
 
     const imageData = await http.post(
@@ -53,32 +54,49 @@ class UserProfile extends Form {
       }
     );
 
-    this.setState({ profileImageUrl: imageData.data.fullsizeUrl });
+    this.setState({ profileImageUrl: imageData.data.thumbUrl });
 
-    updateUserProperty(this.props.user._id, { profileImageUrl : this.state.profileImageUrl})
+    const newUserData = await updateUserProperty(this.props.user._id, { profileImageUrl: this.state.profileImageUrl })
     // Need to send image url to mongodb field profileImageUrl
+    loginWithJwt(newUserData.headers["x-auth-token"]);
+
+    // window.location.reload();
+    await this.props.appCDM();
+
+    toast.success('Profile Image Updated!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
 
   async componentDidMount() {
-    // User Profile Image
-    const userData = await getUserData(this.props.user._id);
-console.log(userData.data)
-    // load the units and quantitiy options for select boxes into local state
-   // this.setState({ units: getUnits(), quantities: getQuantities() });
+    if (this.props.user.profileImageUrl) {
+      this.setState({ profileImageUrl: this.props.user.profileImageUrl })
+    }
   }
 
   storeImageFile(e) {
     this.setState({ imageFileToUpload: e.target.files[0] });
     this.setState({ profileImageUrl: URL.createObjectURL(e.target.files[0]) });
   }
+
   render() {
     return (
       <React.Fragment>
         <div className="container">
           <h1>User Profile</h1>
           <div className="mx-auto modal-form row">
-            <div className="col-md-5 left-col bg-info">
-              <img className="img-fluid img-thumbnail" src={this.state.profileImageUrl} alt="user profile" />
+            <div className="col-md-5 left-col bg-info text-center">
+              <img
+                className="rounded-circle m-5 img-thumbnail"
+                style={{ "maxWidth": "50%" }}
+                src={this.state.profileImageUrl}
+                alt="user profile" />
               <input type="file" onChange={this.storeImageFile}></input>
               {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
             </div>

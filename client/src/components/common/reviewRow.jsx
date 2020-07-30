@@ -20,8 +20,9 @@ class ReviewRow extends Component {
         <div className="review-row">
           <img
             className="text-center rounded-circle"
-            src="https://picsum.photos/20"
-            alt="lorem"
+            src={this.props.userImage}
+            alt="User Profile"
+            style={{width: "30px", height: "30px"}}
           />
           <p className="review-username">@{this.props.username}</p>
           <AvgStarRating

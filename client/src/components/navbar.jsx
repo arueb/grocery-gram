@@ -64,7 +64,16 @@ const Navbar = ({ user }) => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <FaUserCircle className="mr-1" size={20} />
+                    {user.profileImageUrl ?
+                      <img
+                        className="text-center rounded-circle mr-2"
+                        src={user.profileImageUrl}
+                        alt="User Profile"
+                        style={{ width: "30px", height: "30px" }}
+                      />
+                      :
+                      <FaUserCircle className="mr-1" size={20} />
+                    }
                     {user.username}
                   </Link>
                   <div

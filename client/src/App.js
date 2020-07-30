@@ -28,6 +28,7 @@ class App extends Component {
   async componentDidMount() {
     const user = auth.getCurrentUser();
     const { data: items } = await item.getItems();
+    console.log("App.js user", user)
     this.setState({ user, items, isLoading: false });
   }
 
@@ -69,7 +70,7 @@ class App extends Component {
               />
               <Route
                 path="/profile"
-                render={(props) => <UserProfile {...props} user={user} />}
+                render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)}/>}
               />
               <Route path="/not-found" component={NotFound} />
               <Redirect exact from="/" to="/shopping-list" />
