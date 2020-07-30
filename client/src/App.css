@@ -93,6 +93,11 @@ tr:hover .hover-icon {
   margin-left: 15px;
 }
 
+.sl-page-heading button.new-recipe {
+  position: absolute;
+  right: 15px;
+}
+
 .sl-price {
   float: right;
 }
