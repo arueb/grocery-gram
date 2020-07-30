@@ -5,7 +5,6 @@ import { isAuthenticated } from "../services/authService"
 class ProtectedRoute extends Component {
 
   render() {
-      console.log("private", this);
       const Component = this.props.component;
      
       return isAuthenticated() ? (

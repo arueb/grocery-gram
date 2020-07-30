@@ -68,12 +68,20 @@ class App extends Component {
               <Route path="/recipes/:id"
                 render={(props) => <RecipeDetail {...props} user={user} />}
               />
-              <Route
+              <ProtectedRoute
+                path={"/shopping-list"}
+                component={ShoppingList}
+                // props={this.props}
+                history={this.props.history}
+                user={user}
+                items={items}
+              />
+              {/* <Route
                 path="/shopping-list"
                 render={(props) => (
                   <ShoppingList {...props} user={user} items={items} />
                 )}
-              />
+              /> */}
               <Route
                 path="/profile"
                 render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)} />}

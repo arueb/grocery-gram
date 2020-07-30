@@ -24,11 +24,11 @@ class ExploreRecipes extends Component {
     this.setState({ selectValue: this.getInitialSelectVal() });
 
     try {
-      const user = this.props.user;
-      if (user) {
+ //     const user = this.props.user;
+ //     if (user) {
         const { data: recipes } = await getPublishedRecipes();
         this.setState({ recipes });
-      }
+  //    }
     } catch (ex) {
       console.log("Something failed", ex);
     }
@@ -130,7 +130,7 @@ class ExploreRecipes extends Component {
           </div>
         </div>
         <div className="row">
-          {this.renderExploreRecipeBlocks(recipes, this.props.user._id)}
+          {this.renderExploreRecipeBlocks(recipes, this.props.user ? this.props.user._id : "none")}
         </div>
         <Pagination
           recipesCount={filtered.length}

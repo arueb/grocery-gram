@@ -31,7 +31,7 @@ export function getJwt() {
 }
 
 export function isAuthenticated() {
-  return true;
+  return localStorage.getItem(tokenKey) != null;
 }
 
 export default {
