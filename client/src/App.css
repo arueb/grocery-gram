@@ -747,3 +747,14 @@ Custom media queries
   right: 0;
   top: 0;
 }
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries to separate MR & ER filters on
+collapse
+*/
+@media (max-width: 768px) {
+  .list-group-horizontal, .owner-filter {
+    margin-bottom: 1rem;
+  }
+}

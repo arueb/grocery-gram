@@ -111,7 +111,7 @@ class ExploreRecipes extends Component {
         <div className="row list-group-row">
           <div className="col-md-6">
             <select
-              className="form-control"
+              className="form-control owner-filter"
               id="mr-category"
               name="mr-category"
               onChange={this.handleFilterByCategory}
