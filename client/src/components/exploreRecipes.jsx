@@ -103,15 +103,15 @@ class ExploreRecipes extends Component {
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
-          <div className="col-md">
+          {/* <div className="col-md"> */}
             <h2>Explore Recipes</h2>
-          </div>
+          {/* </div> */}
         </div>
         <hr className="divider" />
         <div className="row list-group-row">
           <div className="col-md-6">
             <select
-              className="form-control"
+              className="form-control owner-filter"
               id="mr-category"
               name="mr-category"
               onChange={this.handleFilterByCategory}

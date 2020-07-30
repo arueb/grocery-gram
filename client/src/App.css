@@ -559,7 +559,8 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 @media (min-width: 768px) {
   /*  Add Recipe Form  */
   #add-recipe-form {
-    padding: 5em 5em;
+    padding: 0em 5em;
+    /* padding: 5em 5em; */
   }
 
   .pie-chart-container > div {
@@ -746,4 +747,15 @@ Custom media queries
   position: absolute;
   right: 0;
   top: 0;
+}
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries to separate MR & ER filters on
+collapse
+*/
+@media (max-width: 768px) {
+  .list-group-horizontal, .owner-filter {
+    margin-bottom: 1rem;
+  }
 }

@@ -162,7 +162,7 @@ class MyRecipes extends Component {
               onItemSelect={this.handleOwnerSelect}
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 owner-filter">
             <select
               className="form-control"
               id="mr-category"
