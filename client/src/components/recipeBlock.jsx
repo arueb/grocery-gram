@@ -47,7 +47,7 @@ class RecipeBlock extends Component {
                 <AvgStarRating
                   avgRating={this.props.recipe.avgRating}
                   numReviews={this.props.recipe.numReviews}
-                  starSize={20}
+                  starSize={16}
                 />
               </div>
             </Link>
