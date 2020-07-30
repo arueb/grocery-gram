@@ -9,6 +9,7 @@ const userSchema = new Schema({
   email: { type: String, max: 64, unique: true, required: true },
   username: { type: String, min: 3, max: 32, unique: true, required: true },
   password: { type: String, min: 3, max: 64, required: true },
+  profileImageUrl: { type: String, min: 4, max: 2083 },
   addedItems: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -73,6 +74,7 @@ validateUser = (user, ignoreRequiredFields = false) => {
     removedItems: Joi.array(),
     itemCounts: Joi.array(),
     savedRecipes: Joi.array(),
+    profileImageUrl: Joi.string(),
   });
 
   if (ignoreRequiredFields) {
