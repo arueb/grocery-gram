@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
       .send("A user with this username is already registered.");
 
   user = new User(_.pick(req.body, ["username", "email", "password"]));
+
   user.addedItems = [];
   user.removedItems = [];
   user.itemCounts = [];
@@ -83,12 +84,24 @@ router.patch("/:id", async (req, res) => {
     if (!user)
       return res.status(404).send("The user with the given ID was not found.");
 
-    // Need to remove password key from output
-    user.password = undefined;
+    // Convert MongooseDB Object to JSON Object
+    var userJSON = user.toObject();
 
-    res.json(user);
+    // Need to remove password key from output
+    delete userJSON.password;
+
+    // Add new JWT if user profile image was updated
+    if (req.body.hasOwnProperty("profileImageUrl")) {
+      newToken = await user.generateAuthToken();
+      return res.header("x-auth-token", newToken)
+        .header("access-control-expose-headers", "x-auth-token")
+        .json(userJSON)
+    } 
+
+    res.json(userJSON);
   } catch (err) {
-    res.status(500).send("Something failed", err);
+    console.log(err);
+    res.status(500).send("Something failed");
   }
 });
 
@@ -107,7 +120,7 @@ router.get("/", async (req, res) => {
           "addedItems",
           "removedItems",
           "itemCounts",
-          "savedRecipes"
+          "savedRecipes",
         ])
       )
     );
@@ -119,9 +132,16 @@ router.get("/", async (req, res) => {
 // get user with given id
 router.get("/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.id);
     if (!user)
       return res.status(404).send("The user with the given ID was not found.");
+
+    // Convert user object to JSON
+    user = user.toJSON();
+
+    if (!user.hasOwnProperty("profileImageUrl")) {
+      user.profileImageUrl = ""
+    }
 
     res.send(
       _.pick(user, [
@@ -131,11 +151,13 @@ router.get("/:id", async (req, res) => {
         "addedItems",
         "removedItems",
         "itemCounts",
-        "savedRecipes"
+        "savedRecipes",
+        "profileImageUrl",
       ])
     );
   } catch (err) {
     // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    console.log("/get/:id Error:", err);
     res.status(500).send("Something failed.");
   }
 });
@@ -249,7 +271,7 @@ router.get('/:userId/reviews', async (req, res) => {
   if (!user) return res.status(404).send("The userId could not be found.");
 
   const reviews = await Review.aggregate([
-    {$match: {_id: {$in : user.reviews } } },
+    { $match: { _id: { $in: user.reviews } } },
     {
       $lookup: {
         from: "users",

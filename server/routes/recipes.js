@@ -211,6 +211,7 @@ router.get("/:id/reviews", async (req, res) => {
   // remove user data except username
   reviews.forEach(review => {
     review.username = review.user[0].username;
+    review.profileImageUrl = review.user[0].profileImageUrl;
     delete review.user;
   });
 
