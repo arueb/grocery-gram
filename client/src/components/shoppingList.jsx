@@ -535,9 +535,9 @@ class ShoppingList extends Component {
             </div>
           </div>
           <div className="col-md-4 order-md-12 pie">
-            <h5>List Summary</h5>
             {totalNumItems > 0 && (
               <React.Fragment>
+                <h5>List Summary</h5>
                 <div className="totals">
                   ${totalPriceItems}
                   <span className="num-items">
@@ -553,7 +553,7 @@ class ShoppingList extends Component {
             )}
             {/* <div className="trial-cover"></div> */}
             <ul className="category-legend">
-              {totalNumItems &&
+              {totalNumItems > 0 &&
                 catPercents.map((cat, i) => {
                   return (
                     <li key={i}>
@@ -573,7 +573,7 @@ class ShoppingList extends Component {
             </ul>
           </div>
           <div className="col-md-3 order-md-1">
-            <h5>My Staples</h5>
+            {!isLoading && <h5>My Staples</h5>}
             <div className="list-group lst-grp-hover myStaples">
               {!isLoading &&
                 staples &&
@@ -590,7 +590,7 @@ class ShoppingList extends Component {
                     )
                 )}
             </div>
-            <h5 className="my-recipes-header">My Recipes</h5>
+            {!isLoading && <h5 className="my-recipes-header">My Recipes</h5>}
             <div className="list-group lst-grp-hover myRecipes">
               {!isLoading &&
                 userRecipes &&
