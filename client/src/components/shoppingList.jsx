@@ -4,11 +4,14 @@ import {
   getUserData,
   getUserRecipes,
   updateShoppingList,
+  deleteItemFromShoppingList,
+  clearAllFromShoppingList,
   updateItemCounts,
 } from "../services/userService";
 import { getColor } from "../services/itemService";
 import ItemSearch from "../components/itemSearch";
 import PieChart from "./pieChart";
+import { FaTrash } from "react-icons/fa";
 
 class ShoppingList extends Component {
   state = {
@@ -25,11 +28,6 @@ class ShoppingList extends Component {
     isLoading: true,
     errors: {},
   };
-
-  //   async componentDidUpdate() {
-  //     alert("component did update");
-  //     await this.expandShoppingLists();
-  //   }
 
   async componentDidMount() {
     // Bind the this context to the handler function
@@ -231,7 +229,7 @@ class ShoppingList extends Component {
   handleUpdatePieChart = () => {
     // create array of category objects for use in pie chart
     const { addedItems } = this.state;
-    if (!addedItems) return;
+    if (addedItems === null) return;
     let catStats = [];
     let cats = [];
     for (let i = 0; i < addedItems.length; i++) {
@@ -311,11 +309,6 @@ class ShoppingList extends Component {
     this.setState({ staples });
   };
 
-  // updateMyRecipes
-
-  // handleChooseStaple
-
-  // handleChooseRecipe
   handleAddRecipeIngredients = async (recipe) => {
     // console.log(recipe);
     let itemsToAdd = recipe.ingredients.map((ingredient) => {
@@ -350,6 +343,43 @@ class ShoppingList extends Component {
     }
   };
 
+  handlePermDelete = async (idx) => {
+    const prevRemovedItems = [...this.state.removedItems];
+    const newRemovedItems = [...this.state.removedItems];
+    newRemovedItems.splice(idx, 1);
+    const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
+    this.setState({ removedItems: newRemovedItems });
+
+    try {
+      await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
+    } catch (err) {
+      // revert state back to original
+      this.setState({ removedItems: prevRemovedItems });
+      console.log("Something went wrong.", err);
+    }
+  };
+
+  handleClearAll = async () => {
+    // console.log("clearing all!");
+    const prevAddedItems = [...this.state.addedItems];
+    const prevRemovedItems = [...this.state.removedItems];
+    this.setState({ addedItems: [], removedItems: [] });
+    setTimeout(() => {
+      this.handleUpdatePieChart();
+    }, 10);
+
+    try {
+      await clearAllFromShoppingList(this.props.user._id, [], []);
+    } catch (err) {
+      // revert state back to original
+      this.setState({
+        addedItems: prevAddedItems,
+        removedItems: prevRemovedItems,
+      });
+      console.log("Something went wrong.", err);
+    }
+  };
+
   render() {
     const {
       addedItems,
@@ -362,10 +392,14 @@ class ShoppingList extends Component {
       isLoading,
     } = this.state;
 
+    let numAllItems = 0;
+    if (addedItems) numAllItems += addedItems.length;
+    if (removedItems) numAllItems += removedItems.length;
+    // console.log('numAllItems', numAllItems);
+
     return (
       <React.Fragment>
         {isLoading && <p>page loading...</p>}
-
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
@@ -406,28 +440,97 @@ class ShoppingList extends Component {
                       >
                         {item.name}
                       </span>
-                      <span className="sl-price">${item.price}</span>
+                      <span className="sl-price">${item.price.toFixed(2)}</span>
                     </li>
                   ))}
             </div>
-            <div className="removed list-group lst-grp-hover">
+            <div className="list-group lst-grp-hover lst-grp-removed">
               {!removedItems
                 ? null
                 : removedItems.map((item, i) => (
                     <li
                       key={i}
-                      onClick={() => this.handleAddBackItem(item._id)}
+                      className="list-group-item"
                       style={{
                         borderTop: 0,
                         borderBottom: 0,
                         borderRight: 0,
                         borderLeft: "15px solid #fff",
                       }}
-                      className="list-group-item"
                     >
-                      {item.name}
+                      <span
+                        className="removed"
+                        onClick={() => this.handleAddBackItem(item._id)}
+                      >
+                        {item.name}
+                      </span>
+                      <span className="perm-delete">
+                        <FaTrash
+                          className="hover-icon"
+                          onClick={() => this.handlePermDelete(i)}
+                        />
+                      </span>
                     </li>
-                  ))}
+                ))}
+              {(numAllItems > 0) &&
+                <React.Fragment>
+                  <button
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#warnClearAll"
+                    className="btn btn-secondary clear-all"
+                  >
+                    Clear All
+                  </button>
+                  <div
+                    className="modal fade"
+                    id="warnClearAll"
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-labelledby="warnClearAll"
+                    aria-hidden="true"
+                  >
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          Are you sure?
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        This will delete all items in your Shopping List including your lined-through items. This
+                        cannot be undone.
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => this.handleClearAll()}
+                          type="button"
+                          data-dismiss="modal"
+                          className="btn btn-danger"
+                        >
+                          Clear All
+                        </button>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </React.Fragment>
+              }
             </div>
           </div>
           <div className="col-md-4 order-md-12 pie">
@@ -468,11 +571,9 @@ class ShoppingList extends Component {
                 })}
             </ul>
           </div>
-
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover myStaples">
-              {/* {console.log("staples", staples)} */}
               {!isLoading &&
                 staples &&
                 staples.map(
@@ -505,7 +606,6 @@ class ShoppingList extends Component {
                       </li>
                     )
                 )}
-              {/* <li className="list-group-item border-0">A recipe</li> */}
             </div>
           </div>
         </div>

@@ -182,6 +182,7 @@ class RecipeForm extends Form {
 
   // handle deleting a row from the ingredients table
   handleRemoveSpecificRow = (idx) => () => {
+    console.log('deleting ingredient');
     const ingredients = [...this.state.ingredients];
     ingredients.splice(idx, 1);
     this.setState({ ingredients, validateIngredientsRow: null });
