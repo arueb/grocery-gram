@@ -4,7 +4,6 @@ import { FaStarHalfAlt } from "react-icons/fa";
 import "../../css/starRating.css";
 
 const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
-
   if (numReviews <= 0) {
     return null;
   }
@@ -13,8 +12,10 @@ const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
 
   let ratingNumber, reviewCount;
   if (numReviews !== undefined) {
-    ratingNumber = <span className="ml-2">{avgRating}</span>
-    reviewCount = <div>{numReviews + (numReviews === 1 ? " Review" : " Reviews")}</div>
+    ratingNumber = <span className="ml-2">{avgRating.toFixed(1)}</span>;
+    reviewCount = (
+      <div>{numReviews + (numReviews === 1 ? " Review" : " Reviews")}</div>
+    );
   } else {
     ratingNumber = null;
     reviewCount = null;
