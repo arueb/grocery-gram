@@ -210,6 +210,19 @@ class RecipeDetail extends Form {
           newAddedItemIds.push(ingredient.itemId);
         }
       })
+
+      if (newAddedItemIds.length === 0) {
+        return toast.info('No items selected to add to shopping list', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
       await addToShoppingList(this.props.user._id, newAddedItemIds);
 
       toast.success('Items added to Shopping List!', {
@@ -265,21 +278,12 @@ class RecipeDetail extends Form {
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">Qty</th>
-                  <th scope="col">Measure</th>
-                  <th scope="col">Ingredient</th>
-                  {this.props.user ?
-                    <th scope="col">Add</th>
-                    :
-                    null}
+                  <th colSpan={this.props.user ? 4 : 3}>Ingredients List</th>
                 </tr>
               </thead>
               <tbody>
                 {this.state.data.ingredients.map((ingredient, index) => (
                   <tr key={index}>
-                    <th scope="row">{ingredient.qty}</th>
-                    <td>{ingredient.unit}</td>
-                    <td>{ingredient.item.name}</td>
                     {this.props.user ?
                       <td>
                         <input
@@ -290,6 +294,9 @@ class RecipeDetail extends Form {
                       </td>
                       :
                       null}
+                    <th scope="row">{ingredient.qty}</th>
+                    <td>{ingredient.unit}</td>
+                    <td>{ingredient.item.name}</td>
                   </tr>
                 ))}
               </tbody>
