@@ -449,6 +449,7 @@ class ShoppingList extends Component {
                 ? null
                 : removedItems.map((item, i) => (
                     <li
+                      onClick=""
                       key={i}
                       className="list-group-item"
                       style={{
