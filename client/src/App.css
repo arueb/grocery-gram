@@ -306,15 +306,15 @@ footer {
   list-style: none;
 }
 
-.trial-cover {
+/* .trial-cover {
   position: absolute;
   height: 10px;
   background-color: white;
   top: 420px;
   width: 80%;
   height: 20px;
-  /* bottom: 108px; */
-}
+} */
+
 .list-group-item {
   padding: 0.6rem 1.25rem;
 }
@@ -700,9 +700,9 @@ Custom media queries
     margin-bottom: 0;
   }
 
-  /* .category-legend {
-    margin-top: -12px;
-  } */
+  .recipe-block {
+    padding: 0 15px;
+  }
 }
 
 .star-label {

@@ -551,7 +551,7 @@ class ShoppingList extends Component {
                 />
               </React.Fragment>
             )}
-            <div className="trial-cover"></div>
+            {/* <div className="trial-cover"></div> */}
             <ul className="category-legend">
               {totalNumItems &&
                 catPercents.map((cat, i) => {
