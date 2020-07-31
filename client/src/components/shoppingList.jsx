@@ -229,7 +229,7 @@ class ShoppingList extends Component {
   handleUpdatePieChart = () => {
     // create array of category objects for use in pie chart
     const { addedItems } = this.state;
-    if (!addedItems) return;
+    if (addedItems === null) return;
     let catStats = [];
     let cats = [];
     for (let i = 0; i < addedItems.length; i++) {
@@ -360,23 +360,25 @@ class ShoppingList extends Component {
   };
 
   handleClearAll = async () => {
-    console.log('clearing all!');
+    // console.log("clearing all!");
     const prevAddedItems = [...this.state.addedItems];
     const prevRemovedItems = [...this.state.removedItems];
     this.setState({ addedItems: [], removedItems: [] });
+    setTimeout(() => {
+      this.handleUpdatePieChart();
+    }, 10);
 
     try {
       await clearAllFromShoppingList(this.props.user._id, [], []);
-    }
-    catch (err) {
+    } catch (err) {
       // revert state back to original
       this.setState({
         addedItems: prevAddedItems,
-        removedItems: prevRemovedItems
+        removedItems: prevRemovedItems,
       });
       console.log("Something went wrong.", err);
     }
-  }
+  };
 
   render() {
     const {
@@ -389,6 +391,11 @@ class ShoppingList extends Component {
       userRecipes,
       isLoading,
     } = this.state;
+
+    let numAllItems = 0;
+    if (addedItems) numAllItems += addedItems.length;
+    if (removedItems) numAllItems += removedItems.length;
+    // console.log('numAllItems', numAllItems);
 
     return (
       <React.Fragment>
@@ -463,45 +470,69 @@ class ShoppingList extends Component {
                           onClick={() => this.handlePermDelete(i)}
                         />
                       </span>
-                  </li>
-                  ))}
-              <button
-                type="button"
-                data-toggle="modal"
-                data-target="#warnClearAll"
-                // onClick={() => this.handleClearAll()}
-                className="btn btn-secondary clear-all"
-              >
-                Clear All
-              </button>
-              {/* Modal */}
-              <div class="modal fade" id="warnClearAll" tabindex="-1" role="dialog" aria-labelledby="warnClearAll" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">
-                        Are you sure?
-                      </h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      This will delete all items in your Shopping List and cannot be undone.
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                      <button
-                        onClick={() => this.handleClearAll()}
-                        type="button"
-                        data-dismiss="modal"
-                        class="btn btn-danger">Clear All</button>
+                    </li>
+                ))}
+              {(numAllItems > 0) &&
+                <React.Fragment>
+                  <button
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#warnClearAll"
+                    className="btn btn-secondary clear-all"
+                  >
+                    Clear All
+                  </button>
+                  <div
+                    className="modal fade"
+                    id="warnClearAll"
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-labelledby="warnClearAll"
+                    aria-hidden="true"
+                  >
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          Are you sure?
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        This will delete all items in your Shopping List and
+                        cannot be undone.
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => this.handleClearAll()}
+                          type="button"
+                          data-dismiss="modal"
+                          className="btn btn-danger"
+                        >
+                          Clear All
+                        </button>
+                      </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </React.Fragment>
+              }
             </div>
-          </div> 
+          </div>
           <div className="col-md-4 order-md-12 pie">
             <h5>List Summary</h5>
             {totalNumItems > 0 && (
