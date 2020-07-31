@@ -41,10 +41,12 @@ class App extends Component {
           <Navbar user={user} />
           <main className="container">
             <Switch>
-              <Route path="/login" component={LoginForm} />
-              <Route path="/logout" component={Logout} />
               <Route path="/register" component={RegisterForm} />
-              {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
+              <Route path="/login" component={LoginForm} />
+              <ProtectedRoute
+                path={'/logout'}
+                component={Logout}
+              />
               <Route
                 path="/my-recipes/:id"
                 render={(props) => (
@@ -82,12 +84,16 @@ class App extends Component {
                   <ShoppingList {...props} user={user} items={items} />
                 )}
               /> */}
-              <Route
-                path="/profile"
-                render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)} />}
+              <ProtectedRoute
+                path={"/profile"}
+                component={UserProfile}
+                // props={this.props}
+                history={this.props.history}
+                user={user}
+                appCDM={this.componentDidMount.bind(this)}
               />
               <Route path="/not-found" component={NotFound} />
-              <Redirect exact from="/" to="/shopping-list" />
+              <Redirect exact from="/" to="/explore-recipes" />
               <Redirect to="/not-found" />
             </Switch>
           </main>
