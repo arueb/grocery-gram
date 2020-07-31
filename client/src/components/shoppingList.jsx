@@ -506,7 +506,7 @@ class ShoppingList extends Component {
                         </button>
                       </div>
                       <div className="modal-body">
-                        This will delete all items in your Shopping List and
+                        This will delete all items in your Shopping List including your lined-through items. This
                         cannot be undone.
                       </div>
                       <div className="modal-footer">
