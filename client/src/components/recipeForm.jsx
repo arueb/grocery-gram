@@ -291,7 +291,7 @@ class RecipeForm extends Form {
       ingredients: this.state.ingredients,
     };
 
-    const { id } = this.props.match.params;
+    const { id } = this.props.computedMatch.params;
     try {
       if (id === "new") {
         // console.log("saving new recipe", recipeRecord);
