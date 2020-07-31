@@ -12,6 +12,7 @@ class RecipeBlock extends Component {
     }
     return this.props.recipe.user.username;
   }
+
   placeholderOrImage() {
     if (this.props.recipe.images && this.props.recipe.images[0].thumbUrl) {
       return (
@@ -31,6 +32,28 @@ class RecipeBlock extends Component {
       );
     }
   }
+
+  renderHeartOrPencilOrNone() {
+    // Case if user is not logged in
+    if (this.props.userId === undefined) {
+      return null
+    }
+    // Case if user owns this recipe
+    else if (this.props.recipe.userId === this.props.userId) {
+      return <div className="edit-icon">
+        <Link to={"/my-recipes/" + this.props.recipe._id}>
+          <FaPen></FaPen>
+        </Link>
+      </div>
+    }
+    // Case if user does not own this recipe
+    else if (this.props.recipe.userId !== this.props.userId) {
+      return <div className="saved-icon">
+        <FaHeart></FaHeart>
+      </div>
+    }
+  }
+
   render(props) {
     return (
       <React.Fragment>
@@ -52,19 +75,7 @@ class RecipeBlock extends Component {
               </div>
             </Link>
 
-            {this.props.recipe.userId === this.props.userId && (
-              <div className="edit-icon">
-                <Link to={"/my-recipes/" + this.props.recipe._id}>
-                  <FaPen></FaPen>
-                </Link>
-              </div>
-            )}
-
-            {this.props.recipe.userId !== this.props.userId && (
-              <div className="saved-icon">
-                <FaHeart></FaHeart>
-              </div>
-            )}
+            {this.renderHeartOrPencilOrNone()}
           </div>
         </div>
       </React.Fragment>

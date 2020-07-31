@@ -29,10 +29,16 @@ export function getCurrentUser() {
 export function getJwt() {
   return localStorage.getItem(tokenKey);
 }
+
+export function isAuthenticated() {
+  return localStorage.getItem(tokenKey) != null;
+}
+
 export default {
   login,
   loginWithJwt,
   logout,
   getCurrentUser,
   getJwt,
+  isAuthenticated,
 };

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./components/protectedRoute"
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import ShoppingList from "./components/shoppingList";
@@ -40,39 +41,50 @@ class App extends Component {
           <Navbar user={user} />
           <main className="container">
             <Switch>
-              <Route path="/login" component={LoginForm} />
-              <Route path="/logout" component={Logout} />
               <Route path="/register" component={RegisterForm} />
-              {/* <Route path="/my-recipes/test" component={RecipeForm} /> */}
-              <Route
-                path="/my-recipes/:id"
-                render={(props) => (
-                  <RecipeForm {...props} user={user} items={items} />
-                )}
+              <Route path="/login" component={LoginForm} />
+              <ProtectedRoute
+                path={'/logout'}
+                component={Logout}
               />
-              <Route
-                path="/my-recipes"
-                render={(props) => <MyRecipes {...props} user={user} />}
+              <ProtectedRoute
+                path={'/my-recipes/:id'}
+                component={RecipeForm}
+                items={items}
+                user={user}
+              />
+              <ProtectedRoute
+                path={'/my-recipes'}
+                component={MyRecipes}
+                user={user}
               />
               <Route
                 path="/explore-recipes"
                 render={(props) => <ExploreRecipes {...props} user={user} />}
               />
-              <Route path="/recipes/:id" 
-              render={(props) => <RecipeDetail {...props} user={user} />}
+              <Route path="/recipes/:id"
+                render={(props) => <RecipeDetail {...props} user={user} />}
               />
-              <Route
-                path="/shopping-list"
-                render={(props) => (
-                  <ShoppingList {...props} user={user} items={items} />
-                )}
+              <ProtectedRoute
+                path={"/shopping-list"}
+                component={ShoppingList}
+                user={user}
+                items={items}
               />
-              <Route
-                path="/profile"
-                render={(props) => <UserProfile {...props} user={user} appCDM={this.componentDidMount.bind(this)}/>}
+              <ProtectedRoute
+                path={"/profile"}
+                component={UserProfile}
+                history={this.props.history}
+                user={user}
+                appCDM={this.componentDidMount.bind(this)}
               />
               <Route path="/not-found" component={NotFound} />
-              <Redirect exact from="/" to="/shopping-list" />
+              <Redirect exact from="/"
+                to={auth.isAuthenticated() ?
+                  "/shopping-list"
+                  :
+                  "/explore-recipes"}
+              />
               <Redirect to="/not-found" />
             </Switch>
           </main>
