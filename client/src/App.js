@@ -47,22 +47,17 @@ class App extends Component {
                 path={'/logout'}
                 component={Logout}
               />
-              <Route
-                path="/my-recipes/:id"
-                render={(props) => (
-                  <RecipeForm {...props} user={user} items={items} />
-                )}
+              <ProtectedRoute
+                path={'/my-recipes/:id'}
+                component={RecipeForm}
+                items={items}
+                user={user}
               />
               <ProtectedRoute
                 path={'/my-recipes'}
                 component={MyRecipes}
-                // props={this.props}
                 user={user}
               />
-              {/* <Route
-                path="/my-recipes"
-                render={(props) => <MyRecipes {...props} user={user} />}
-              /> */}
               <Route
                 path="/explore-recipes"
                 render={(props) => <ExploreRecipes {...props} user={user} />}
@@ -73,27 +68,23 @@ class App extends Component {
               <ProtectedRoute
                 path={"/shopping-list"}
                 component={ShoppingList}
-                // props={this.props}
-                history={this.props.history}
                 user={user}
                 items={items}
               />
-              {/* <Route
-                path="/shopping-list"
-                render={(props) => (
-                  <ShoppingList {...props} user={user} items={items} />
-                )}
-              /> */}
               <ProtectedRoute
                 path={"/profile"}
                 component={UserProfile}
-                // props={this.props}
                 history={this.props.history}
                 user={user}
                 appCDM={this.componentDidMount.bind(this)}
               />
               <Route path="/not-found" component={NotFound} />
-              <Redirect exact from="/" to="/explore-recipes" />
+              <Redirect exact from="/"
+                to={auth.isAuthenticated() ?
+                  "/shopping-list"
+                  :
+                  "/explore-recipes"}
+              />
               <Redirect to="/not-found" />
             </Switch>
           </main>
