@@ -24,11 +24,11 @@ class ExploreRecipes extends Component {
     this.setState({ selectValue: this.getInitialSelectVal() });
 
     try {
- //     const user = this.props.user;
- //     if (user) {
-        const { data: recipes } = await getPublishedRecipes();
-        this.setState({ recipes });
-  //    }
+      //     const user = this.props.user;
+      //     if (user) {
+      const { data: recipes } = await getPublishedRecipes();
+      this.setState({ recipes });
+      //    }
     } catch (ex) {
       console.log("Something failed", ex);
     }
@@ -104,7 +104,7 @@ class ExploreRecipes extends Component {
       <React.Fragment>
         <div className="row sl-page-heading">
           {/* <div className="col-md"> */}
-            <h2>Explore Recipes</h2>
+          <h2>Explore Recipes</h2>
           {/* </div> */}
         </div>
         <hr className="divider" />
@@ -130,7 +130,7 @@ class ExploreRecipes extends Component {
           </div>
         </div>
         <div className="row">
-          {this.renderExploreRecipeBlocks(recipes, this.props.user ? this.props.user._id : "none")}
+          {this.renderExploreRecipeBlocks(recipes, this.props.user ? this.props.user._id : undefined)}
         </div>
         <Pagination
           recipesCount={filtered.length}
