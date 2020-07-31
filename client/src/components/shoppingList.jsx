@@ -373,7 +373,6 @@ class ShoppingList extends Component {
     return (
       <React.Fragment>
         {isLoading && <p>page loading...</p>}
-
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
@@ -447,7 +446,7 @@ class ShoppingList extends Component {
                     </li>
                   ))}
             </div>
-          </div>
+          </div> 
           <div className="col-md-4 order-md-12 pie">
             <h5>List Summary</h5>
             {totalNumItems > 0 && (
@@ -486,11 +485,9 @@ class ShoppingList extends Component {
                 })}
             </ul>
           </div>
-
           <div className="col-md-3 order-md-1">
             <h5>My Staples</h5>
             <div className="list-group lst-grp-hover myStaples">
-              {/* {console.log("staples", staples)} */}
               {!isLoading &&
                 staples &&
                 staples.map(
@@ -523,7 +520,6 @@ class ShoppingList extends Component {
                       </li>
                     )
                 )}
-              {/* <li className="list-group-item border-0">A recipe</li> */}
             </div>
           </div>
         </div>
