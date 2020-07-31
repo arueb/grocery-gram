@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Joi from "joi-browser";
 import ImageGallery from "react-image-gallery";
 import { toast } from "react-toastify";
@@ -186,7 +187,15 @@ class RecipeDetail extends Form {
   };
 
   renderIcon = () => {
-    if (this.state.data.userId === this.props.user._id) return <FaPen />;
+    if (this.state.data.userId === this.props.user._id) {
+      return (
+        <div>
+          <Link to={"/my-recipes/" + this.props.match.params.id}>
+            <FaPen className="text-secondary"/>
+          </Link>
+        </div>
+      )
+    };
 
     return (
       <React.Fragment>
