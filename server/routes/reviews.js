@@ -50,12 +50,21 @@ router.post("/", async (req, res) => {
     res.status(500).send("Problem updating user reviews array");
   }
 
+  console.log("recipe.numReviews", recipe.numReviews);
+  console.log("recipe.avgRating", recipe.avgRating);
+  console.log("review.rating", review.rating);
+
+  // calculate average rating
+  const avgRating =
+    (recipe.numReviews * recipe.avgRating + review.rating) /
+    (recipe.numReviews + 1);
+
   // Try updating recipe.reviews
   try {
     await Recipe.findByIdAndUpdate(recipe._id, {
       $push: { reviews: review._id },
       $inc: { numReviews: 1 },
-      //   numReviews: 1,
+      avgRating: avgRating,
     });
   } catch (err) {
     console.log(err);
