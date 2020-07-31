@@ -5,6 +5,7 @@ import {
   getUserRecipes,
   updateShoppingList,
   deleteItemFromShoppingList,
+  clearAllFromShoppingList,
   updateItemCounts,
 } from "../services/userService";
 import { getColor } from "../services/itemService";
@@ -358,6 +359,25 @@ class ShoppingList extends Component {
     }
   };
 
+  handleClearAll = async () => {
+    console.log('clearing all!');
+    const prevAddedItems = [...this.state.addedItems];
+    const prevRemovedItems = [...this.state.removedItems];
+    this.setState({ addedItems: [], removedItems: [] });
+
+    try {
+      await clearAllFromShoppingList(this.props.user._id, [], []);
+    }
+    catch (err) {
+      // revert state back to original
+      this.setState({
+        addedItems: prevAddedItems,
+        removedItems: prevRemovedItems
+      });
+      console.log("Something went wrong.", err);
+    }
+  }
+
   render() {
     const {
       addedItems,
@@ -443,8 +463,43 @@ class ShoppingList extends Component {
                           onClick={() => this.handlePermDelete(i)}
                         />
                       </span>
-                    </li>
+                  </li>
                   ))}
+              <button
+                type="button"
+                data-toggle="modal"
+                data-target="#warnClearAll"
+                // onClick={() => this.handleClearAll()}
+                className="btn btn-secondary clear-all"
+              >
+                Clear All
+              </button>
+              {/* Modal */}
+              <div class="modal fade" id="warnClearAll" tabindex="-1" role="dialog" aria-labelledby="warnClearAll" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        Are you sure?
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      This will delete all items in your Shopping List and cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button
+                        onClick={() => this.handleClearAll()}
+                        type="button"
+                        data-dismiss="modal"
+                        class="btn btn-danger">Clear All</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div> 
           <div className="col-md-4 order-md-12 pie">

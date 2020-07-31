@@ -30,6 +30,10 @@ export function deleteItemFromShoppingList(userId, removedItems) {
   return http.patch(userUrl(userId), { removedItems });
 }
 
+export function clearAllFromShoppingList(userId, addedItems, removedItems) {
+  return http.patch(userUrl(userId), { addedItems, removedItems });
+}
+
 export function updateUserProperty(userId, data) {
   return http.patch(userUrl(userId), data);
 }

@@ -787,3 +787,10 @@ li:hover span.perm-delete .hover-icon {
 .list-group-item .removed {
   cursor: pointer;
 }
+
+.clear-all {
+  margin-top: 1rem;
+  line-height: 0.5;
+  /* background-color: #6e757d;
+  border: none; */
+}
