@@ -41,44 +41,59 @@ class App extends Component {
           <Navbar user={user} />
           <main className="container">
             <Switch>
-              <Route path="/register" component={RegisterForm} />
-              <Route path="/login" component={LoginForm} />
+              <Route
+                path="/register"
+                render={(props) => <RegisterForm {...props} pageTitle="Register - GroceryGram" />}
+              />
+              <Route
+                path="/login"
+                render={(props) => <LoginForm {...props} pageTitle="Login - GroceryGram" />}
+              />
               <ProtectedRoute
                 path={'/logout'}
                 component={Logout}
+                pageTitle={"Logout - GroceryGram"}
               />
               <ProtectedRoute
                 path={'/my-recipes/:id'}
                 component={RecipeForm}
                 items={items}
                 user={user}
+                pageTitle={"My Recipe Page - GroceryGram"}
               />
               <ProtectedRoute
                 path={'/my-recipes'}
                 component={MyRecipes}
                 user={user}
+                pageTitle={"My Recipes - GroceryGram"}
               />
               <Route
                 path="/explore-recipes"
-                render={(props) => <ExploreRecipes {...props} user={user} />}
+                render={(props) => <ExploreRecipes {...props} user={user} pageTitle={"Explore Recipes - GroceryGram"} />}
               />
-              <Route path="/recipes/:id"
-                render={(props) => <RecipeDetail {...props} user={user} />}
+              <Route
+                path="/recipes/:id"
+                render={(props) => <RecipeDetail {...props} user={user} pageTitle={"Recipe Page - GroceryGram"} />}
               />
               <ProtectedRoute
                 path={"/shopping-list"}
                 component={ShoppingList}
                 user={user}
                 items={items}
+                pageTitle={"Shopping List - GroceryGram"}
               />
               <ProtectedRoute
                 path={"/profile"}
                 component={UserProfile}
                 history={this.props.history}
                 user={user}
+                pageTitle={"User Profile - GroceryGram"}
                 appCDM={this.componentDidMount.bind(this)}
               />
-              <Route path="/not-found" component={NotFound} />
+              <Route
+              path="/not-found" 
+              render={(props) => <NotFound {...props} pageTitle={"Page Not Found - GroceryGram"} />}
+              />
               <Redirect exact from="/"
                 to={auth.isAuthenticated() ?
                   "/shopping-list"

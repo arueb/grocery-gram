@@ -26,6 +26,10 @@ class RegisterForm extends Form {
       }),
   };
 
+  componentDidMount() {
+    document.title = this.props.pageTitle;
+  }
+
   // this function is called in the hamdleSubmit function of the forms base component
   doSubmit = async () => {
     try {
@@ -37,7 +41,7 @@ class RegisterForm extends Form {
 
       // reload the application so that the user is added to state on componentDidMount() in app.js
       const { state } = this.props.location;
-      console.log("state from do submit", state);
+
       window.location = state ? state.from.pathname : "/";
     } catch (ex) {
       // display 400 responses in form  by adding to errors property of state
@@ -49,30 +53,31 @@ class RegisterForm extends Form {
         this.setState({ errors });
       }
     }
-    console.log("submitted");
   };
 
   render() {
     return (
-      <section id="register-form">
-        <div className="col-lg-8 col-xl-7 mx-auto modal-form row">
-          <div className="col-md-5 left-col bg-info"></div>
-          <div className="col-md-7 right-col">
-            <h2>Let's Get Started</h2>
-            <form onSubmit={this.handleSubmit}>
-              {this.renderInput("email", "Email")}
-              {this.renderInput("username", "Username")}
-              {this.renderInput("password", "Password", "password")}
-              {this.renderInput(
-                "confirmPassword",
-                "Confirm Password",
-                "password"
-              )}
-              {this.renderButton("Create Account")}
-            </form>
+      <React.Fragment>
+        <section id="register-form">
+          <div className="col-lg-8 col-xl-7 mx-auto modal-form row">
+            <div className="col-md-5 left-col bg-info"></div>
+            <div className="col-md-7 right-col">
+              <h2>Let's Get Started</h2>
+              <form onSubmit={this.handleSubmit}>
+                {this.renderInput("email", "Email")}
+                {this.renderInput("username", "Username")}
+                {this.renderInput("password", "Password", "password")}
+                {this.renderInput(
+                  "confirmPassword",
+                  "Confirm Password",
+                  "password"
+                )}
+                {this.renderButton("Create Account")}
+              </form>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </React.Fragment>
     );
   }
 }

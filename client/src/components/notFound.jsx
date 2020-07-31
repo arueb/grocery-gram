@@ -1,7 +1,18 @@
 import React from "react";
 
-const NotFound = () => {
-  return <h1>Page Not Found</h1>;
-};
+class NotFound extends React.Component {
+
+  componentDidMount() {
+    document.title = this.props.pageTitle;
+  }
+
+  render () {
+    return (
+      <React.Fragment>
+      <h1>Page Not Found</h1>
+    </React.Fragment>
+    )
+  }
+}
 
 export default NotFound;

@@ -74,6 +74,13 @@ class RecipeForm extends Form {
 
     // load the units and quantitiy options for select boxes into local state
     this.setState({ units: getUnits(), quantities: getQuantities() });
+
+    document.title = "Shopping List - GroceryGram"
+    if (this.props.match.params.id === "new") {
+      document.title = "Create A Recipe - GroceryGram";
+    } else {
+      document.title = "Edit " + this.state.data.title + " - GroceryGram";
+    }
   }
 
   // populates recipe in state if valid recipe id

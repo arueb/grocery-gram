@@ -75,6 +75,7 @@ class UserProfile extends Form {
   }
 
   async componentDidMount() {
+    document.title = this.props.pageTitle
     if (this.props.user.profileImageUrl) {
       this.setState({ profileImageUrl: this.props.user.profileImageUrl })
     }
