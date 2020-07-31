@@ -53,12 +53,14 @@ class RecipeDetail extends Form {
     // Load the Page
     await this.populateRecipe();
 
-    // Load the user
-    const user = await getUserData(this.props.user._id);
+    if (this.props.user) {
+      // Load the user
+      const user = await getUserData(this.props.user._id);
 
-    // figure out if the recipe is saved
-    const isSaved = user.data.savedRecipes.includes(this.state.data._id);
-    this.setState({ savedRecipes: user.data.savedRecipes, isSaved });
+      // figure out if the recipe is saved
+      const isSaved = user.data.savedRecipes.includes(this.state.data._id);
+      this.setState({ savedRecipes: user.data.savedRecipes, isSaved });
+    }
 
     // Load the reviews
     await this.populateReviews();
@@ -198,9 +200,13 @@ class RecipeDetail extends Form {
               starSize={25}
             />
           </div>
-          <span style={{ float: "right", marginTop: "-25px" }}>
-            {this.state.savedRecipes && this.renderIcon()}
-          </span>
+          {this.props.user ?
+            <span style={{ float: "right", marginTop: "-25px" }}>
+              {this.state.savedRecipes && this.renderIcon()}
+            </span>
+            :
+            null
+          }
         </section>
         <section className="image-gallery">
           {data.images && (
@@ -246,13 +252,19 @@ class RecipeDetail extends Form {
           </div>
         </div>
         <hr className="divider" />
-        <h3 className="my-3">Review The Recipe</h3>
-        <form onSubmit={this.handleSubmit}>
-          <StarRating starSize={25} onChange={this.handleStarChange} />
-          <br></br>
-          {this.renderTextArea("reviewNotes", "", 3, "Add your review here")}
-          {this.renderButton("Submit Review")}
-        </form>
+        {this.props.user ?
+          <div>
+            <h3 className="my-3">Review The Recipe</h3>
+            <form onSubmit={this.handleSubmit}>
+              <StarRating starSize={25} onChange={this.handleStarChange} />
+              <br></br>
+              {this.renderTextArea("reviewNotes", "", 3, "Add your review here")}
+              {this.renderButton("Submit Review")}
+            </form>
+          </div>
+          :
+          null
+        }
         {this.state.reviews.map((review) => (
           <ReviewRow
             key={review._id}
