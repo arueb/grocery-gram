@@ -89,8 +89,8 @@ class UserProfile extends Form {
     return (
       <React.Fragment>
         <div className="container">
-          <h1>User Profile</h1>
-          <div className="mx-auto modal-form row">
+          <h1 className="">User Profile</h1>
+          <div className="mx-auto mt-4 modal-form row">
             <div className="col-md-5 left-col bg-info text-center">
               <img
                 className="rounded-circle m-5 img-thumbnail"
