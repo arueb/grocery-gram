@@ -3,7 +3,7 @@ const router = express.Router();
 const _ = require("lodash");
 const { Review, validate } = require("../models/review");
 const { User } = require("../models/user");
-const { Recipe } = require("../models/recipe")
+const { Recipe } = require("../models/recipe");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -25,7 +25,8 @@ router.post("/", async (req, res) => {
   let recipe = {};
   try {
     recipe = await Recipe.findOne({ _id: req.body.recipeId });
-    if (!recipe) return res.status(404).send("The specified recipe does not exist");
+    if (!recipe)
+      return res.status(404).send("The specified recipe does not exist");
   } catch (err) {
     console.log("Problem Finding Recipe.  Error:", err);
     return res.status(500).send("Problem with recipeId");
@@ -38,27 +39,27 @@ router.post("/", async (req, res) => {
     await review.save();
     console.log("New review saved id=" + review._id);
   } catch (err) {
-    return res.status(500).send("Problem saving recipe to db", err)
+    return res.status(500).send("Problem saving recipe to db", err);
   }
 
   // Try updating user.reviews
   try {
-    await User.findByIdAndUpdate(user._id,
-      { $push: { reviews: review._id } }
-    );
+    await User.findByIdAndUpdate(user._id, { $push: { reviews: review._id } });
   } catch (err) {
     console.log(err);
-    res.status(500).send("Problem updating user reviews array")
+    res.status(500).send("Problem updating user reviews array");
   }
 
   // Try updating recipe.reviews
   try {
-    await Recipe.findByIdAndUpdate(recipe._id,
-      { $push: { reviews: review._id } }
-    );
+    await Recipe.findByIdAndUpdate(recipe._id, {
+      $push: { reviews: review._id },
+      $inc: { numReviews: 1 },
+      //   numReviews: 1,
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).send("Problem updating recipe reviews array")
+    res.status(500).send("Problem updating recipe reviews array");
   }
 
   res.status(201).json(review);
@@ -89,10 +90,10 @@ router.get("/", async (req, res) => {
     ]);
 
     // remove user data except username
-    reviews.forEach(review => {
+    reviews.forEach((review) => {
       review.username = review.user[0].username;
       delete review.user;
-    })
+    });
 
     res.send(reviews);
   } catch (err) {
@@ -100,23 +101,27 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   // check to make sure the specified review exists
-  let review = {}
+  let review = {};
   try {
     review = await Review.findByIdAndRemove(req.params.id);
     if (!review) {
-      return res.status(404).send("The recipeId could not be found.");
+      return res.status(404).send("The reviewId could not be found.");
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).send("Something failed finding & deleting the review.");
+    return res
+      .status(500)
+      .send("Something failed finding & deleting the review.");
   }
 
   // Remove review from the reviewers user.reviews
   try {
-    await User.updateOne({reviews: review._id},
-      { $pull: { reviews: review._id } });
+    await User.updateOne(
+      { reviews: review._id },
+      { $pull: { reviews: review._id } }
+    );
   } catch (err) {
     console.log(err);
     res.status(500).send("Something failed updating the user.");
@@ -124,8 +129,13 @@ router.delete('/:id', async (req, res) => {
 
   // Remove the review from recipe.reviews
   try {
-    await Recipe.updateOne({reviews: review._id},
-      { $pull: { reviews: review._id } });
+    await Recipe.updateOne(
+      { reviews: review._id },
+      {
+        $pull: { reviews: review._id },
+        $inc: { numReviews: -1 },
+      }
+    );
   } catch (err) {
     console.log(err);
     res.status(500).send("Something failed updating the recipe.");

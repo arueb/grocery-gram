@@ -471,8 +471,8 @@ class ShoppingList extends Component {
                         />
                       </span>
                     </li>
-                ))}
-              {(numAllItems > 0) &&
+                  ))}
+              {numAllItems > 0 && (
                 <React.Fragment>
                   <button
                     type="button"
@@ -490,53 +490,54 @@ class ShoppingList extends Component {
                     aria-labelledby="warnClearAll"
                     aria-hidden="true"
                   >
-                  <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">
-                          Are you sure?
-                        </h5>
-                        <button
-                          type="button"
-                          className="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                        >
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        This will delete all items in your Shopping List including your lined-through items. This
-                        cannot be undone.
-                      </div>
-                      <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-dismiss="modal"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => this.handleClearAll()}
-                          type="button"
-                          data-dismiss="modal"
-                          className="btn btn-danger"
-                        >
-                          Clear All
-                        </button>
-                      </div>
+                    <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
+                            Are you sure?
+                          </h5>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          This will delete all items in your Shopping List
+                          including your lined-through items. This cannot be
+                          undone.
+                        </div>
+                        <div className="modal-footer">
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={() => this.handleClearAll()}
+                            type="button"
+                            data-dismiss="modal"
+                            className="btn btn-danger"
+                          >
+                            Clear All
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </React.Fragment>
-              }
+              )}
             </div>
           </div>
           <div className="col-md-4 order-md-12 pie">
-            <h5>List Summary</h5>
             {totalNumItems > 0 && (
               <React.Fragment>
+                <h5>List Summary</h5>
                 <div className="totals">
                   ${totalPriceItems}
                   <span className="num-items">
@@ -550,9 +551,9 @@ class ShoppingList extends Component {
                 />
               </React.Fragment>
             )}
-            <div className="trial-cover"></div>
+            {/* <div className="trial-cover"></div> */}
             <ul className="category-legend">
-              {totalNumItems &&
+              {totalNumItems > 0 &&
                 catPercents.map((cat, i) => {
                   return (
                     <li key={i}>
@@ -572,7 +573,7 @@ class ShoppingList extends Component {
             </ul>
           </div>
           <div className="col-md-3 order-md-1">
-            <h5>My Staples</h5>
+            {!isLoading && <h5>My Staples</h5>}
             <div className="list-group lst-grp-hover myStaples">
               {!isLoading &&
                 staples &&
@@ -589,7 +590,7 @@ class ShoppingList extends Component {
                     )
                 )}
             </div>
-            <h5 className="my-recipes-header">My Recipes</h5>
+            {!isLoading && <h5 className="my-recipes-header">My Recipes</h5>}
             <div className="list-group lst-grp-hover myRecipes">
               {!isLoading &&
                 userRecipes &&
