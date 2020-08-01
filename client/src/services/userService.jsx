@@ -45,3 +45,7 @@ export function updateUserProperty(userId, data) {
 export function updateItemCounts(userId, itemCounts) {
   return http.patch(userUrl(userId), { itemCounts });
 }
+
+export function getUserReviews(id) {
+  return http.get(userUrl(id) + "/reviews");
+}
