@@ -43,11 +43,17 @@ class App extends Component {
             <Switch>
               <Route
                 path="/register"
-                render={(props) => <RegisterForm {...props} pageTitle="Register - GroceryGram" />}
+                render={(props) =>
+                  <RegisterForm {...props}
+                    pageTitle="Register - GroceryGram"
+                  />}
               />
               <Route
                 path="/login"
-                render={(props) => <LoginForm {...props} pageTitle="Login - GroceryGram" />}
+                render={(props) =>
+                  <LoginForm {...props}
+                    pageTitle="Login - GroceryGram"
+                  />}
               />
               <ProtectedRoute
                 path={'/logout'}
@@ -69,11 +75,21 @@ class App extends Component {
               />
               <Route
                 path="/explore-recipes"
-                render={(props) => <ExploreRecipes {...props} user={user} pageTitle={"Explore Recipes - GroceryGram"} />}
+                render={(props) =>
+                  <ExploreRecipes
+                    {...props}
+                    user={user}
+                    pageTitle={"Explore Recipes - GroceryGram"}
+                  />}
               />
               <Route
                 path="/recipes/:id"
-                render={(props) => <RecipeDetail {...props} user={user} pageTitle={"Recipe Page - GroceryGram"} />}
+                render={(props) =>
+                  <RecipeDetail
+                    {...props}
+                    user={user}
+                    pageTitle={"Recipe Page - GroceryGram"}
+                  />}
               />
               <ProtectedRoute
                 path={"/shopping-list"}
@@ -91,8 +107,11 @@ class App extends Component {
                 appCDM={this.componentDidMount.bind(this)}
               />
               <Route
-              path="/not-found" 
-              render={(props) => <NotFound {...props} pageTitle={"Page Not Found - GroceryGram"} />}
+                path="/not-found"
+                render={(props) =>
+                  <NotFound {...props}
+                    pageTitle={"Page Not Found - GroceryGram"}
+                  />}
               />
               <Redirect exact from="/"
                 to={auth.isAuthenticated() ?
