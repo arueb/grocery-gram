@@ -282,8 +282,6 @@ class RecipeForm extends Form {
     let recipeRecord = {
       title: this.state.data.title,
       userId: this.props.user._id,
-      avgRating: 0,
-      numReviews: 0,
       category: this.state.data.category,
       images: imageLinks,
       isPublished: this.state.data.isPublished,
