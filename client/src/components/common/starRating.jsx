@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import "../../css/starRating.css";
 
-const StarRating = ({ starSize = 50, onChange}) => {
-  const [rating, setRating] = useState(null);
+const StarRating = ({ starSize = 50, onChange, currentStars}) => {
+//  const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
   return (
@@ -18,12 +18,12 @@ const StarRating = ({ starSize = 50, onChange}) => {
               name="rating"
               style={{ display: "none" }}
               value={ratingValue}
-              onClick={() => setRating(ratingValue)}
+              onClick={() => onChange(ratingValue)} //was setRating(ratingValue)
               onChange={() => onChange(ratingValue)}
             />
             <FaStar
               size={starSize}
-              color={ratingValue <= (hover || rating) ? "#ffc107" : "#DDDDDD"}
+              color={ratingValue <= (hover || currentStars) ? "#ffc107" : "#DDDDDD"} // was  (hover || rating)
               onMouseEnter={() => setHover(ratingValue)}
               onMouseLeave={() => setHover(null)}
             />

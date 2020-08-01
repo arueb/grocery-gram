@@ -282,8 +282,6 @@ class RecipeForm extends Form {
     let recipeRecord = {
       title: this.state.data.title,
       userId: this.props.user._id,
-      avgRating: 0,
-      numReviews: 0,
       category: this.state.data.category,
       images: imageLinks,
       isPublished: this.state.data.isPublished,
@@ -302,7 +300,7 @@ class RecipeForm extends Form {
         // console.log("patch success");
       }
       // redirect to my-recipes page
-      this.props.history.push("/my-recipes");
+      this.props.history.push("/recipes/" + id);
     } catch (ex) {
       console.log("Something went wrong with uploading a recipe");
       console.log(ex);
