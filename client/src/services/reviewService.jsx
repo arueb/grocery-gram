@@ -6,8 +6,8 @@ function reviewsUrl(id) {
     return `${apiEndpoint}/${id}`;
 }
 
-export function deleteReview(recipeId) {
-    return http.delete(reviewsUrl(recipeId));
+export function deleteReview(Id) {
+    return http.delete(reviewsUrl(Id));
 }
 
 export function newReview(review) {

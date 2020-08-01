@@ -55,7 +55,7 @@ router.post("/:id/items", async (req, res) => {
   try {
     const user = await User.findOneAndUpdate(
       { _id: req.params.id },
-      {$push: { addedItems: itemsToAdd }},
+      { $push: { addedItems: itemsToAdd } },
     )
     res.sendStatus(201)
   } catch (err) {
@@ -285,7 +285,7 @@ router.get('/:userId/reviews', async (req, res) => {
   let user = await User.findById(req.params.userId);
   if (!user) return res.status(404).send("The userId could not be found.");
 
-  const reviews = await Review.aggregate([
+  let reviews = await Review.aggregate([
     { $match: { _id: { $in: user.reviews } } },
     {
       $lookup: {
@@ -309,12 +309,18 @@ router.get('/:userId/reviews', async (req, res) => {
   ]);
 
   // remove user data except username
-  reviews.forEach(review => {
+  let newReviews = await Promise.all(reviews.map(async review => {
     review.username = review.user[0].username;
     delete review.user;
-  });
 
-  res.json(reviews);
+    const recipeRecord = await Recipe.findOne({ reviews: { "$in": [review._id] } }, "title _id");
+    review.recipeId = recipeRecord._id;
+    review.recipeTitle = recipeRecord.title;
+
+    return review;
+  }));
+  
+  res.json(newReviews);
 })
 
 module.exports = router;

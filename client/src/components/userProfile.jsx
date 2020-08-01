@@ -3,8 +3,9 @@ import Form from "./common/form";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import http from "../services/httpService";
-import { updateUserProperty } from "../services/userService";
+import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt } from "../services/authService"
+import AvgStarRating from "./common/avgStarRating";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -14,7 +15,9 @@ class UserProfile extends Form {
       profileImageUrl: process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png",
       imageFileToUpload: "",
       data: { email: "", password: "" },
+      userReviews: [],
       errors: {},
+      modalReview: {},
     };
 
     this.storeImageFile = this.storeImageFile.bind(this);
@@ -76,14 +79,26 @@ class UserProfile extends Form {
 
   async componentDidMount() {
     document.title = this.props.pageTitle
+
     if (this.props.user.profileImageUrl) {
       this.setState({ profileImageUrl: this.props.user.profileImageUrl })
     }
+
+    this.populateReviews();
+  }
+
+  async populateReviews() {
+    const reviews = await getUserReviews(this.props.user._id);
+    this.setState({ userReviews: reviews.data });
   }
 
   storeImageFile(e) {
     this.setState({ imageFileToUpload: e.target.files[0] });
     this.setState({ profileImageUrl: URL.createObjectURL(e.target.files[0]) });
+  }
+
+  populateDeleteModal(review) {
+    this.setState({modalReview: review});
   }
 
   render() {
@@ -110,6 +125,82 @@ class UserProfile extends Form {
                 {this.renderInput("confirmPassword", "Confirm Password")}
                 {this.renderButton("Change Password")}
               </form>
+            </div>
+          </div>
+          <h2>Your Reviews:</h2>
+          <div className="alert alert-danger" role="alert">
+            Below is a horribly inefficient query
+          </div>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Recipe</th>
+                  <th scope="col">Your Rating</th>
+                  <th scope="col">Comments</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.userReviews.map(review => (
+                  <tr key={review._id}>
+                    <td><a href={"/recipes/" + review.recipeId} >{review.recipeTitle}</a></td>
+                    <td>
+                      <AvgStarRating
+                        avgRating={review.rating}
+                        starSize={15}
+                      />
+                    </td>
+                    <td>{review.comments}</td>
+                    <td><button type="button" className="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button></td>
+                    <td><button type="button" className="btn btn-danger"  data-toggle="modal" data-target="#deleteModal" onClick={() => this.populateDeleteModal(review)}>Delete</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Edit Modal */}
+        <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                Doing edits would be a pain, mainly in updating the ratings of the recipes.  Not impossible or difficult, just annoying.
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Delete Modal */}
+        <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Delete Review</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete this review?</p>
+                <p>{JSON.stringify(this.state.modalReview)}</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" className="btn btn-danger">Delete</button>
+              </div>
             </div>
           </div>
         </div>
