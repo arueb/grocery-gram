@@ -30,16 +30,14 @@ class LoginForm extends Form {
       await auth.login(email, password);
 
       const { state } = this.props.location;
-      console.log(state);
       window.location = state ? state.from.pathname : "/shopping-list";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
-        errors.username = ex.response.data;
+        errors.email = ex.response.data;
         this.setState({ errors });
       }
     }
-    console.log("submitted");
   };
 
   render() {

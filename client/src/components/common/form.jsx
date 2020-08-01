@@ -34,7 +34,7 @@ class Form extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault(); //prevent roundtrip http request to server
-    // console.log("handling submit");
+    console.log("handling submit");
     const errors = this.validate();
     console.log(errors);
     this.setState({ errors: errors || {} });
@@ -100,6 +100,8 @@ class Form extends Component {
 
   renderInput(name, label, type = "text", placeholder = "") {
     const { data, errors } = this.state;
+    console.log("errors in renderInput errors[name]", errors[name]);
+    console.log("name", name);
     return (
       <Input
         type={type}
@@ -121,12 +123,7 @@ class Form extends Component {
         name={name}
         label={label}
         checked={checked}
-        // checked={data["isPublished"]}
-        // value={data[name]}
-        // onClick={this.handleChange}
         onChange={this.handleSliderChange}
-        // onClick={(e) => this.handleSliderChange(e)}
-        // handleChange={this.handleChange.bind(this)}
         error={errors[name]}
       />
     );
