@@ -34,7 +34,7 @@ class Form extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault(); //prevent roundtrip http request to server
-    // console.log("handling submit");
+    console.log("handling submit");
     const errors = this.validate();
     console.log(errors);
     this.setState({ errors: errors || {} });
