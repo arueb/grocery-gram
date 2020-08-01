@@ -173,7 +173,7 @@ class UserProfile extends Form {
                 </button>
               </div>
               <div className="modal-body">
-                Doing edits would be a pain, mainly in updating the ratings of the recipes.  Not impossible or difficult, just annoying.
+                <p>I don't believe there is a patch reviews route at all, so that would need to be included</p>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -194,7 +194,7 @@ class UserProfile extends Form {
                 </button>
               </div>
               <div className="modal-body">
-                <p>Are you sure you want to delete this review?</p>
+                <p>There is already a route for delete review, but it does not correctly handle changing the review average</p>
                 <p>{JSON.stringify(this.state.modalReview)}</p>
               </div>
               <div className="modal-footer">
