@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Joi from "joi-browser";
 import ImageGallery from "react-image-gallery";
+import { toast } from "react-toastify";
 import Form from "./common/form";
 import Like from "./common/like";
 import ReviewRow from "./common/reviewRow";
@@ -12,7 +14,8 @@ import { FaPen } from "react-icons/fa";
 import { getRecipe, getReviews } from "../services/recipeService";
 import { newReview } from "../services/reviewService";
 import "react-image-gallery/styles/css/image-gallery.css";
-import { updateUserProperty } from "../services/userService";
+import { updateUserProperty, addToShoppingList } from "../services/userService";
+
 class RecipeDetail extends Form {
   constructor(props) {
     super(props);
@@ -26,6 +29,7 @@ class RecipeDetail extends Form {
         category: "",
         isPublished: false,
         instructions: "",
+        ingredients: [],
       },
       reviews: [],
       isSaved: null,
@@ -47,6 +51,7 @@ class RecipeDetail extends Form {
     instructions: Joi.any(),
     avgRating: Joi.any(),
     numReviews: Joi.any(),
+    ingredients: Joi.any(),
   };
 
   async componentDidMount() {
@@ -62,6 +67,7 @@ class RecipeDetail extends Form {
       this.setState({ savedRecipes: user.data.savedRecipes, isSaved });
     }
 
+    document.title = this.state.data.title + " - GroceryGram";
     // Load the reviews
     await this.populateReviews();
   }
@@ -77,6 +83,7 @@ class RecipeDetail extends Form {
       data.title = recipe[0].title;
       data.category = recipe[0].category;
       data.instructions = recipe[0].instructions;
+      data.ingredients = recipe[0].ingredients;
       data.isPublished = recipe[0].isPublished;
       data.author = recipe[0].username;
       data._id = recipe[0]._id;
@@ -85,6 +92,11 @@ class RecipeDetail extends Form {
       data.numReviews = recipe[0].numReviews;
       data.images = recipe[0].images;
       data.reviews = recipe[0].reviews;
+
+      data.ingredients.map(ingredient => (
+        ingredient.addToList = true
+      ))
+
       this.setState({ data });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
@@ -175,7 +187,15 @@ class RecipeDetail extends Form {
   };
 
   renderIcon = () => {
-    if (this.state.data.userId === this.props.user._id) return <FaPen />;
+    if (this.state.data.userId === this.props.user._id) {
+      return (
+        <div>
+          <Link to={"/my-recipes/" + this.props.match.params.id}>
+            <FaPen className="text-secondary"/>
+          </Link>
+        </div>
+      )
+    };
 
     return (
       <React.Fragment>
@@ -184,6 +204,50 @@ class RecipeDetail extends Form {
       </React.Fragment>
     );
   };
+
+  handleIngredientCick = (ingredientIndex, isChecked) => {
+    let data = this.state.data;
+    data.ingredients[ingredientIndex].addToList = isChecked;
+    this.setState({ data });
+  }
+
+  async handleAddIngredients() {
+    try {
+      let newAddedItemIds = [];
+      this.state.data.ingredients.forEach(ingredient => {
+        if (ingredient.addToList) {
+          newAddedItemIds.push(ingredient.itemId);
+        }
+      })
+
+      if (newAddedItemIds.length === 0) {
+        return toast.info('No items selected to add to shopping list', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
+      await addToShoppingList(this.props.user._id, newAddedItemIds);
+
+      toast.success('Items added to Shopping List!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (err) {
+      // revert state back to original
+      console.log("Something went wrong.", err);
+    }
+  }
 
   render() {
     const { data } = this.state;
@@ -223,31 +287,36 @@ class RecipeDetail extends Form {
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Measure</th>
-                  <th scope="col">Ingredient</th>
+                  <th colSpan={this.props.user ? 4 : 3}>Ingredients List</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Cup</td>
-                  <td>Flour</td>
-                </tr>
-                <tr>
-                  <th scope="row">4</th>
-                  <td>Gallons</td>
-                  <td>Milk</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Dash</td>
-                  <td>Coconut Oil</td>
-                </tr>
+                {this.state.data.ingredients.map((ingredient, index) => (
+                  <tr key={index}>
+                    {this.props.user ?
+                      <td>
+                        <input
+                          type="checkbox"
+                          onChange={checkbox => this.handleIngredientCick(index, checkbox.target.checked)}
+                          checked={ingredient.addToList}
+                        />
+                      </td>
+                      :
+                      null}
+                    <th scope="row">{ingredient.qty}</th>
+                    <td>{ingredient.unit}</td>
+                    <td>{ingredient.item.name}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+            {this.props.user ?
+              this.renderButtonCustomHandler("Add Ingredients To List", this.handleAddIngredients.bind(this))
+              :
+              null}
           </div>
           <div className="col-md-6">
+            <h3>Recipe Notes:</h3>
             <p>{this.state.data.instructions}</p>
           </div>
         </div>

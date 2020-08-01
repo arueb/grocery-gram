@@ -74,12 +74,19 @@ class RecipeForm extends Form {
 
     // load the units and quantitiy options for select boxes into local state
     this.setState({ units: getUnits(), quantities: getQuantities() });
+
+    document.title = "Shopping List - GroceryGram"
+    if (this.props.computedMatch.params.id === "new") {
+      document.title = "Create A Recipe - GroceryGram";
+    } else {
+      document.title = "Edit " + this.state.data.title + " - GroceryGram";
+    }
   }
 
   // populates recipe in state if valid recipe id
   async populateRecipe() {
     try {
-      const recipeId = this.props.match.params.id;
+      const recipeId = this.props.computedMatch.params.id;
       //   console.log("recipeId", recipeId);
       if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
 
@@ -141,7 +148,7 @@ class RecipeForm extends Form {
   };
 
   renderDeleteButton() {
-    if (this.props.match.params.id !== "new") {
+    if (this.props.computedMatch.params.id !== "new") {
       return this.renderButtonCustomHandler(
         "Delete Recipe",
         this.handleDeleteRecipe
@@ -159,7 +166,7 @@ class RecipeForm extends Form {
   }
 
   renderHeader() {
-    if (this.props.match.params.id === "new") {
+    if (this.props.computedMatch.params.id === "new") {
       return <h2>Create A Recipe</h2>;
     } else {
       return <h2>Edit Recipe</h2>;
@@ -284,7 +291,7 @@ class RecipeForm extends Form {
       ingredients: this.state.ingredients,
     };
 
-    const { id } = this.props.match.params;
+    const { id } = this.props.computedMatch.params;
     try {
       if (id === "new") {
         // console.log("saving new recipe", recipeRecord);
@@ -368,7 +375,7 @@ class RecipeForm extends Form {
                     {[...Array(ingredients.length)].map((row, i) => {
                       return (
                         (this.state.recipeId ||
-                          this.props.match.params.id === "new") && (
+                          this.props.computedMatch.params.id === "new") && (
                           <tr key={i}>
                             {/* </tr><tr key={i}>    */}
                             <td className="qty">

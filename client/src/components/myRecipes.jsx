@@ -29,6 +29,8 @@ class MyRecipes extends Component {
   };
 
   async componentDidMount() {
+    document.title = this.props.pageTitle;
+
     this.setState({ selectValue: this.getInitialSelectVal() });
 
     try {

@@ -20,6 +20,10 @@ class LoginForm extends Form {
     password: Joi.string().required().min(5).label("Password"),
   };
 
+  componentDidMount() {
+    document.title = this.props.pageTitle;
+  }
+
   doSubmit = async () => {
     try {
       const { email, password } = this.state.data;

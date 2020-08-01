@@ -50,6 +50,21 @@ router.post("/", async (req, res) => {
     );
 });
 
+router.post("/:id/items", async (req, res) => {
+  const { itemsToAdd } = req.body;
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      {$push: { addedItems: itemsToAdd }},
+    )
+    res.sendStatus(201)
+  } catch (err) {
+    // id isn't valid mongo ID (e.g. ID isn't 24 chars)
+    console.log("/get/:id Error:", err);
+    res.status(500).send("Something failed.");
+  }
+});
+
 // update given user's properties with properties sent in request body
 router.patch("/:id", async (req, res) => {
   const { error } = validate(req.body, true); // ignore required
@@ -96,7 +111,7 @@ router.patch("/:id", async (req, res) => {
       return res.header("x-auth-token", newToken)
         .header("access-control-expose-headers", "x-auth-token")
         .json(userJSON)
-    } 
+    }
 
     res.json(userJSON);
   } catch (err) {
