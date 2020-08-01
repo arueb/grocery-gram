@@ -133,6 +133,7 @@ class RecipeDetail extends Form {
 
     // Get the page again
     await this.populateReviews();
+    await this.populateRecipe();
 
     const data = { ...this.state.data };
     data.reviewNotes = "";
@@ -149,7 +150,6 @@ class RecipeDetail extends Form {
         return imgObject;
       });
 
-      //   console.log(images);
       return images;
     }
   };
@@ -166,11 +166,9 @@ class RecipeDetail extends Form {
 
     if (isSaved) {
       // remove from saved recipes
-      console.log("remove from saved recipes");
       savedRecipes = this.state.savedRecipes.filter((r) => r !== recipe._id);
     } else {
       // add to saved recipes
-      console.log("add to saved recipes");
       savedRecipes = [...this.state.savedRecipes, recipe._id];
     }
 
@@ -245,7 +243,7 @@ class RecipeDetail extends Form {
       });
     } catch (err) {
       // revert state back to original
-      console.log("Something went wrong.", err);
+      console.log("Adding Ingredients Error", err);
     }
   }
 
@@ -325,7 +323,7 @@ class RecipeDetail extends Form {
           <div>
             <h3 className="my-3">Review The Recipe</h3>
             <form onSubmit={this.handleSubmit}>
-              <StarRating starSize={25} onChange={this.handleStarChange} />
+              <StarRating starSize={25} onChange={this.handleStarChange} currentStars={this.state.data.reviewStars} />
               <br></br>
               {this.renderTextArea("reviewNotes", "", 3, "Add your review here")}
               {this.renderButton("Submit Review")}
