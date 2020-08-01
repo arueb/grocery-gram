@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { getUserRecipes } from "../services/userService";
+import {
+  getUserRecipes,
+  getUserData,
+  updateUserProperty,
+} from "../services/userService";
 import RecipeBlock from "./recipeBlock";
 import { getCategories } from "../services/categoryService";
 import Pagination from "./common/pagination";
@@ -30,6 +34,7 @@ class MyRecipes extends Component {
 
   async componentDidMount() {
     document.title = this.props.pageTitle;
+    // this.handleUnsaveRecipe = this.handleUnsaveRecipe.bind(this);
 
     this.setState({ selectValue: this.getInitialSelectVal() });
 
@@ -37,30 +42,32 @@ class MyRecipes extends Component {
       const user = this.props.user;
       if (user) {
         const { data: recipes } = await getUserRecipes(user._id);
+        const { data: userData } = await getUserData(user._id);
         const options = getCategories(recipes);
-        this.setState({ recipes, options });
+        this.setState({ recipes, options, userData });
       }
     } catch (ex) {
       console.log("Something failed", ex);
     }
   }
 
-  renderRecipeBlocks(recipes, userId) {
-    let items = [];
-    if (recipes) {
-      recipes.forEach(function (recipe) {
-        items.push(
-          <RecipeBlock
-            userId={userId}
-            key={recipe._id}
-            recipe={recipe}
-            forExplore={false}
-          />
-        );
-      });
-    }
-    return items;
-  }
+  //   renderRecipeBlocks(recipes, userId) {
+  //     let items = [];
+  //     if (recipes) {
+  //       recipes.forEach(function (recipe) {
+  //         items.push(
+  //           <RecipeBlock
+  //             unSave={this.handleUnsaveRecipe}
+  //             userId={userId}
+  //             key={recipe._id}
+  //             recipe={recipe}
+  //             forExplore={false}
+  //           />
+  //         );
+  //       });
+  //     }
+  //     return items;
+  //   }
 
   handleOwnerSelect = (ownerType) => {
     this.setState({
@@ -90,6 +97,28 @@ class MyRecipes extends Component {
       selectedOwnerType: "All",
       selectValue: this.getInitialSelectVal(),
     });
+  };
+
+  handleUnsaveRecipe = async (recipeId) => {
+    console.log("handling unsave recipe", recipeId);
+    const recipes = [...this.state.recipes];
+    const filtered = recipes.filter((r) => r._id !== recipeId);
+    this.setState({ recipes: filtered });
+
+    // call backend to remove from saved recipes
+    const oldSavedRecipes = [...this.state.userData.savedRecipes];
+    // console.log("savedRecipes", savedRecipes);
+    const savedRecipes = oldSavedRecipes.filter((r) => {
+      return r !== recipeId;
+    });
+    try {
+      await updateUserProperty(this.state.userData._id, { savedRecipes });
+    } catch (ex) {
+      this.setState({ recipes });
+      console.log("Something failed", ex);
+    }
+
+    // console.log("newSavedRecipes", newSavedRecipes);
   };
 
   render() {
@@ -185,7 +214,20 @@ class MyRecipes extends Component {
           </div>
         </div>
         <div className="row">
-          {this.renderRecipeBlocks(recipes, this.props.user._id)}
+          {recipes &&
+            recipes.map((recipe) => {
+              return (
+                <RecipeBlock
+                  unSave={this.handleUnsaveRecipe}
+                  userId={this.props.user._id}
+                  key={recipe._id}
+                  recipe={recipe}
+                  forExplore={false}
+                />
+              );
+            })}
+
+          {/* {this.renderRecipeBlocks(recipes, this.props.user._id)} */}
         </div>
         <Pagination
           recipesCount={filtered.length}

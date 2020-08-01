@@ -43,7 +43,7 @@ class RecipeDetail extends Form {
     userId: Joi.any(),
     _id: Joi.any(),
     reviews: Joi.any(),
-    images: Joi.any(),          // I am not sure if it's correct to just be ignoring all this stuff
+    images: Joi.any(), // I am not sure if it's correct to just be ignoring all this stuff
     author: Joi.any(),
     title: Joi.any(),
     category: Joi.any(),
@@ -93,9 +93,7 @@ class RecipeDetail extends Form {
       data.images = recipe[0].images;
       data.reviews = recipe[0].reviews;
 
-      data.ingredients.map(ingredient => (
-        ingredient.addToList = true
-      ))
+      data.ingredients.map((ingredient) => (ingredient.addToList = true));
 
       this.setState({ data });
     } catch (ex) {
@@ -191,11 +189,11 @@ class RecipeDetail extends Form {
       return (
         <div>
           <Link to={"/my-recipes/" + this.props.match.params.id}>
-            <FaPen className="text-secondary"/>
+            <FaPen className="text-secondary" />
           </Link>
         </div>
-      )
-    };
+      );
+    }
 
     return (
       <React.Fragment>
@@ -209,19 +207,19 @@ class RecipeDetail extends Form {
     let data = this.state.data;
     data.ingredients[ingredientIndex].addToList = isChecked;
     this.setState({ data });
-  }
+  };
 
   async handleAddIngredients() {
     try {
       let newAddedItemIds = [];
-      this.state.data.ingredients.forEach(ingredient => {
+      this.state.data.ingredients.forEach((ingredient) => {
         if (ingredient.addToList) {
           newAddedItemIds.push(ingredient.itemId);
         }
-      })
+      });
 
       if (newAddedItemIds.length === 0) {
-        return toast.info('No items selected to add to shopping list', {
+        return toast.info("No items selected to add to shopping list", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -234,7 +232,7 @@ class RecipeDetail extends Form {
 
       await addToShoppingList(this.props.user._id, newAddedItemIds);
 
-      toast.success('Items added to Shopping List!', {
+      toast.success("Items added to Shopping List!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -264,13 +262,14 @@ class RecipeDetail extends Form {
               starSize={25}
             />
           </div>
-          {this.props.user ?
-            <span style={{ float: "right", marginTop: "-25px" }}>
+          {this.props.user ? (
+            <span
+              className="save-recipe"
+              style={{ float: "right", marginTop: "-25px" }}
+            >
               {this.state.savedRecipes && this.renderIcon()}
             </span>
-            :
-            null
-          }
+          ) : null}
         </section>
         <section className="image-gallery">
           {data.images && (
@@ -293,16 +292,20 @@ class RecipeDetail extends Form {
               <tbody>
                 {this.state.data.ingredients.map((ingredient, index) => (
                   <tr key={index}>
-                    {this.props.user ?
+                    {this.props.user ? (
                       <td>
                         <input
                           type="checkbox"
-                          onChange={checkbox => this.handleIngredientCick(index, checkbox.target.checked)}
+                          onChange={(checkbox) =>
+                            this.handleIngredientCick(
+                              index,
+                              checkbox.target.checked
+                            )
+                          }
                           checked={ingredient.addToList}
                         />
                       </td>
-                      :
-                      null}
+                    ) : null}
                     <th scope="row">{ingredient.qty}</th>
                     <td>{ingredient.unit}</td>
                     <td>{ingredient.item.name}</td>
@@ -310,10 +313,12 @@ class RecipeDetail extends Form {
                 ))}
               </tbody>
             </table>
-            {this.props.user ?
-              this.renderButtonCustomHandler("Add Ingredients To List", this.handleAddIngredients.bind(this))
-              :
-              null}
+            {this.props.user
+              ? this.renderButtonCustomHandler(
+                  "Add Ingredients To List",
+                  this.handleAddIngredients.bind(this)
+                )
+              : null}
           </div>
           <div className="col-md-6">
             <h3>Recipe Notes:</h3>
@@ -321,25 +326,31 @@ class RecipeDetail extends Form {
           </div>
         </div>
         <hr className="divider" />
-        {this.props.user ?
+        {this.props.user ? (
           <div>
             <h3 className="my-3">Review The Recipe</h3>
             <form onSubmit={this.handleSubmit}>
               <StarRating starSize={25} onChange={this.handleStarChange} />
               <br></br>
-              {this.renderTextArea("reviewNotes", "", 3, "Add your review here")}
+              {this.renderTextArea(
+                "reviewNotes",
+                "",
+                3,
+                "Add your review here"
+              )}
               {this.renderButton("Submit Review")}
             </form>
           </div>
-          :
-          null
-        }
+        ) : null}
         {this.state.reviews.map((review) => (
           <ReviewRow
             key={review._id}
             username={review.username}
             comments={review.comments}
-            userImage={review.profileImageUrl || (process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png")}
+            userImage={
+              review.profileImageUrl ||
+              process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
+            }
             date={review.date}
             rating={review.rating}
             starSize={20}
