@@ -302,7 +302,7 @@ class RecipeForm extends Form {
         // console.log("patch success");
       }
       // redirect to my-recipes page
-      this.props.history.push("/my-recipes");
+      this.props.history.push("/recipes/" + id);
     } catch (ex) {
       console.log("Something went wrong with uploading a recipe");
       console.log(ex);
