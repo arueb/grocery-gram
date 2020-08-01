@@ -11,6 +11,7 @@ const categories = [
   { _id: 6, name: "Dairy", hexColor: "#a29bfe" },
   { _id: 7, name: "Cereal", hexColor: "#fab1a0" },
   { _id: 8, name: "Nuts", hexColor: "#fdcb6e" },
+  { _id: 9, name: "Vegetables", hexColor: "#009933" },
 ];
 
 // function itemUrl(id) {

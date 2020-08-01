@@ -29,6 +29,11 @@ class ShoppingList extends Component {
     errors: {},
   };
 
+  constructor(props) {
+    super(props);
+    this.itemSearchRef = React.createRef();
+  }
+
   async componentDidMount() {
     document.title = this.props.pageTitle
     
@@ -351,7 +356,8 @@ class ShoppingList extends Component {
     newRemovedItems.splice(idx, 1);
     const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
     this.setState({ removedItems: newRemovedItems });
-
+    const itemSearchNode = this.itemSearchRef.current;
+    itemSearchNode.focus();
     try {
       await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
     } catch (err) {
@@ -412,7 +418,7 @@ class ShoppingList extends Component {
         <hr className="divider" />
         <div className="row">
           <div className="col-md-5 order-md-4 shop-list">
-            <div className="itemSearch pb-3">
+            <div className="itemSearch pb-3" ref={this.itemSearchRef}>
               <ItemSearch
                 items={this.props.items}
                 update={this.handleUpdate}
