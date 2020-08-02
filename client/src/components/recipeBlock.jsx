@@ -33,24 +33,39 @@ class RecipeBlock extends Component {
     }
   }
 
+  //   handleUnsaveRecipe = (recipeId) => {
+  //     console.log("unsave recipe id: ", recipeId);
+  //     console.log(this.state.recipes);
+  //     // const recipes = [...this.state.recipes];
+  //     // const filtered = recipes.filter((r) => r._id !== recipeId);
+  //     // this.setState({ recipes: filtered });
+  //   };
+
   renderHeartOrPencilOrNone() {
     // Case if user is not logged in
     if (this.props.userId === undefined) {
-      return null
+      return null;
     }
     // Case if user owns this recipe
     else if (this.props.recipe.userId === this.props.userId) {
-      return <div className="edit-icon">
-        <Link to={"/my-recipes/" + this.props.recipe._id}>
-          <FaPen></FaPen>
-        </Link>
-      </div>
+      return (
+        <div className="edit-icon">
+          <Link to={"/my-recipes/" + this.props.recipe._id}>
+            <FaPen></FaPen>
+          </Link>
+        </div>
+      );
     }
     // Case if user does not own this recipe
     else if (this.props.recipe.userId !== this.props.userId) {
-      return <div className="saved-icon">
-        <FaHeart></FaHeart>
-      </div>
+      return (
+        <div className="saved-icon">
+          <FaHeart
+            style={{ cursor: "pointer" }}
+            onClick={() => this.props.unSave(this.props.recipe._id)}
+          ></FaHeart>
+        </div>
+      );
     }
   }
 
@@ -75,7 +90,7 @@ class RecipeBlock extends Component {
               </div>
             </Link>
 
-            {this.renderHeartOrPencilOrNone()}
+            {!this.props.forExplore && this.renderHeartOrPencilOrNone()}
           </div>
         </div>
       </React.Fragment>
