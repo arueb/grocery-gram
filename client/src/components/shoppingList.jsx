@@ -35,8 +35,8 @@ class ShoppingList extends Component {
   }
 
   async componentDidMount() {
-    document.title = this.props.pageTitle
-    
+    document.title = this.props.pageTitle;
+
     // Bind the this context to the handler function
     this.handleUpdate = this.handleUpdate.bind(this);
 
@@ -457,7 +457,7 @@ class ShoppingList extends Component {
                 ? null
                 : removedItems.map((item, i) => (
                     <li
-                      onClick=""
+                      //   onClick=""
                       key={i}
                       className="list-group-item"
                       style={{
