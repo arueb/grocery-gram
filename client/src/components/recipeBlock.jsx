@@ -90,7 +90,7 @@ class RecipeBlock extends Component {
               </div>
             </Link>
 
-            {this.renderHeartOrPencilOrNone()}
+            {!this.props.forExplore && this.renderHeartOrPencilOrNone()}
           </div>
         </div>
       </React.Fragment>
