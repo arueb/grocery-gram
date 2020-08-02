@@ -296,6 +296,14 @@ router.get('/:userId/reviews', async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "recipes",
+        localField: "recipeId",
+        foreignField: "_id",
+        as: "recipe",
+      },
+    },
+    {
       $project: {
         "user.password": 0,
         "user.addedItems": 0,
@@ -303,24 +311,47 @@ router.get('/:userId/reviews', async (req, res) => {
         "user.email": 0,
         "user.itemCounts": 0,
         "user.date": 0,
+        "user.reviews": 0,
         "user.savedRecipes": 0,
+        "user.profileImageUrl": 0,
+        "recipe.avgRating": 0,
+        "recipe.numReviews": 0,
+        "recipe.isPublished": 0,
+        "recipe.userId": 0,
+        "recipe.category": 0,
+        "recipe.images": 0,
+        "recipe.ingredients": 0,
+        "recipe.reviews": 0,
+        "recipe.instructions": 0,
+        "recipe.createdOn": 0,
       },
     },
+    { $unwind: "$user" },
+    { $unwind: "$recipe" },
+    {
+      "$replaceRoot": {
+        "newRoot": {
+          "$mergeObjects": ["$user", "$$ROOT"]
+        }
+      }
+    },
+    { "$project": { "user": 0 } },
+    {
+      "$replaceRoot": {
+        "newRoot": {
+          "$mergeObjects": ["$recipe", "$$ROOT"]
+        }
+      }
+    },
+    { "$project": { "recipe": 0 } },
   ]);
 
-  // remove user data except username
-  let newReviews = await Promise.all(reviews.map(async review => {
-    review.username = review.user[0].username;
-    delete review.user;
+  reviews.forEach(review => {
+    review.recipeTitle = review.title;
+    delete review.title;
+  });
 
-    const recipeRecord = await Recipe.findOne({ reviews: { "$in": [review._id] } }, "title _id");
-    review.recipeId = recipeRecord._id;
-    review.recipeTitle = recipeRecord.title;
-
-    return review;
-  }));
-  
-  res.json(newReviews);
+  res.json(reviews);
 })
 
 module.exports = router;

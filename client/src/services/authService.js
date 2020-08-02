@@ -10,6 +10,12 @@ export async function login(email, password) {
   localStorage.setItem(tokenKey, res.headers["x-auth-token"]);
 }
 
+export async function changePassword(email, oldPassword, newPassword) {
+  const res = await http.patch(apiEndpoint, { email, oldPassword, newPassword });
+  localStorage.setItem(tokenKey, res.headers["x-auth-token"]);
+  return res;
+}
+
 export function loginWithJwt(jwt) {
   localStorage.setItem(tokenKey, jwt);
 }
