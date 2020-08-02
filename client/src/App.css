@@ -911,7 +911,16 @@ collapse
     border-radius: 3px;
     margin: 0 6px;
   }
+  .icon-container:hover {
+    color: black !important;
+  }
 
+  .up-review-row:hover {
+    background-color: #f2f2f2;
+  }
+}
+
+@media (hover: none) {
   .up-review-row:hover {
     background-color: initial;
   }
