@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Form from './common/form';
-import StarRating from "./common/starRating";
+// import StarRating from "./common/starRating";
 
 class ReviewEdit extends Form {
   state = {  }
@@ -29,26 +29,6 @@ class ReviewEdit extends Form {
 }
  
 export default ReviewEdit;
-
-{/* <div>
-  <h3 className="my-3">Review The Recipe</h3>
-  <form onSubmit={this.handleSubmit}>
-    <StarRating
-      starSize={25}
-      onChange={this.handleStarChange}
-      currentStars={this.state.data.reviewStars}
-    />
-    <br></br>
-    {this.renderTextArea(
-      "reviewNotes",
-      "",
-      3,
-      "Add your review here"
-    )}
-    {this.renderButton("Submit Review")}
-  </form>
-</div> */}
-
 
 
 // class RecipeForm extends Form {

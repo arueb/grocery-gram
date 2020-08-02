@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService"
-import AvgStarRating from "./common/avgStarRating";
+// import AvgStarRating from "./common/avgStarRating";
 import UPReviewRow from "./upReviewRow";
 
 class UserProfile extends Form {

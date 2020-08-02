@@ -829,7 +829,7 @@ collapse
 
 .up-review-row:hover {
   background: #d3d3d3;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .up-review-date {
