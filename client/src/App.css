@@ -376,30 +376,6 @@ footer {
   text-decoration: none;
 }
 
-/* [1] The container */
-.img-hover-zoom {
-  /* height: 300px; [1.1] Set it as per your need */
-  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
-}
-
-/* [2] Transition property for smooth transformation of images */
-.img-hover-zoom img {
-  transition: transform 0.3s ease;
-}
-
-/* [3] Finally, transforming the image when container gets hovered */
-.card:hover img {
-  transform: scale(1.1);
-}
-
-.card:hover .card-body {
-  background-color: #343a40 !important;
-  /* background-color: #AD310B; */
-  -webkit-transition: background-color 300ms linear;
-  -ms-transition: background-color 300ms linear;
-  transition: background-color 300ms linear;
-}
-
 .avg-star-rating span {
   position: absolute;
   margin-top: 0.2rem;
@@ -440,18 +416,8 @@ tbody .form-group {
 .edit-icon {
   position: absolute;
   right: 16px;
-  /* bottom: 16px; */
   top: 8px;
-  display: none;
   opacity: 0.9;
-}
-
-.edit-icon:hover {
-  opacity: 1;
-}
-.card:hover .edit-icon,
-.card:hover .saved-icon {
-  display: block !important;
 }
 
 .edit-icon a {
@@ -464,12 +430,7 @@ tbody .form-group {
   top: 8px;
   right: 16px;
   font-size: 1.2em;
-  display: none;
   opacity: 0.9;
-}
-
-.saved-icon:hover {
-  opacity: 1;
 }
 
 /* recipe detail header */
@@ -590,6 +551,113 @@ span.save-recipe svg {
   color: #6c757d;
 }
 
+.star-label {
+  font-size: 1.1em;
+  vertical-align: top;
+}
+
+/* .review-user, .rdp-author {
+    margin-left: 15px;
+    font-size: 1.1em;
+    font-weight: 500;
+  } */
+
+.rdp-heading {
+  margin-top: 3em;
+}
+
+.rdp-author-block {
+  margin-bottom: 0.5em;
+}
+
+.review-row {
+  top: 4rem;
+  padding: 0 2.4rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.review-row img {
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+}
+
+.review-username {
+  margin-bottom: 0;
+  font-size: 1.1em;
+  /* font-weight: 400; */
+}
+
+.review-row span.review-date {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.up-heading {
+  margin-top: 3rem;
+  margin-bottom: 1.4rem;
+}
+
+.up-hdg-user {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.up-review-row {
+  top: 0;
+  padding: 0;
+  position: relative;
+}
+
+.title-url {
+  margin-bottom: 0;
+}
+
+.up-review-row:hover {
+  background: #d3d3d3;
+  /* cursor: pointer; */
+}
+
+.up-review-date {
+  position: relative;
+  left: 0;
+  top: 0;
+  margin-bottom: 0;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.up-del-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.up-edit-btn {
+  position: absolute;
+  right: 5rem;
+  top: 0;
+}
+
+.icon-container {
+  float: right;
+}
+
+.title-url a {
+  color: #333;
+  font-weight: bold;
+  text-decoration: none !important;
+}
+.title-url a:hover {
+  color: black !important;
+}
+
+.user-profile h3 {
+  margin-bottom: 2rem;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
@@ -643,6 +711,78 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   .card-text {
     font-size: 0.8rem;
+  }
+
+  .edit-icon {
+    display: none;
+  }
+
+  .edit-icon:hover {
+    opacity: 1;
+  }
+  .card:hover .edit-icon,
+  .card:hover .saved-icon {
+    display: block !important;
+  }
+
+  .saved-icon {
+    display: none;
+  }
+
+  .saved-icon:hover {
+    opacity: 1;
+  }
+
+  /* [1] The container */
+  .img-hover-zoom {
+    overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+  }
+
+  /* [2] Transition property for smooth transformation of images */
+  .img-hover-zoom img {
+    transition: transform 0.3s ease;
+  }
+
+  /* [3] Finally, transforming the image when container gets hovered */
+  .card:hover img {
+    transform: scale(1.1);
+  }
+
+  .card:hover .card-body {
+    background-color: #343a40 !important;
+    /* background-color: #AD310B; */
+    -webkit-transition: background-color 300ms linear;
+    -ms-transition: background-color 300ms linear;
+    transition: background-color 300ms linear;
+  }
+
+  .icon-container {
+    display: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-top: -0.5rem;
+  }
+
+  .icon-container:hover {
+    color: black !important;
+  }
+  .up-review-row {
+    padding: 1rem;
+    border-radius: 5px;
+  }
+
+  .up-review-row:hover {
+    background-color: #f3f3f3;
+  }
+  .up-review-row:hover .icon-container {
+    display: block !important;
+  }
+
+  .btn-container {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 0;
+    right: 0;
   }
 }
 
@@ -751,50 +891,6 @@ Custom media queries
   }
 }
 
-.star-label {
-  font-size: 1.1em;
-  vertical-align: top;
-}
-
-/* .review-user, .rdp-author {
-  margin-left: 15px;
-  font-size: 1.1em;
-  font-weight: 500;
-} */
-
-.rdp-heading {
-  margin-top: 3em;
-}
-
-.rdp-author-block {
-  margin-bottom: 0.5em;
-}
-
-.review-row {
-  top: 4rem;
-  padding: 0 2.4rem;
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.review-row img {
-  position: absolute;
-  left: 0;
-  top: 0.2rem;
-}
-
-.review-username {
-  margin-bottom: 0;
-  font-size: 1.1em;
-  /* font-weight: 400; */
-}
-
-.review-row span.review-date {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
 /*
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Custom media queries to separate MR & ER filters on
@@ -805,51 +901,27 @@ collapse
   .owner-filter {
     margin-bottom: 1rem;
   }
+  .up-review-row {
+    padding: 0.5rem;
+  }
+  .icon-container {
+    padding: 0.5rem;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin: 0 6px;
+  }
+  .icon-container:hover {
+    color: black !important;
+  }
+
+  .up-review-row:hover {
+    background-color: #f2f2f2;
+  }
 }
 
-.up-heading {
-  margin-top: 3rem;
-  margin-bottom: 1.4rem;
+@media (hover: none) {
+  .up-review-row:hover {
+    background-color: initial;
+  }
 }
-
-.up-hdg-user {
-  font-weight: 400;
-  font-style: italic;
-}
-
-.up-review-row {
-  top: 0;
-  padding: 0;
-  position: relative;
-}
-
-.title-url {
-  margin-bottom: 0;
-}
-
-.up-review-row:hover {
-  background: #d3d3d3;
-  /* cursor: pointer; */
-}
-
-.up-review-date {
-  position: relative;
-  left: 0;
-  top: 0;
-  margin-bottom: 0;
-  font-weight: 400;
-  font-style: italic;
-}
-
-.up-del-btn {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-
-.up-edit-btn {
-  position: absolute;
-  right: 5rem;
-  top: 0;
-}
-
