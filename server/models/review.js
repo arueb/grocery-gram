@@ -7,7 +7,8 @@ const reviewSchema = new Schema({
   comments: { type: String, max: 2048 },
   rating: { type: Number, min: 0, max: 5, default: 0.0 },
   date: { type: Date, required: true, default: Date.now },
-  userId: { type: mongoose.Schema.ObjectId, ref: "User", required: true }
+  userId: { type: mongoose.Schema.ObjectId, ref: "User", required: true },
+  recipeId: { type: mongoose.Schema.ObjectId, ref: "Recipe", required: true }
 })
 
 const Review = mongoose.model("Review", reviewSchema);
