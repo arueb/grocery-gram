@@ -14,6 +14,7 @@ import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import RecipeForm from "./components/recipeForm";
 import UserProfile from "./components/userProfile"
+import ReviewEdit from "./components/reviewEdit";
 import auth from "./services/authService";
 import item from "./services/itemService";
 import "react-toastify/dist/ReactToastify.css";
@@ -105,6 +106,13 @@ class App extends Component {
                 user={user}
                 pageTitle={"User Profile - GroceryGram"}
                 appCDM={this.componentDidMount.bind(this)}
+              />
+              <ProtectedRoute
+                path={"/review-edit"}
+                component={ReviewEdit}
+                history={this.props.history}
+                user={user}
+                pageTitle={"Review Edit Page - GroceryGram"}
               />
               <Route
                 path="/not-found"

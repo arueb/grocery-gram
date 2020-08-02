@@ -6,6 +6,7 @@ import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt } from "../services/authService"
 import AvgStarRating from "./common/avgStarRating";
+import UPReviewRow from "./upReviewRow";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -104,64 +105,87 @@ class UserProfile extends Form {
   render() {
     return (
       <React.Fragment>
-        <div className="sl-page-heading">
+        <div className="up-heading">
           <h2>User Profile</h2>
-          <hr className="divider" />
-          <div className="mx-auto mt-4 modal-form row">
-            <div className="col-md-5 left-col bg-info text-center">
-              <img
-                className="rounded-circle m-5 img-thumbnail"
-                style={{ "maxWidth": "50%" }}
-                src={this.state.profileImageUrl}
-                alt="user profile" />
-              <input type="file" onChange={this.storeImageFile}></input>
-              {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
-            </div>
-            <div className="col-md-7 right-col">
-              <h2>{this.props.user.username}</h2>
-              <h6>Change Password</h6>
-              <form onSubmit={this.handleSubmit}>
-                {this.renderInput("oldPassword", "Old Password")}
-                {this.renderInput("newPassword", "New Password")}
-                {this.renderInput("confirmPassword", "Confirm Password")}
-                {this.renderButton("Change Password")}
-              </form>
-            </div>
+        </div>
+        <hr className="divider" />
+        <div className="mx-auto mt-4 modal-form row">
+          <div className="col-md-5 left-col bg-info text-center">
+            <img
+              className="rounded-circle m-5 img-thumbnail"
+              style={{ "maxWidth": "50%" }}
+              src={this.state.profileImageUrl}
+              alt="user profile" />
+            <input type="file" onChange={this.storeImageFile}></input>
+            {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
           </div>
-          <h2>Your Reviews:</h2>
-          <div className="alert alert-danger" role="alert">
-            Below is a horribly inefficient query
-          </div>
-          <div className="table-responsive">
-            <table className="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Recipe</th>
-                  <th scope="col">Your Rating</th>
-                  <th scope="col">Comments</th>
-                  <th scope="col">Edit</th>
-                  <th scope="col">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.userReviews.map(review => (
-                  <tr key={review._id}>
-                    <td><a href={"/recipes/" + review.recipeId} >{review.recipeTitle}</a></td>
-                    <td>
-                      <AvgStarRating
-                        avgRating={review.rating}
-                        starSize={15}
-                      />
-                    </td>
-                    <td>{review.comments}</td>
-                    <td><button type="button" className="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button></td>
-                    <td><button type="button" className="btn btn-danger"  data-toggle="modal" data-target="#deleteModal" onClick={() => this.populateDeleteModal(review)}>Delete</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="col-md-7 right-col">
+            <h2>{this.props.user.username}</h2>
+            <h6>Change Password</h6>
+            <form onSubmit={this.handleSubmit}>
+              {this.renderInput("oldPassword", "Old Password")}
+              {this.renderInput("newPassword", "New Password")}
+              {this.renderInput("confirmPassword", "Confirm Password")}
+              {this.renderButton("Change Password")}
+            </form>
           </div>
         </div>
+        <div className="">
+          <h3 className="up-heading">Your Reviews:</h3>
+        </div>
+        {/* <div className="alert alert-danger" role="alert">
+          Below is a horribly inefficient query
+        </div> */}
+
+        {this.state.userReviews.map(review => (
+          <React.Fragment>
+            <UPReviewRow
+              key={review._id}
+              recipeId={review.recipeId}
+              recipeTitle={review.recipeTitle}
+              username={review.username}
+              comments={review.comments}
+              userImage={
+                review.profileImageUrl ||
+                process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
+              }
+              date={review.date}
+              rating={review.rating}
+              starSize={20}
+            />
+          </React.Fragment>
+        ))}
+
+        {/* <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Recipe</th>
+                <th scope="col">Your Rating</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.userReviews.map(review => (
+                <tr key={review._id}>
+                  <td><a href={"/recipes/" + review.recipeId} >{review.recipeTitle}</a></td>
+                  <td>
+                    <AvgStarRating
+                      avgRating={review.rating}
+                      starSize={15}
+                    />
+                  </td>
+                  <td>{review.comments}</td>
+                  <td><button type="button" className="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button></td>
+                  <td><button type="button" className="btn btn-danger"  data-toggle="modal" data-target="#deleteModal" onClick={() => this.populateDeleteModal(review)}>Delete</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div> */}
+      
 
         {/* Edit Modal */}
         <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

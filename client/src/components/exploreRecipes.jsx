@@ -10,7 +10,7 @@ class ExploreRecipes extends Component {
   state = {
     data: "",
     recipes: [],
-    pageSize: 8,
+    pageSize: 12,
     currentPage: 1,
     selectValue: "",
     searchQuery: "",
