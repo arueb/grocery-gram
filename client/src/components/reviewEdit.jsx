@@ -7,7 +7,13 @@ class ReviewEdit extends Form {
   render() { 
     return ( 
       <div>
-        <h3 className="my-3">Review The Recipe</h3>
+        <div className="up-heading">
+          <h2><span className="up-hdg-user text-secondary">
+            {this.props.user.username}
+          </span> User Profile</h2>
+        </div>
+        <hr className="divider" />
+        <h3 className="my-3">Edit Review</h3>
         {/* <form onSubmit={this.handleSubmit}>
           <StarRating
             starSize={25}
