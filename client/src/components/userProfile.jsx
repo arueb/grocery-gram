@@ -4,7 +4,7 @@ import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
-import { loginWithJwt } from "../services/authService"
+import { loginWithJwt, changePassword } from "../services/authService"
 import AvgStarRating from "./common/avgStarRating";
 
 class UserProfile extends Form {
@@ -14,7 +14,11 @@ class UserProfile extends Form {
     this.state = {
       profileImageUrl: process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png",
       imageFileToUpload: "",
-      data: { email: "", password: "" },
+      data: {
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      },
       userReviews: [],
       errors: {},
       modalReview: {},
@@ -24,22 +28,52 @@ class UserProfile extends Form {
     this.handleImageSubmit = this.handleImageSubmit.bind(this);
   }
 
+  // define schema for input validation in browser
   schema = {
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().min(5).label("Password"),
+    oldPassword: Joi.string().required().label("Password"),
+    newPassword: Joi.string().required().min(5).label("Password"),
+
+    // check that passwords match with custom error message
+    confirmPassword: Joi.any()
+      .valid(Joi.ref("newPassword"))
+      .required()
+      .label("Confirm Password")
+      .options({
+        language: { any: { allowOnly: "does not match" } },
+      }),
   };
 
   doSubmit = async () => {
     try {
-
+      const res = await changePassword(this.props.user.email, this.state.data.oldPassword, this.state.data.newPassword);
+      if (res.status === 200) {
+        toast.success(res.data, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
         this.setState({ errors });
+
+        toast.error(ex.response.data, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     }
-    console.log("submitted");
   };
 
   async handleImageSubmit(e) {
@@ -104,26 +138,25 @@ class UserProfile extends Form {
   render() {
     return (
       <React.Fragment>
-        <div className="container">
-          <h1 className="">User Profile</h1>
-          <div className="mx-auto mt-4 modal-form row">
-            <div className="col-md-5 left-col bg-info text-center">
+          <h1 className="">{this.props.user.username} User Profile</h1>
+          <div className="mx-auto mt-4 row">
+            <div className="col-md-6 left-col bg-info p-4 text-center border">
+              <h2>Change Avatar</h2>
               <img
-                className="rounded-circle m-5 img-thumbnail"
-                style={{ "maxWidth": "50%" }}
+                className="rounded-circle m-3 border bg-white"
+                style={{ "maxWidth": "55%" }}
                 src={this.state.profileImageUrl}
                 alt="user profile" />
-              <input type="file" onChange={this.storeImageFile}></input>
+                <div style={{width: "100%"}}><input type="file" onChange={this.storeImageFile}></input></div>
               {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
             </div>
-            <div className="col-md-7 right-col">
-              <h2>{this.props.user.username}</h2>
-              <h6>Change Password</h6>
+            <div className="col-md-6 right-co p-4 border">
+              <h2 className="text-center">Change Password</h2>
               <form onSubmit={this.handleSubmit}>
-                {this.renderInput("oldPassword", "Old Password")}
-                {this.renderInput("newPassword", "New Password")}
-                {this.renderInput("confirmPassword", "Confirm Password")}
-                {this.renderButton("Change Password")}
+                {this.renderInput("oldPassword", "Old Password", "password")}
+                {this.renderInput("newPassword", "New Password", "password")}
+                {this.renderInput("confirmPassword", "Confirm Password", "password")}
+                <div className="text-center">{this.renderButton("Change Password")}</div>
               </form>
             </div>
           </div>
@@ -160,7 +193,6 @@ class UserProfile extends Form {
               </tbody>
             </table>
           </div>
-        </div>
 
         {/* Edit Modal */}
         <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

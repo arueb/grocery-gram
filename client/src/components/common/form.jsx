@@ -100,8 +100,9 @@ class Form extends Component {
 
   renderInput(name, label, type = "text", placeholder = "") {
     const { data, errors } = this.state;
-    console.log("errors in renderInput errors[name]", errors[name]);
-    console.log("name", name);
+    // console.log("errors in renderInput errors[name]", errors[name]);
+    // console.log("name", name);
+    // console.log("error", errors);
     return (
       <Input
         type={type}
