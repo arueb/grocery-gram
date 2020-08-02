@@ -4,7 +4,7 @@ import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
-import { loginWithJwt, changePassword } from "../services/authService"
+import { loginWithJwt, changePassword } from "../services/authService";
 // import AvgStarRating from "./common/avgStarRating";
 import UPReviewRow from "./upReviewRow";
 
@@ -13,7 +13,8 @@ class UserProfile extends Form {
     super(props);
 
     this.state = {
-      profileImageUrl: process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png",
+      profileImageUrl:
+        process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png",
       imageFileToUpload: "",
       data: {
         oldPassword: "",
@@ -46,7 +47,11 @@ class UserProfile extends Form {
 
   doSubmit = async () => {
     try {
-      const res = await changePassword(this.props.user.email, this.state.data.oldPassword, this.state.data.newPassword);
+      const res = await changePassword(
+        this.props.user.email,
+        this.state.data.oldPassword,
+        this.state.data.newPassword
+      );
       if (res.status === 200) {
         toast.success(res.data, {
           position: "top-right",
@@ -94,14 +99,16 @@ class UserProfile extends Form {
 
     this.setState({ profileImageUrl: imageData.data.thumbUrl });
 
-    const newUserData = await updateUserProperty(this.props.user._id, { profileImageUrl: this.state.profileImageUrl })
+    const newUserData = await updateUserProperty(this.props.user._id, {
+      profileImageUrl: this.state.profileImageUrl,
+    });
     // Need to send image url to mongodb field profileImageUrl
     loginWithJwt(newUserData.headers["x-auth-token"]);
 
     // window.location.reload();
     await this.props.appCDM();
 
-    toast.success('Profile Image Updated!', {
+    toast.success("Profile Image Updated!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -113,10 +120,10 @@ class UserProfile extends Form {
   }
 
   async componentDidMount() {
-    document.title = this.props.pageTitle
+    document.title = this.props.pageTitle;
 
     if (this.props.user.profileImageUrl) {
-      this.setState({ profileImageUrl: this.props.user.profileImageUrl })
+      this.setState({ profileImageUrl: this.props.user.profileImageUrl });
     }
 
     this.populateReviews();
@@ -133,43 +140,67 @@ class UserProfile extends Form {
   }
 
   populateDeleteModal(review) {
-    this.setState({modalReview: review});
+    this.setState({ modalReview: review });
   }
 
   render() {
     return (
       <React.Fragment>
         <div className="up-heading">
-          <h2><span className="up-hdg-user text-secondary">
-            {this.props.user.username}
-          </span> User Profile</h2>
+          <h2>
+            {/* <span className="up-hdg-user text-secondary">
+              {this.props.user.username}
+            </span>{" "} */}
+            My Profile
+          </h2>
         </div>
         <hr className="divider" />
-        <div className="mx-auto mt-4 row">
-          <div className="col-md-6 left-col bg-info p-4 text-center border">
-            <h3>Change Avatar</h3>
-            <img
-              className="rounded-circle m-3 border bg-white"
-              style={{ "maxWidth": "55%" }}
-              src={this.state.profileImageUrl}
-              alt="user profile" />
-              <div style={{width: "100%"}}><input type="file" onChange={this.storeImageFile}></input></div>
-            {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
+        <section className="user-profile">
+          <div className="mx-auto mt-4 row">
+            <div className="col-md-6 left-col bg-info p-4 text-center border">
+              {/* <h3>Profile Picture</h3> */}
+              <h3>
+                <span className="up-hdg-user text-white">
+                  {this.props.user.username}
+                </span>
+              </h3>
+              <img
+                className="rounded-circle m-3 border bg-white"
+                style={{ maxWidth: "55%" }}
+                src={this.state.profileImageUrl}
+                alt="user profile"
+              />
+              <div style={{ width: "100%" }}>
+                <input type="file" onChange={this.storeImageFile}></input>
+              </div>
+              <div className="btn-container">
+                {this.renderButtonCustomHandler(
+                  "Change Profile Picture",
+                  this.handleImageSubmit
+                )}
+              </div>
+            </div>
+            <div className="col-md-6 right-col p-4 border">
+              <h3 className="text-center">Change Password</h3>
+              <form onSubmit={this.handleSubmit}>
+                {this.renderInput("oldPassword", "Old Password", "password")}
+                {this.renderInput("newPassword", "New Password", "password")}
+                {this.renderInput(
+                  "confirmPassword",
+                  "Confirm Password",
+                  "password"
+                )}
+                <div className="text-center">
+                  {this.renderButton("Change Password")}
+                </div>
+              </form>
+            </div>
           </div>
-          <div className="col-md-6 right-col p-4 border">
-            <h3 className="text-center">Change Password</h3>
-            <form onSubmit={this.handleSubmit}>
-              {this.renderInput("oldPassword", "Old Password", "password")}
-              {this.renderInput("newPassword", "New Password", "password")}
-              {this.renderInput("confirmPassword", "Confirm Password", "password")}
-              <div className="text-center">{this.renderButton("Change Password")}</div>
-            </form>
-          </div>
-        </div>
+        </section>
         <div className="">
-          <h3 className="up-heading">Your Reviews:</h3>
+          <h3 className="up-heading">Your Reviews</h3>
         </div>
-        {this.state.userReviews.map(review => (
+        {this.state.userReviews.map((review) => (
           <React.Fragment>
             <UPReviewRow
               key={review._id}
@@ -187,45 +218,95 @@ class UserProfile extends Form {
             />
           </React.Fragment>
         ))}
-          
+
         {/* Edit Modal */}
-        <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div
+          className="modal fade"
+          id="editModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Modal title
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div className="modal-body">
-                <p>I don't believe there is a patch reviews route at all, so that would need to be included</p>
+                <p>
+                  I don't believe there is a patch reviews route at all, so that
+                  would need to be included
+                </p>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary">Save changes</button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" className="btn btn-primary">
+                  Save changes
+                </button>
               </div>
             </div>
           </div>
         </div>
 
         {/* Delete Modal */}
-        <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div
+          className="modal fade"
+          id="deleteModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">Delete Review</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Delete Review
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div className="modal-body">
-                <p>There is already a route for delete review, but it does not correctly handle changing the review average</p>
+                <p>
+                  There is already a route for delete review, but it does not
+                  correctly handle changing the review average
+                </p>
                 <p>{JSON.stringify(this.state.modalReview)}</p>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" className="btn btn-danger">Delete</button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="button" className="btn btn-danger">
+                  Delete
+                </button>
               </div>
             </div>
           </div>
