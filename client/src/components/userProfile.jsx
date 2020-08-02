@@ -172,18 +172,13 @@ class UserProfile extends Form {
         {this.state.userReviews.map(review => (
           <React.Fragment>
             <UPReviewRow
-              key={review._id}
               recipeId={review.recipeId}
               recipeTitle={review.recipeTitle}
               username={review.username}
-              comments={review.comments}
-              userImage={
-                review.profileImageUrl ||
-                process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
-              }
-              date={review.date}
               rating={review.rating}
               starSize={20}
+              date={review.date}
+              comments={review.comments}
             />
           </React.Fragment>
         ))}

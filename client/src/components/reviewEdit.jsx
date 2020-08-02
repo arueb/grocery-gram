@@ -6,14 +6,11 @@ class ReviewEdit extends Form {
   state = {  }
   render() { 
     return ( 
-      <div>
+      <React.Fragment>
         <div className="up-heading">
-          <h2><span className="up-hdg-user text-secondary">
-            {this.props.user.username}
-          </span> User Profile</h2>
+          <h2>Edit Review</h2>
         </div>
         <hr className="divider" />
-        <h3 className="my-3">Edit Review</h3>
         {/* <form onSubmit={this.handleSubmit}>
           <StarRating
             starSize={25}
@@ -29,7 +26,7 @@ class ReviewEdit extends Form {
           )}
           {this.renderButton("Submit Review")}
         </form> */}
-      </div>
+      </React.Fragment>
      );
   }
 }
