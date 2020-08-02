@@ -376,30 +376,6 @@ footer {
   text-decoration: none;
 }
 
-/* [1] The container */
-.img-hover-zoom {
-  /* height: 300px; [1.1] Set it as per your need */
-  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
-}
-
-/* [2] Transition property for smooth transformation of images */
-.img-hover-zoom img {
-  transition: transform 0.3s ease;
-}
-
-/* [3] Finally, transforming the image when container gets hovered */
-.card:hover img {
-  transform: scale(1.1);
-}
-
-.card:hover .card-body {
-  background-color: #343a40 !important;
-  /* background-color: #AD310B; */
-  -webkit-transition: background-color 300ms linear;
-  -ms-transition: background-color 300ms linear;
-  transition: background-color 300ms linear;
-}
-
 .avg-star-rating span {
   position: absolute;
   margin-top: 0.2rem;
@@ -440,18 +416,8 @@ tbody .form-group {
 .edit-icon {
   position: absolute;
   right: 16px;
-  /* bottom: 16px; */
   top: 8px;
-  display: none;
   opacity: 0.9;
-}
-
-.edit-icon:hover {
-  opacity: 1;
-}
-.card:hover .edit-icon,
-.card:hover .saved-icon {
-  display: block !important;
 }
 
 .edit-icon a {
@@ -464,12 +430,7 @@ tbody .form-group {
   top: 8px;
   right: 16px;
   font-size: 1.2em;
-  display: none;
   opacity: 0.9;
-}
-
-.saved-icon:hover {
-  opacity: 1;
 }
 
 /* recipe detail header */
@@ -643,6 +604,49 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   .card-text {
     font-size: 0.8rem;
+  }
+
+  .edit-icon {
+    display: none;
+  }
+
+  .edit-icon:hover {
+    opacity: 1;
+  }
+  .card:hover .edit-icon,
+  .card:hover .saved-icon {
+    display: block !important;
+  }
+
+  .saved-icon {
+    display: none;
+  }
+
+  .saved-icon:hover {
+    opacity: 1;
+  }
+
+  /* [1] The container */
+  .img-hover-zoom {
+    overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+  }
+
+  /* [2] Transition property for smooth transformation of images */
+  .img-hover-zoom img {
+    transition: transform 0.3s ease;
+  }
+
+  /* [3] Finally, transforming the image when container gets hovered */
+  .card:hover img {
+    transform: scale(1.1);
+  }
+
+  .card:hover .card-body {
+    background-color: #343a40 !important;
+    /* background-color: #AD310B; */
+    -webkit-transition: background-color 300ms linear;
+    -ms-transition: background-color 300ms linear;
+    transition: background-color 300ms linear;
   }
 }
 
@@ -852,4 +856,3 @@ collapse
   right: 5rem;
   top: 0;
 }
-
