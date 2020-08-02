@@ -575,9 +575,8 @@ li:hover span.perm-delete .hover-icon {
 
 .clear-all {
   margin-top: 1rem;
-  line-height: 0.5;
-  /* background-color: #6e757d;
-    border: none; */
+  margin-bottom: 1rem;
+  line-height: 1;
 }
 
 span.save-recipe {
