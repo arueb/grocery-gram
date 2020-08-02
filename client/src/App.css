@@ -901,4 +901,14 @@ collapse
   .owner-filter {
     margin-bottom: 1rem;
   }
+  .up-review-row {
+    padding: 0.5rem;
+  }
+  .icon-container {
+    padding: 0.5rem;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin: 0 6px;
+  }
 }
