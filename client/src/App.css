@@ -809,17 +809,22 @@ collapse
 
 .up-heading {
   margin-top: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.4rem;
 }
 
-.user-prof-reviews {
-  margin-top: 2rem;
+.up-hdg-user {
+  font-weight: 400;
+  font-style: italic;
 }
 
 .up-review-row {
-  top: 2rem;
+  top: 0;
   padding: 0;
   position: relative;
+}
+
+.title-url {
+  margin-bottom: 0;
 }
 
 .up-review-row:hover {
@@ -846,9 +851,5 @@ collapse
   position: absolute;
   right: 5rem;
   top: 0;
-}
-
-.title-url {
-  margin-bottom: 0;
 }
 
