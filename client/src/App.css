@@ -911,4 +911,8 @@ collapse
     border-radius: 3px;
     margin: 0 6px;
   }
+
+  .up-review-row:hover {
+    background-color: initial;
+  }
 }
