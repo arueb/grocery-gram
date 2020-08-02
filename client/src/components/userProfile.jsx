@@ -104,8 +104,9 @@ class UserProfile extends Form {
   render() {
     return (
       <React.Fragment>
-        <div className="container">
-          <h1 className="">User Profile</h1>
+        <div className="sl-page-heading">
+          <h2>User Profile</h2>
+          <hr className="divider" />
           <div className="mx-auto mt-4 modal-form row">
             <div className="col-md-5 left-col bg-info text-center">
               <img
