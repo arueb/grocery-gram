@@ -15,7 +15,7 @@ class MyRecipes extends Component {
   state = {
     data: "",
     recipes: [],
-    pageSize: 8,
+    pageSize: 12,
     currentPage: 1,
     listGroupLabels: ["All", "Saved", "My Own"],
     selectedOwnerType: "All",
@@ -139,7 +139,6 @@ class MyRecipes extends Component {
     let filtered = allRecipes;
     if (searchQuery) {
       filtered = allRecipes.filter((r) =>
-        // r.title.toLowerCase().startsWith(searchQuery.toLowerCase())
         r.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     } else if (selectedOwnerType) {

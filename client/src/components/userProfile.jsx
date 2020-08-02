@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService"
-import AvgStarRating from "./common/avgStarRating";
+// import AvgStarRating from "./common/avgStarRating";
+import UPReviewRow from "./upReviewRow";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -138,62 +139,55 @@ class UserProfile extends Form {
   render() {
     return (
       <React.Fragment>
-          <h1 className="">{this.props.user.username} User Profile</h1>
-          <div className="mx-auto mt-4 row">
-            <div className="col-md-6 left-col bg-info p-4 text-center border">
-              <h2>Change Avatar</h2>
-              <img
-                className="rounded-circle m-3 border bg-white"
-                style={{ "maxWidth": "55%" }}
-                src={this.state.profileImageUrl}
-                alt="user profile" />
-                <div style={{width: "100%"}}><input type="file" onChange={this.storeImageFile}></input></div>
-              {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
-            </div>
-            <div className="col-md-6 right-co p-4 border">
-              <h2 className="text-center">Change Password</h2>
-              <form onSubmit={this.handleSubmit}>
-                {this.renderInput("oldPassword", "Old Password", "password")}
-                {this.renderInput("newPassword", "New Password", "password")}
-                {this.renderInput("confirmPassword", "Confirm Password", "password")}
-                <div className="text-center">{this.renderButton("Change Password")}</div>
-              </form>
-            </div>
+        <div className="up-heading">
+          <h2><span className="up-hdg-user text-secondary">
+            {this.props.user.username}
+          </span> User Profile</h2>
+        </div>
+        <hr className="divider" />
+        <div className="mx-auto mt-4 row">
+          <div className="col-md-6 left-col bg-info p-4 text-center border">
+            <h3>Change Avatar</h3>
+            <img
+              className="rounded-circle m-3 border bg-white"
+              style={{ "maxWidth": "55%" }}
+              src={this.state.profileImageUrl}
+              alt="user profile" />
+              <div style={{width: "100%"}}><input type="file" onChange={this.storeImageFile}></input></div>
+            {this.renderButtonCustomHandler("Change Profile Picture", this.handleImageSubmit)}
           </div>
-          <h2>Your Reviews:</h2>
-          <div className="alert alert-danger" role="alert">
-            Below is a horribly inefficient query
+          <div className="col-md-6 right-col p-4 border">
+            <h3 className="text-center">Change Password</h3>
+            <form onSubmit={this.handleSubmit}>
+              {this.renderInput("oldPassword", "Old Password", "password")}
+              {this.renderInput("newPassword", "New Password", "password")}
+              {this.renderInput("confirmPassword", "Confirm Password", "password")}
+              <div className="text-center">{this.renderButton("Change Password")}</div>
+            </form>
           </div>
-          <div className="table-responsive">
-            <table className="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Recipe</th>
-                  <th scope="col">Your Rating</th>
-                  <th scope="col">Comments</th>
-                  <th scope="col">Edit</th>
-                  <th scope="col">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.userReviews.map(review => (
-                  <tr key={review._id}>
-                    <td><a href={"/recipes/" + review.recipeId} >{review.recipeTitle}</a></td>
-                    <td>
-                      <AvgStarRating
-                        avgRating={review.rating}
-                        starSize={15}
-                      />
-                    </td>
-                    <td>{review.comments}</td>
-                    <td><button type="button" className="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button></td>
-                    <td><button type="button" className="btn btn-danger"  data-toggle="modal" data-target="#deleteModal" onClick={() => this.populateDeleteModal(review)}>Delete</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
+        </div>
+        <div className="">
+          <h3 className="up-heading">Your Reviews:</h3>
+        </div>
+        {this.state.userReviews.map(review => (
+          <React.Fragment>
+            <UPReviewRow
+              key={review._id}
+              recipeId={review.recipeId}
+              recipeTitle={review.recipeTitle}
+              username={review.username}
+              comments={review.comments}
+              userImage={
+                review.profileImageUrl ||
+                process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
+              }
+              date={review.date}
+              rating={review.rating}
+              starSize={20}
+            />
+          </React.Fragment>
+        ))}
+          
         {/* Edit Modal */}
         <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
