@@ -144,14 +144,14 @@ class UserReviews extends Form {
                 <button
                   onClick={this.handleSubmit}
                   type="button"
-                  className="btn btn-dark float-right mt-3"
+                  className="btn btn-dark float-left mt-3"
                   data-dismiss="modal"
                 >
                   Submit Review
                 </button>  
                 <button
                   type="button"
-                  className="btn btn-secondary float-right mr-2 mt-3"
+                  className="btn btn-secondary float-left ml-2 mt-3"
                   data-dismiss="modal"
                 >
                   Cancel
@@ -189,21 +189,22 @@ class UserReviews extends Form {
                 This will permanently delete your review and cannot be undone.
               </p>
             </div>
-            <div className="modal-footer">
+              <div className="modal-footer d-flex justify-content-start">
+              <button
+                onClick={this.handleDeleteReview}
+                type="button"
+                // className="btn btn-danger mr-auto"
+                className="btn btn-danger"
+                data-dismiss="modal"
+              >
+                Delete Review
+              </button>
               <button
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
               >
                 Cancel
-              </button>
-                <button
-                  onClick={this.handleDeleteReview}
-                  type="button"
-                  className="btn btn-danger"
-                  data-dismiss="modal"
-                >
-                Delete
               </button>
             </div>
           </div>
