@@ -153,4 +153,50 @@ router.delete("/:id", async (req, res) => {
   res.sendStatus(204);
 });
 
+// update given recipe's properties with properties sent in request body
+router.patch("/:id", async (req, res) => {
+  const { error } = validate(req.body, true); // ignore required
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // if editing review's userId, first ensure it is present in db
+  if (req.body.userId) {
+    try {
+      const user = await User.findOne({ _id: req.body.userId });
+      if (!user) return res.status(404).send("The userId does not exist");
+    } catch (err) {
+      res.status(500).send("Something failed.", err);
+    }
+  }
+
+  // if editing review's recipeId, first ensure it is present in db
+  if (req.body.recipeId) {
+    try {
+      const recipe = await Recipe.findOne({ _id: req.body.recipeId });
+      if (!recipe) return res.status(404).send("The recipeId does not exist");
+    } catch (err) {
+      res.status(500).send("Something failed.", err);
+    }
+  }
+
+  // udpate the date of the review
+
+  // make requested updates to recipe
+  try {
+    const review = await Review.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
+
+    if (!review)
+      return res
+        .status(404)
+        .send("The review with the given ID was not found.");
+
+    res.send(review);
+  } catch (err) {
+    res.status(500).send("Something failed", err);
+  }
+});
+
 module.exports = router;
