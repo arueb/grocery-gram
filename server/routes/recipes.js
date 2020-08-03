@@ -3,7 +3,7 @@ const router = express.Router();
 const _ = require("lodash");
 const { Recipe, validate } = require("../models/recipe");
 const { User } = require("../models/user");
-const { Review } = require("../models/review")
+const { Review } = require("../models/review");
 const mongoose = require("mongoose");
 // get all recipes
 // router.get("/", async (req, res) => {
@@ -170,11 +170,20 @@ router.patch("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  // check to make sure the specified user exists
   try {
-    let recipe = await Recipe.findByIdAndRemove(req.params.id);
+    //   check to make sure the specified recipe exists
+    const recipe = await Recipe.findByIdAndRemove(req.params.id);
     if (!recipe)
       return res.status(404).send("The recipeId could not be found.");
+
+    // remove this recipe from any user's savedRecipes
+    await User.updateMany(
+      { savedRecipes: req.params.id },
+      { $pull: { savedRecipes: req.params.id } }
+    );
+
+    // remove any reviews for this recipe
+    await Review.deleteMany({ recipeId: req.params.id });
     res.send(recipe);
   } catch (err) {
     res.status(500).send("Something failed.", err);
@@ -209,7 +218,7 @@ router.get("/:id/reviews", async (req, res) => {
   ]);
 
   // remove user data except username
-  reviews.forEach(review => {
+  reviews.forEach((review) => {
     review.username = review.user[0].username;
     review.profileImageUrl = review.user[0].profileImageUrl;
     delete review.user;
