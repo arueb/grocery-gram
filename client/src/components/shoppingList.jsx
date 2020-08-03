@@ -519,14 +519,7 @@ class ShoppingList extends Component {
                           including your lined-through items. This cannot be
                           undone.
                         </div>
-                        <div className="modal-footer">
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            data-dismiss="modal"
-                          >
-                            Cancel
-                          </button>
+                        <div className="modal-footer d-flex justify-content-start">
                           <button
                             onClick={() => this.handleClearAll()}
                             type="button"
@@ -534,6 +527,13 @@ class ShoppingList extends Component {
                             className="btn btn-danger"
                           >
                             Clear All
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Cancel
                           </button>
                         </div>
                       </div>
