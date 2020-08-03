@@ -153,4 +153,88 @@ router.delete("/:id", async (req, res) => {
   res.sendStatus(204);
 });
 
+// update given recipe's properties with properties sent in request body
+router.patch("/:id", async (req, res) => {
+  const { error } = validate(req.body, true); // ignore required
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let review, recipe;
+
+  // if editing review's userId, first ensure it is present in db
+  if (req.body.userId) {
+    try {
+      const user = await User.findOne({ _id: req.body.userId });
+      if (!user) return res.status(404).send("The userId does not exist");
+    } catch (err) {
+      res.status(500).send("Something failed.", err);
+    }
+  }
+
+  // get the original review
+  try {
+    review = await Review.findOne({ _id: req.params.id });
+    if (!review) return res.status(404).send("The review does not exist");
+  } catch (err) {
+    res.status(500).send("Something failed.", err);
+  }
+
+  // get the recipeId from the review in case the body doesn't contain recipeId
+
+  try {
+    recipe = await Recipe.findOne({ _id: review.recipeId });
+    if (!recipe) return res.status(404).send("The recipeId does not exist");
+    console.log("recipe", recipe);
+  } catch (err) {
+    res.status(500).send("Something failed.", err);
+  }
+
+  // if editing review's recipeId, first ensure it is present in db
+  if (req.body.recipeId) {
+    try {
+      recipe = await Recipe.findOne({ _id: req.body.recipeId });
+      if (!recipe) return res.status(404).send("The recipeId does not exist");
+      console.log("recipe", recipe);
+    } catch (err) {
+      res.status(500).send("Something failed.", err);
+    }
+  }
+
+  // if rating is included in request body, recalculate the avgRating for the recipe
+  if (req.body.rating && req.body.rating !== review.rating) {
+    const oldRating = review.rating;
+    const newRating = req.body.rating;
+    const avgRating =
+      (recipe.avgRating * recipe.numReviews - oldRating + newRating) /
+      recipe.numReviews;
+
+    // update the recipe
+    try {
+      await Recipe.findByIdAndUpdate(recipe._id, {
+        avgRating,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send("Problem updating recipe avgRating");
+    }
+  }
+
+  // make requested updates to review
+  try {
+    review = await Review.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
+
+    if (!review)
+      return res
+        .status(404)
+        .send("The review with the given ID was not found.");
+
+    res.send(review);
+  } catch (err) {
+    res.status(500).send("Something failed", err);
+  }
+});
+
 module.exports = router;

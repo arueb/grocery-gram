@@ -765,6 +765,7 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   .icon-container:hover {
     color: black !important;
+    color: #f7f7f7;
   }
   .up-review-row {
     padding: 1rem;
@@ -909,7 +910,7 @@ collapse
     cursor: pointer;
     border: 1px solid #ddd;
     border-radius: 3px;
-    margin: 0 6px;
+    margin-right: 0.5em;
   }
   .icon-container:hover {
     color: black !important;
