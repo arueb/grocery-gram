@@ -160,9 +160,6 @@ class UserProfile extends Form {
       <React.Fragment>
         <div className="up-heading">
           <h2>
-            {/* <span className="up-hdg-user text-secondary">
-              {this.props.user.username}
-            </span>{" "} */}
             My Profile
           </h2>
         </div>
@@ -210,11 +207,10 @@ class UserProfile extends Form {
           </div>
         </section>
         <UserReviews />
-        <div className="">
+        {/*<div className="">
           <h3 className="up-heading">Your Reviews</h3>
         </div>
         {this.state.userReviews.map((review) => (
-          // <React.Fragment>
           <div key={review._id}>
             <UPReviewRow
               review={review}
@@ -227,10 +223,7 @@ class UserProfile extends Form {
               comments={review.comments}
               onEdit={this.handleEdit}
             />
-            {/* </React.Fragment>
-        ))} */}
 
-            {/* Edit Modal */}
             <div
               className="modal fade"
               id="editModal"
@@ -254,12 +247,8 @@ class UserProfile extends Form {
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
+
                   <div className="modal-body">
-                    {/* <p>
-                    I don't believe there is a patch reviews route at all, so that
-                    would need to be included
-                    {review.recipeTitle}
-                  </p> */}
                     <p className="edit-review-title">
                       {this.state.modalReview.recipeTitle}
                     </p>
@@ -276,8 +265,6 @@ class UserProfile extends Form {
                         name="this.state.modalReview._id"
                         value={this.state.modalReview.comments}
                       ></textarea>
-                      {/* <div className="container"> */}
-                      {/* <div> */}
                       <span className="edit-submit-btn">
                         {this.renderButton(
                           "Submit Review",
@@ -291,31 +278,14 @@ class UserProfile extends Form {
                       >
                         Cancel
                       </button>
-
-                      {/* </div> */}
-                      {/* </div> */}
                     </form>
                   </div>
-                  {/* <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    Save changes
-                  </button>
-                </div> */}
                 </div>
               </div>
             </div>
-            {/* </React.Fragment> */}
           </div>
         ))}
 
-        {/* Delete Modal
         <div
           className="modal fade"
           id="deleteModal"
