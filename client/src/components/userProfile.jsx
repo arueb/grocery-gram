@@ -5,9 +5,8 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService";
-import UPReviewRow from "./upReviewRow";
+// import UPReviewRow from "./upReviewRow";
 import UserReviews from "./userReviews";
-import StarRating from "./common/starRating";
 // import AvgStarRating from "./common/avgStarRating";
 
 class UserProfile extends Form {
@@ -141,19 +140,7 @@ class UserProfile extends Form {
     this.setState({ profileImageUrl: URL.createObjectURL(e.target.files[0]) });
   }
 
-  populateDeleteModal(review) {
-    this.setState({ modalReview: review });
-  }
-
-  handleEdit = (review) => {
-    this.setState({ modalReview: review });
-  };
-
-  handleStarChange = () => {};
-
-  handleEditSubmit = () => {
-    console.log("Edit Review");
-  };
+  
 
   render() {
     return (
@@ -206,7 +193,10 @@ class UserProfile extends Form {
             </div>
           </div>
         </section>
-        <UserReviews />
+        <UserReviews
+          user={this.props.user}
+        
+        />
         {/*<div className="">
           <h3 className="up-heading">Your Reviews</h3>
         </div>
