@@ -16,3 +16,7 @@ export function newReview(review) {
         review
     );
 }
+
+export function updateReview(Id, review) {
+    return http.patch(reviewsUrl(Id), review);
+}

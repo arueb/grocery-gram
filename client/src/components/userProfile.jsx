@@ -5,8 +5,7 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService";
-// import AvgStarRating from "./common/avgStarRating";
-import UPReviewRow from "./upReviewRow";
+import UserReviews from "./userReviews";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -23,7 +22,6 @@ class UserProfile extends Form {
       },
       userReviews: [],
       errors: {},
-      modalReview: {},
     };
 
     this.storeImageFile = this.storeImageFile.bind(this);
@@ -137,20 +135,13 @@ class UserProfile extends Form {
   storeImageFile(e) {
     this.setState({ imageFileToUpload: e.target.files[0] });
     this.setState({ profileImageUrl: URL.createObjectURL(e.target.files[0]) });
-  }
-
-  populateDeleteModal(review) {
-    this.setState({ modalReview: review });
-  }
+  }  
 
   render() {
     return (
       <React.Fragment>
         <div className="up-heading">
           <h2>
-            {/* <span className="up-hdg-user text-secondary">
-              {this.props.user.username}
-            </span>{" "} */}
             My Profile
           </h2>
         </div>
@@ -197,120 +188,9 @@ class UserProfile extends Form {
             </div>
           </div>
         </section>
-        <div className="">
-          <h3 className="up-heading">Your Reviews</h3>
-        </div>
-        {this.state.userReviews.map((review) => (
-          <React.Fragment>
-            <UPReviewRow
-              key={review._id}
-              recipeId={review.recipeId}
-              recipeTitle={review.recipeTitle}
-              username={review.username}
-              comments={review.comments}
-              userImage={
-                review.profileImageUrl ||
-                process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
-              }
-              date={review.date}
-              rating={review.rating}
-              starSize={20}
-            />
-          </React.Fragment>
-        ))}
-
-        {/* Edit Modal */}
-        <div
-          className="modal fade"
-          id="editModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Modal title
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  I don't believe there is a patch reviews route at all, so that
-                  would need to be included
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Delete Modal */}
-        <div
-          className="modal fade"
-          id="deleteModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Delete Review
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  There is already a route for delete review, but it does not
-                  correctly handle changing the review average
-                </p>
-                <p>{JSON.stringify(this.state.modalReview)}</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button type="button" className="btn btn-danger">
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <UserReviews
+          user={this.props.user}        
+        />
       </React.Fragment>
     );
   }
