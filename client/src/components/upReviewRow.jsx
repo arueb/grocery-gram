@@ -21,6 +21,7 @@ class UPReviewRow extends Component {
       <React.Fragment>
         <div className="up-review-row">
           <div
+            onClick={() => this.props.onDelete(this.props.review._id)}
             className="icon-container text-secondary"
             // className="delete-review-icon "
             // style={({ cursor: "pointer" }, { float: "right" })}

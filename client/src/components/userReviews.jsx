@@ -2,7 +2,7 @@ import React from 'react';
 import Joi from "joi-browser";
 import Form from './common/form';
 import { getUserReviews } from "../services/userService";
-import { updateReview } from '../services/reviewService';
+import { updateReview, deleteReview } from '../services/reviewService';
 import UPReviewRow from "./upReviewRow";
 import StarRating from "./common/starRating";
 
@@ -17,8 +17,8 @@ class UserReviews extends Form {
       recipeModalTitle: "",
       reviewModalId: "",
       userReviews: [],
+      reviewToDeleteId: "",
       errors: {},
-      // modalReview: {},
     };
   }
 
@@ -68,6 +68,15 @@ class UserReviews extends Form {
     this.setState({ data });
   };
 
+  handleDeleteReview = async () => {
+    await deleteReview(this.state.reviewToDeleteId);
+    await this.populateReviews();
+  }
+
+  handleDelete = (reviewId) => {
+    this.setState({ reviewToDeleteId: reviewId });
+  }
+
   render() { 
     return (
       <React.Fragment>
@@ -86,6 +95,7 @@ class UserReviews extends Form {
             date={review.date}
             comments={review.comments}
             onEdit={this.populateEditModal}
+            onDelete={this.handleDelete}
           />
         </div>
       ))}
@@ -151,10 +161,7 @@ class UserReviews extends Form {
           </div>
         </div>
       </div>
-    {/* </div> */}
-
-
-      {/* <div
+      <div
         className="modal fade"
         id="deleteModal"
         tabIndex="-1"
@@ -166,7 +173,7 @@ class UserReviews extends Form {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Delete Review
+                Are you sure?
               </h5>
               <button
                 type="button"
@@ -179,10 +186,8 @@ class UserReviews extends Form {
             </div>
             <div className="modal-body">
               <p>
-                There is already a route for delete review, but it does not
-                correctly handle changing the review average
+                This will permanently delete your review and cannot be undone.
               </p>
-              <p>{JSON.stringify(this.state.modalReview)}</p>
             </div>
             <div className="modal-footer">
               <button
@@ -192,13 +197,18 @@ class UserReviews extends Form {
               >
                 Cancel
               </button>
-              <button type="button" className="btn btn-danger">
+                <button
+                  onClick={this.handleDeleteReview}
+                  type="button"
+                  className="btn btn-danger"
+                  data-dismiss="modal"
+                >
                 Delete
               </button>
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       </React.Fragment>
     );
   }
