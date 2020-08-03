@@ -6,6 +6,7 @@ import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService";
 import UPReviewRow from "./upReviewRow";
+import UserReviews from "./userReviews";
 import StarRating from "./common/starRating";
 // import AvgStarRating from "./common/avgStarRating";
 
@@ -208,6 +209,7 @@ class UserProfile extends Form {
             </div>
           </div>
         </section>
+        <UserReviews />
         <div className="">
           <h3 className="up-heading">Your Reviews</h3>
         </div>
