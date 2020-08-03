@@ -23,47 +23,19 @@ class UPReviewRow extends Component {
           <div
             onClick={() => this.props.onDelete(this.props.review._id)}
             className="icon-container text-secondary"
-            // className="delete-review-icon "
-            // style={({ cursor: "pointer" }, { float: "right" })}
             data-toggle="modal"
             data-target="#deleteModal"
           >
-            <FaTrash
-
-            // type="button"
-            // className="btn btn-secondary up-edit-btn"
-            ></FaTrash>
+            <FaTrash></FaTrash>
           </div>
           <div
-            // onClick={() => this.props.onEdit(this.props.review)}
             onClick={() => this.props.onEdit(this.props.review)}
             className="icon-container text-secondary"
-            // className="edit-review-icon text-secondary"
             data-toggle="modal"
-            // style={({ cursor: "pointer" }, { float: "right" })}
             data-target="#editModal"
-            // data-val={this.props.review}
           >
             <FaPen></FaPen>
           </div>
-          {/* <button
-            type="button"
-            className="btn btn-secondary up-edit-btn"
-            data-toggle="modal"
-            data-target="#editModal"
-            >
-            Edit
-        </button> */}
-          {/* 
-          <button
-          type="button"
-          className="btn btn-danger up-del-btn"
-          data-toggle="modal"
-          data-target="#deleteModal"
-          // onClick={() => this.populateDeleteModal(review)}
-          >
-          Delete
-        </button> */}
           <p className="title-url">
             <a href={"/recipes/" + this.props.recipeId}>
               {this.props.recipeTitle}

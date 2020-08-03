@@ -5,9 +5,7 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService";
-// import UPReviewRow from "./upReviewRow";
 import UserReviews from "./userReviews";
-// import AvgStarRating from "./common/avgStarRating";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -24,7 +22,6 @@ class UserProfile extends Form {
       },
       userReviews: [],
       errors: {},
-      modalReview: {},
     };
 
     this.storeImageFile = this.storeImageFile.bind(this);
@@ -138,9 +135,7 @@ class UserProfile extends Form {
   storeImageFile(e) {
     this.setState({ imageFileToUpload: e.target.files[0] });
     this.setState({ profileImageUrl: URL.createObjectURL(e.target.files[0]) });
-  }
-
-  
+  }  
 
   render() {
     return (
@@ -194,133 +189,8 @@ class UserProfile extends Form {
           </div>
         </section>
         <UserReviews
-          user={this.props.user}
-        
+          user={this.props.user}        
         />
-        {/*<div className="">
-          <h3 className="up-heading">Your Reviews</h3>
-        </div>
-        {this.state.userReviews.map((review) => (
-          <div key={review._id}>
-            <UPReviewRow
-              review={review}
-              recipeId={review.recipeId}
-              recipeTitle={review.recipeTitle}
-              username={review.username}
-              rating={review.rating}
-              starSize={20}
-              date={review.date}
-              comments={review.comments}
-              onEdit={this.handleEdit}
-            />
-
-            <div
-              className="modal fade"
-              id="editModal"
-              tabIndex="-1"
-              role="dialog"
-              aria-labelledby="edit-modal"
-              aria-hidden="true"
-            >
-              <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h4 className="modal-title" id="exampleModalLabel">
-                      Edit Review
-                    </h4>
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-
-                  <div className="modal-body">
-                    <p className="edit-review-title">
-                      {this.state.modalReview.recipeTitle}
-                    </p>
-                    <form onSubmit={this.handleEditSubmit}>
-                      <StarRating
-                        starSize={25}
-                        onChange={this.handleStarChange}
-                        currentStars={this.state.modalReview.rating}
-                      />
-                      <br></br>
-                      <textarea
-                        rows={3}
-                        className="form-control"
-                        name="this.state.modalReview._id"
-                        value={this.state.modalReview.comments}
-                      ></textarea>
-                      <span className="edit-submit-btn">
-                        {this.renderButton(
-                          "Submit Review",
-                          "btn btn-dark float-right mt-3"
-                        )}
-                      </span>
-                      <button
-                        type="button"
-                        className="btn btn-secondary float-right mr-2 mt-3"
-                        data-dismiss="modal"
-                      >
-                        Cancel
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        <div
-          className="modal fade"
-          id="deleteModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Delete Review
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  There is already a route for delete review, but it does not
-                  correctly handle changing the review average
-                </p>
-                <p>{JSON.stringify(this.state.modalReview)}</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Cancel
-                </button>
-                <button type="button" className="btn btn-danger">
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </React.Fragment>
     );
   }
