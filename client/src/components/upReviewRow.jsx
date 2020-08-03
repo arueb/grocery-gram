@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AvgStarRating from "./common/avgStarRating";
 import { FaPen, FaTrash } from "react-icons/fa";
 
+
 class UPReviewRow extends Component {
   prettyDate = () => {
     let date = new Date(this.props.date);
@@ -33,11 +34,14 @@ class UPReviewRow extends Component {
             ></FaTrash>
           </div>
           <div
+            // onClick={() => this.props.onEdit(this.props.review)}
+            onClick={() => this.props.onEdit(this.props.review)}
             className="icon-container text-secondary"
             // className="edit-review-icon text-secondary"
             data-toggle="modal"
             // style={({ cursor: "pointer" }, { float: "right" })}
             data-target="#editModal"
+            // data-val={this.props.review}
           >
             <FaPen></FaPen>
           </div>

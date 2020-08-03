@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService";
+// import UPReviewRow from "./upReviewRow";
+import UserReviews from "./userReviews";
 // import AvgStarRating from "./common/avgStarRating";
-import UPReviewRow from "./upReviewRow";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -139,18 +140,13 @@ class UserProfile extends Form {
     this.setState({ profileImageUrl: URL.createObjectURL(e.target.files[0]) });
   }
 
-  populateDeleteModal(review) {
-    this.setState({ modalReview: review });
-  }
+  
 
   render() {
     return (
       <React.Fragment>
         <div className="up-heading">
           <h2>
-            {/* <span className="up-hdg-user text-secondary">
-              {this.props.user.username}
-            </span>{" "} */}
             My Profile
           </h2>
         </div>
@@ -197,75 +193,89 @@ class UserProfile extends Form {
             </div>
           </div>
         </section>
-        <div className="">
+        <UserReviews
+          user={this.props.user}
+        
+        />
+        {/*<div className="">
           <h3 className="up-heading">Your Reviews</h3>
         </div>
         {this.state.userReviews.map((review) => (
-          <React.Fragment>
+          <div key={review._id}>
             <UPReviewRow
-              key={review._id}
+              review={review}
               recipeId={review.recipeId}
               recipeTitle={review.recipeTitle}
               username={review.username}
-              comments={review.comments}
-              userImage={
-                review.profileImageUrl ||
-                process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
-              }
-              date={review.date}
               rating={review.rating}
               starSize={20}
+              date={review.date}
+              comments={review.comments}
+              onEdit={this.handleEdit}
             />
-          </React.Fragment>
-        ))}
 
-        {/* Edit Modal */}
-        <div
-          className="modal fade"
-          id="editModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Modal title
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  I don't believe there is a patch reviews route at all, so that
-                  would need to be included
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
+            <div
+              className="modal fade"
+              id="editModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="edit-modal"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h4 className="modal-title" id="exampleModalLabel">
+                      Edit Review
+                    </h4>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div className="modal-body">
+                    <p className="edit-review-title">
+                      {this.state.modalReview.recipeTitle}
+                    </p>
+                    <form onSubmit={this.handleEditSubmit}>
+                      <StarRating
+                        starSize={25}
+                        onChange={this.handleStarChange}
+                        currentStars={this.state.modalReview.rating}
+                      />
+                      <br></br>
+                      <textarea
+                        rows={3}
+                        className="form-control"
+                        name="this.state.modalReview._id"
+                        value={this.state.modalReview.comments}
+                      ></textarea>
+                      <span className="edit-submit-btn">
+                        {this.renderButton(
+                          "Submit Review",
+                          "btn btn-dark float-right mt-3"
+                        )}
+                      </span>
+                      <button
+                        type="button"
+                        className="btn btn-secondary float-right mr-2 mt-3"
+                        data-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ))}
 
-        {/* Delete Modal */}
         <div
           className="modal fade"
           id="deleteModal"
@@ -310,7 +320,7 @@ class UserProfile extends Form {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </React.Fragment>
     );
   }
