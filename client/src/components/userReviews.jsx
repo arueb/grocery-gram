@@ -2,6 +2,7 @@ import React from 'react';
 import Joi from "joi-browser";
 import Form from './common/form';
 import { getUserReviews } from "../services/userService";
+import { updateReview } from '../services/reviewService';
 import UPReviewRow from "./upReviewRow";
 import StarRating from "./common/starRating";
 
@@ -39,20 +40,16 @@ class UserReviews extends Form {
     let toSubmit = {};
     toSubmit.comments = this.state.data.reviewNotes;
     toSubmit.rating = this.state.data.reviewStars;
-    toSubmit.userId = this.props.user._id;
-    toSubmit.recipeId = this.state.recipeModalId;
 
-    console.log('toSubmit', toSubmit);
-    // await newReview(toSubmit);
+    // console.log('toSubmit', toSubmit);
+    await updateReview(this.state.reviewModalId, toSubmit);
 
-    // // Get the page again
-    // await this.populateReviews();
-    // await this.populateRecipe();
+    await this.populateReviews();
 
-    // const data = { ...this.state.data };
-    // data.reviewNotes = "";
-    // data.reviewStars = 0;
-    // this.setState({ data });
+    const data = { ...this.state.data };
+    data.reviewNotes = "";
+    data.reviewStars = 0;
+    this.setState({ data });
   };
 
   populateEditModal = (review) => {
@@ -133,13 +130,15 @@ class UserReviews extends Form {
                   "",
                   3,
                   ""
-                )}              
-                <span className="edit-submit-btn">
-                {this.renderButton(
-                  "Submit Review",
-                  "btn btn-dark float-right mt-3"
-                )}
-                </span>
+                )}   
+                <button
+                  onClick={this.handleSubmit}
+                  type="button"
+                  className="btn btn-dark float-right mt-3"
+                  data-dismiss="modal"
+                >
+                  Submit Review
+                </button>  
                 <button
                   type="button"
                   className="btn btn-secondary float-right mr-2 mt-3"
