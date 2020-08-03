@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 import http from "../services/httpService";
 import { updateUserProperty, getUserReviews } from "../services/userService";
 import { loginWithJwt, changePassword } from "../services/authService";
-// import AvgStarRating from "./common/avgStarRating";
 import UPReviewRow from "./upReviewRow";
+import StarRating from "./common/starRating";
+// import AvgStarRating from "./common/avgStarRating";
 
 class UserProfile extends Form {
   constructor(props) {
@@ -143,6 +144,16 @@ class UserProfile extends Form {
     this.setState({ modalReview: review });
   }
 
+  handleEdit = (review) => {
+    this.setState({ modalReview: review });
+  };
+
+  handleStarChange = () => {};
+
+  handleEditSubmit = () => {
+    console.log("Edit Review");
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -201,8 +212,10 @@ class UserProfile extends Form {
           <h3 className="up-heading">Your Reviews</h3>
         </div>
         {this.state.userReviews.map((review) => (
-          <React.Fragment>
+          // <React.Fragment>
+          <div key={review._id}>
             <UPReviewRow
+              review={review}
               recipeId={review.recipeId}
               recipeTitle={review.recipeTitle}
               username={review.username}
@@ -210,57 +223,97 @@ class UserProfile extends Form {
               starSize={20}
               date={review.date}
               comments={review.comments}
+              onEdit={this.handleEdit}
             />
-          </React.Fragment>
-        ))}
+            {/* </React.Fragment>
+        ))} */}
 
-        {/* Edit Modal */}
-        <div
-          className="modal fade"
-          id="editModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Modal title
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>
-                  I don't believe there is a patch reviews route at all, so that
-                  would need to be included
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save changes
-                </button>
+            {/* Edit Modal */}
+            <div
+              className="modal fade"
+              id="editModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="edit-modal"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h4 className="modal-title" id="exampleModalLabel">
+                      Edit Review
+                    </h4>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    {/* <p>
+                    I don't believe there is a patch reviews route at all, so that
+                    would need to be included
+                    {review.recipeTitle}
+                  </p> */}
+                    <p className="edit-review-title">
+                      {this.state.modalReview.recipeTitle}
+                    </p>
+                    <form onSubmit={this.handleEditSubmit}>
+                      <StarRating
+                        starSize={25}
+                        onChange={this.handleStarChange}
+                        currentStars={this.state.modalReview.rating}
+                      />
+                      <br></br>
+                      <textarea
+                        rows={3}
+                        className="form-control"
+                        name="this.state.modalReview._id"
+                        value={this.state.modalReview.comments}
+                      ></textarea>
+                      {/* <div className="container"> */}
+                      {/* <div> */}
+                      <span className="edit-submit-btn">
+                        {this.renderButton(
+                          "Submit Review",
+                          "btn btn-dark float-right mt-3"
+                        )}
+                      </span>
+                      <button
+                        type="button"
+                        className="btn btn-secondary float-right mr-2 mt-3"
+                        data-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+
+                      {/* </div> */}
+                      {/* </div> */}
+                    </form>
+                  </div>
+                  {/* <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" className="btn btn-primary">
+                    Save changes
+                  </button>
+                </div> */}
+                </div>
               </div>
             </div>
+            {/* </React.Fragment> */}
           </div>
-        </div>
+        ))}
 
-        {/* Delete Modal */}
+        {/* Delete Modal
         <div
           className="modal fade"
           id="deleteModal"
@@ -305,7 +358,7 @@ class UserProfile extends Form {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </React.Fragment>
     );
   }
