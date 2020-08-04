@@ -31,7 +31,7 @@ class ShoppingList extends Component {
 
   constructor(props) {
     super(props);
-    this.pageHeadingRef = React.createRef();
+    this.addBackRef = React.createRef();
   }
 
   async componentDidMount() {
@@ -356,8 +356,8 @@ class ShoppingList extends Component {
     newRemovedItems.splice(idx, 1);
     const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
     this.setState({ removedItems: newRemovedItems });
-    const pageHeadingNode = this.pageHeadingRef.current;
-    pageHeadingNode.focus();
+    const addBackNode = this.addBackRef.current;
+    addBackNode.blur();
     try {
       await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
     } catch (err) {
@@ -411,7 +411,7 @@ class ShoppingList extends Component {
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
-            <h2 ref={this.pageHeadingRef}>Shopping List</h2>
+            <h2>Shopping List</h2>
           </div>
           <div className="col-md"></div>
         </div>
@@ -469,6 +469,7 @@ class ShoppingList extends Component {
                     >
                       <span
                         className="removed"
+                        ref={this.addBackRef}
                         onClick={() => this.handleAddBackItem(item._id)}
                       >
                         {item.name}
