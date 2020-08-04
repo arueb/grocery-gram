@@ -124,7 +124,6 @@ router.delete("/:id", async (req, res) => {
       .status(500)
       .send("Something failed finding & deleting the review.");
   }
-
   // Remove review from the reviewers user.reviews
   try {
     await User.updateOne(
@@ -136,13 +135,27 @@ router.delete("/:id", async (req, res) => {
     res.status(500).send("Something failed updating the user.");
   }
 
-  // Remove the review from recipe.reviews
+  // get the recipe from the review being deleted
+  try {
+    recipe = await Recipe.findOne({ _id: review.recipeId });
+    if (!recipe) return res.status(404).send("The recipeId does not exist");
+  } catch (err) {
+    res.status(500).send("Something failed.", err);
+  }
+
+  // calculate new average rating
+  const { avgRating, numReviews } = recipe;
+  const removedRating = review.rating;
+  const newRating = (numReviews * avgRating - removedRating) / (numReviews - 1);
+
+  // Remove the review from recipe.reviews and update new numReviews and avgRating
   try {
     await Recipe.updateOne(
       { reviews: review._id },
       {
         $pull: { reviews: review._id },
         $inc: { numReviews: -1 },
+        avgRating: newRating,
       }
     );
   } catch (err) {
