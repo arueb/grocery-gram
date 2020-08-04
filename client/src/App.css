@@ -13,7 +13,15 @@ Bootstrap 4 breakpoints
 GLOBAL DEVICE STYLES - All devices (portrait phones, less than 576px) and larger
 No media query since this is the default in Bootstrap because it is "mobile first"
 */
-
+html,
+body,
+#root {
+  min-height: 100%;
+  /* position: relative; */
+}
+html {
+  position: relative;
+}
 body {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
@@ -21,7 +29,7 @@ body {
 
 #root {
   padding-bottom: 220px;
-  position: relative;
+  /* position: relative; */
 }
 
 .App {

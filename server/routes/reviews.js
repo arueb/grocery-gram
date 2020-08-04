@@ -144,9 +144,12 @@ router.delete("/:id", async (req, res) => {
   }
 
   // calculate new average rating
+
   const { avgRating, numReviews } = recipe;
   const removedRating = review.rating;
-  const newRating = (numReviews * avgRating - removedRating) / (numReviews - 1);
+  const newRating =
+    (numReviews * avgRating - removedRating) /
+    (numReviews === 1 ? 1 : numReviews - 1); // avoid division by 0 if single review is being deleted
 
   // Remove the review from recipe.reviews and update new numReviews and avgRating
   try {
