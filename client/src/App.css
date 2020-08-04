@@ -19,6 +19,11 @@ body {
   font-weight: 300;
 }
 
+#root {
+  padding-bottom: 220px;
+  position: relative;
+}
+
 .App {
   text-align: center;
 }
@@ -290,7 +295,9 @@ td.delete {
 }
 
 footer {
-  margin-top: 6em;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 #add-recipe-form img {
