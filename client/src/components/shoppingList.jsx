@@ -31,7 +31,7 @@ class ShoppingList extends Component {
 
   constructor(props) {
     super(props);
-    this.itemSearchRef = React.createRef();
+    this.pageHeadingRef = React.createRef();
   }
 
   async componentDidMount() {
@@ -356,8 +356,8 @@ class ShoppingList extends Component {
     newRemovedItems.splice(idx, 1);
     const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
     this.setState({ removedItems: newRemovedItems });
-    const itemSearchNode = this.itemSearchRef.current;
-    itemSearchNode.focus();
+    const pageHeadingNode = this.pageHeadingRef.current;
+    pageHeadingNode.focus();
     try {
       await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
     } catch (err) {
@@ -411,14 +411,14 @@ class ShoppingList extends Component {
         <div className="row sl-page-heading">
           <div className="col-md-3"></div>
           <div className="col-md">
-            <h2>Shopping List</h2>
+            <h2 ref={this.pageHeadingRef}>Shopping List</h2>
           </div>
           <div className="col-md"></div>
         </div>
         <hr className="divider" />
         <div className="row">
           <div className="col-md-5 order-md-4 shop-list">
-            <div className="itemSearch pb-3" ref={this.itemSearchRef}>
+            <div className="itemSearch pb-3">
               <ItemSearch
                 items={this.props.items}
                 update={this.handleUpdate}
