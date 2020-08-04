@@ -193,7 +193,6 @@ class UserReviews extends Form {
               <button
                 onClick={this.handleDeleteReview}
                 type="button"
-                // className="btn btn-danger mr-auto"
                 className="btn btn-danger"
                 data-dismiss="modal"
               >

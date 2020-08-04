@@ -31,7 +31,7 @@ class ShoppingList extends Component {
 
   constructor(props) {
     super(props);
-    this.itemSearchRef = React.createRef();
+    this.addBackRef = React.createRef();
   }
 
   async componentDidMount() {
@@ -356,8 +356,8 @@ class ShoppingList extends Component {
     newRemovedItems.splice(idx, 1);
     const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
     this.setState({ removedItems: newRemovedItems });
-    const itemSearchNode = this.itemSearchRef.current;
-    itemSearchNode.focus();
+    const addBackNode = this.addBackRef.current;
+    addBackNode.blur();
     try {
       await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
     } catch (err) {
@@ -418,7 +418,7 @@ class ShoppingList extends Component {
         <hr className="divider" />
         <div className="row">
           <div className="col-md-5 order-md-4 shop-list">
-            <div className="itemSearch pb-3" ref={this.itemSearchRef}>
+            <div className="itemSearch pb-3">
               <ItemSearch
                 items={this.props.items}
                 update={this.handleUpdate}
@@ -469,6 +469,7 @@ class ShoppingList extends Component {
                     >
                       <span
                         className="removed"
+                        ref={this.addBackRef}
                         onClick={() => this.handleAddBackItem(item._id)}
                       >
                         {item.name}
@@ -519,14 +520,7 @@ class ShoppingList extends Component {
                           including your lined-through items. This cannot be
                           undone.
                         </div>
-                        <div className="modal-footer">
-                          <button
-                            type="button"
-                            className="btn btn-secondary"
-                            data-dismiss="modal"
-                          >
-                            Cancel
-                          </button>
+                        <div className="modal-footer d-flex justify-content-start">
                           <button
                             onClick={() => this.handleClearAll()}
                             type="button"
@@ -534,6 +528,13 @@ class ShoppingList extends Component {
                             className="btn btn-danger"
                           >
                             Clear All
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Cancel
                           </button>
                         </div>
                       </div>
