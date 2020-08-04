@@ -149,64 +149,20 @@ class RecipeForm extends Form {
 
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
-      // return this.renderButtonCustomHandler(
-      //   "Delete Recipe",
-      //   this.handleDeleteRecipe
-      // );
-
-      return (
-        <button
-          className="btn btn-dark mt-4 mr-2"
-          data-toggle="modal"
-          data-target="#deleteRecipeModal"
-          // onClick={() => this.deleteTheRecipe()}
-        >
-          Delete Recipe
-        </button>      
+      return this.renderButtonCustomHandler(
+        "Delete Recipe",
+        this.handleDeleteRecipe
       );
     }
   }
 
-      // <div
-      //   onClick={() => this.props.onDelete(this.props.review._id)}
-      //   className="icon-container text-secondary"
-      //   data-toggle="modal"
-      //   data-target="#deleteModal"
-      // >
-      //   <FaTrash></FaTrash>
-      // </div>
-
-      // renderButtonCustomHandler(
-      //   label,
-      //   handleClick,
-      //   style = "btn btn-dark mt-4 mr-2"
-      // ) {
-      //   // console.log(this.validate());
-      //   return (
-      //     <button className={style} onClick={(e) => handleClick(e)}>
-      //       {label}
-      //     </button>
-      //   );
-      // }
-
-  deleteTheRecipe() {
-    console.log('deleting a recipe')
-  }
-
-
-
-
-  // async handleDeleteRecipe(e) {
-  handleDeleteRecipe(e) {
+  async handleDeleteRecipe(e) {
     e.preventDefault();
-    console.log('handleDeleteRecipe: e', e);
-
-
-  //   const { recipeId } = this.state;
-  //   try {
-  //     await deleteRecipe(recipeId);
-  //     this.props.history.push("/my-recipes");
-  //   } catch (err) {}
+    const { recipeId } = this.state;
+    try {
+      await deleteRecipe(recipeId);
+      this.props.history.push("/my-recipes");
+    } catch (err) {}
   }
 
   renderHeader() {
@@ -502,107 +458,7 @@ class RecipeForm extends Form {
             {this.renderButton("Save Recipe")}
 
             {this.renderDeleteButton()}
-            {/* <div
-              className="modal fade"
-              id="deleteRecipeModal"
-              tabIndex="-1"
-              role="dialog"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">
-                      Are you sure?
-                    </h5>
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  
-                  <div className="modal-body">
-                    <p>
-                      This will permanently delete your recipe and cannot be undone.
-                    </p>
-                  </div>
-                  
-                  <div className="modal-footer d-flex justify-content-start">
-                    <button
-                      onClick={(e) => this.handleDeleteRecipe(e)}
-                      type="button"
-                      className="btn btn-danger"
-                      data-dismiss="modal"
-                    >
-                      Delete Recipe
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-dismiss="modal"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div> <-- */}
           </form>
-          <div
-            className="modal fade"
-            id="deleteRecipeModal"
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLabel">
-                    Are you sure?
-                    </h5>
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-
-                <div className="modal-body">
-                  <p>
-                    This will permanently delete your recipe and cannot be undone.
-                    </p>
-                </div>
-
-                <div className="modal-footer d-flex justify-content-start">
-                  <button
-                    onClick={(e) => this.handleDeleteRecipe(e)}
-                    type="button"
-                    className="btn btn-danger"
-                    data-dismiss="modal"
-                  >
-                    Delete Recipe
-                    </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-dismiss="modal"
-                  >
-                    Cancel
-                    </button>
-                </div>
-              </div>
-            </div>
-          </div> 
         </section>
       </React.Fragment>
     );
