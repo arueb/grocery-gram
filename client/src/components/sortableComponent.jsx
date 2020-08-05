@@ -14,7 +14,7 @@ const SortableItem = sortableElement(({ index, item, imgClick }) =>
 );
 
 const SortableContainer = sortableContainer(({ children }) => {
-  return <div style={{ display: "inline-block" }}>{children}</div>;
+  return <div>{children}</div>;
 });
 
 class SortableComponent extends Component {

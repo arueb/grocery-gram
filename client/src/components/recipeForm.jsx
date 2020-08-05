@@ -47,18 +47,19 @@ class RecipeForm extends Form {
 
   schema = {
     title: Joi.string().required().label("Recipe Name"),
-    category: Joi.string().required().label("Recipe Category"),
-    isPublished: Joi.boolean().required().label("Recipe Published Slider"),
-    instructions: Joi.string().required().label("Recipe Instructions"),
     recipeImages: Joi.array().min(1).required().label("Recipe Images"),
     ingredientCount: Joi.number().min(1).required(),
     qty: Joi.string().label("Qty"),
     unit: Joi.string().label("Unit"),
     itemId: Joi.string().label("Item"),
     notes: Joi.string().label("Notes").optional(),
+    category: Joi.string().required().label("Recipe Category"),
+    instructions: Joi.string().required().label("Recipe Instructions"),
+    isPublished: Joi.boolean().required().label("Recipe Published Slider"),
   };
 
   ingredientsSchema = {
+    _id: Joi.any(),
     qty: Joi.string().label("Qty"),
     unit: Joi.string().label("Unit"),
     itemId: Joi.string().label("Item").required(),
@@ -130,7 +131,13 @@ class RecipeForm extends Form {
     let oldFiles = this.state.data.recipeImages;
     const data = { ...this.state.data };
     data.recipeImages = oldFiles.concat(newFile)
-    this.setState({ data });
+
+    let errors = { ...this.state.errors };
+    if (errors.hasOwnProperty("recipeImages")) {
+      delete errors.recipeImages;
+    }
+
+    this.setState({ data, errors });
   }
 
   handleThumbnailRemove = (e) => {
@@ -189,7 +196,7 @@ class RecipeForm extends Form {
     };
     const ingredients = [...this.state.ingredients, ingredient];
     const data = { ...this.state.data };
-    data.ingredientCount = data.ingredientCount + 1;
+    data.ingredientCount = ingredients.length;
     this.setState({ ingredients, validateIngredientsRow: null, data });
     // console.log(this.state.ingredients);
   };
@@ -200,7 +207,7 @@ class RecipeForm extends Form {
     const ingredients = [...this.state.ingredients];
     ingredients.splice(idx, 1);
     const data = { ...this.state.data };
-    data.ingredientCount = data.ingredientCount + 1;
+    data.ingredientCount = ingredients.length;
     this.setState({ ingredients, validateIngredientsRow: null, data });
     // this.setState({ validateIngredientsRow: null });
   };
@@ -226,7 +233,7 @@ class RecipeForm extends Form {
     // delete ingredient.notes;
     delete ingredient.item;
     const { error } = Joi.validate(
-      //   this.state.ingredients[row],
+      // this.state.ingredients[row],
       ingredient,
       this.ingredientsSchema,
       options
@@ -251,31 +258,28 @@ class RecipeForm extends Form {
     // }
 
     const { ingredients } = this.state;
-    console.log("validate ingredients form");
+    let ingredientsValidationFailed = false;
     if (ingredients.length > 0) {
       ingredients.forEach((ingredient, row) => {
-        // console.log("row", row);
         const errors = this.validateIngredients(row);
-        console.log("this.validateIngredients(row)=", errors);
+        console.log("errors = ", errors);
         this.setState({ errors: errors || {} });
-        console.log("state change", this.state.errors)
         if (errors) {
-          console.log("if (errors) {", row);
+          ingredientsValidationFailed = true;
           this.setState({ validateIngredientsRow: row });
           return;
         }
-        console.log("Out of else", errors);
         this.setState({ validateIngredientsRow: null });
       });
-
-      //   console.log(this.validateIngredients());
     }
-    console.log("state errors", this.state.errors);
-    console.log("this.state.validateIngredientsRow", this.state.validateIngredientsRow);
-    if (this.state.validateIngredientsRow) return;
-    console.log("this.state.validateIngredientsRow", this.state.validateIngredientsRow);
+
+    if (ingredientsValidationFailed) {
+      console.log("I stopped at ingredientsValidationFailed");
+      return;
+    }
+
     console.log("maded it past state errosr!");
-console.log("let's gooo");
+
     let imageLinks = [];
 
     for (const imageFile of this.state.data.recipeImages) {
@@ -333,13 +337,14 @@ console.log("let's gooo");
 
     return (
       <React.Fragment>
-        <input
-          id="myInput"
-          type="file"
-          ref={(fileInput) => (this.fileInput = fileInput)}
-          onChange={this.handleThumbnailAdd}
-          style={{ display: "none" }}
-        />
+        <div className="hiddenInputWrapper">
+          <input
+            id="myInput"
+            type="file"
+            ref={(fileInput) => (this.fileInput = fileInput)}
+            onChange={this.handleThumbnailAdd}
+          />
+        </div>
         <section id="add-recipe-form">
           <div className="row rf-hdr">
             <div className="col">{this.renderHeader()}</div>
@@ -360,7 +365,6 @@ console.log("let's gooo");
                 imgClick={this.handleThumbnailRemove}
                 onSortEnd={this.onSortEnd}
               />
-              {this.renderInput("recipeImages")}
               <button
                 name="addImage"
                 className="btn btn-outline-dark"
@@ -371,6 +375,9 @@ console.log("let's gooo");
               >
                 Add Image +
               </button>
+              <div className="hiddenInputWrapper">
+                {this.renderInput("recipeImages")}
+              </div>
             </div>
 
             <div className="form-group mb-5 mt-5 ingredients-form">
@@ -458,7 +465,9 @@ console.log("let's gooo");
                   </tbody>
                 </table>
               )}
-              {this.renderInput("ingredientCount")}
+              <div className="hiddenInputWrapper">
+                {this.renderInput("ingredientCount")}
+              </div>
               <button
                 onClick={this.handleAddRow}
                 className="btn btn-outline-dark"
