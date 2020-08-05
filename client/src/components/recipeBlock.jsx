@@ -6,6 +6,7 @@ import AvgStarRating from "./common/avgStarRating";
 import { FaPen, FaHeart } from "react-icons/fa";
 
 class RecipeBlock extends Component {
+
   getUsername() {
     if (this.props.forExplore === true) {
       return this.props.recipe.user[0].username;
@@ -33,14 +34,6 @@ class RecipeBlock extends Component {
     }
   }
 
-  //   handleUnsaveRecipe = (recipeId) => {
-  //     console.log("unsave recipe id: ", recipeId);
-  //     console.log(this.state.recipes);
-  //     // const recipes = [...this.state.recipes];
-  //     // const filtered = recipes.filter((r) => r._id !== recipeId);
-  //     // this.setState({ recipes: filtered });
-  //   };
-
   renderHeartOrPencilOrNone() {
     // Case if user is not logged in
     if (this.props.userId === undefined) {
@@ -58,11 +51,19 @@ class RecipeBlock extends Component {
     }
     // Case if user does not own this recipe
     else if (this.props.recipe.userId !== this.props.userId) {
+      // console.log("recipeTitle", this.props.recipe.title);
       return (
         <div className="saved-icon">
           <FaHeart
             style={{ cursor: "pointer" }}
-            onClick={() => this.props.unSave(this.props.recipe._id)}
+            data-toggle="modal"
+            data-target="#unsaveModal"
+            onClick={() =>
+              this.props.unSave(
+                this.props.recipe._id,
+                this.props.recipe.title
+              )
+            }
           ></FaHeart>
         </div>
       );
@@ -89,7 +90,6 @@ class RecipeBlock extends Component {
                 />
               </div>
             </Link>
-
             {!this.props.forExplore && this.renderHeartOrPencilOrNone()}
           </div>
         </div>
