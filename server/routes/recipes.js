@@ -123,15 +123,16 @@ router.post("/", async (req, res) => {
     // check to make sure the specified user exists
     let user = await User.findOne({ _id: req.body.userId });
     if (!user) return res.status(404).send("The userId does not exist");
-
+// console.log("req.body=", req.body)
     // create the recipe object from the request body and save
     const recipe = new Recipe(req.body);
-    console.log(recipe);
+    // console.log(recipe);
     await recipe.save();
-    console.log * "saved recipe successfully!";
+    // console.log * "saved recipe successfully!";
     res.status(200).send(recipe); // send recipe back with response
   } catch (err) {
-    res.status(500).send("Something failed.", err);
+    console.log("POST /recipes error:", err)
+    res.status(500).send("Something failed creating a new recipes.");
   }
 });
 
@@ -147,7 +148,8 @@ router.patch("/:id", async (req, res) => {
       const user = await User.findOne({ _id: req.body.userId });
       if (!user) return res.status(404).send("The userId does not exist");
     } catch (err) {
-      res.status(500).send("Something failed.", err);
+      console.log("PATCH /recipes/:id Finding User Error=", err);
+      res.status(500).send("Finding User Error.");
     }
   }
 
@@ -166,7 +168,8 @@ router.patch("/:id", async (req, res) => {
 
     res.send(recipe);
   } catch (err) {
-    res.status(500).send("Something failed", err);
+    console.log("PATCH /recipes/:id Updating Recipe Error=", err);
+    res.status(500).send("Something failed updating a recipe");
   }
 });
 
