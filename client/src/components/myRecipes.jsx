@@ -14,6 +14,7 @@ import SearchBox from "./searchBox";
 class MyRecipes extends Component {
   state = {
     data: "",
+    userData: {},
     recipes: [],
     pageSize: 12,
     currentPage: 1,
@@ -22,6 +23,8 @@ class MyRecipes extends Component {
     selectValue: "",
     options: [],
     searchQuery: "",
+    recipeIdForUnsave: "",
+    recipeTitleForUnsave: "",
   };
 
   getInitialSelectVal() {
@@ -73,15 +76,11 @@ class MyRecipes extends Component {
     this.setState({
       selectedOwnerType: ownerType,
       currentPage: 1,
-      // selectValue: "",
-      // selectValue: "All Categories",
       selectValue: this.getInitialSelectVal(),
     });
   };
 
   handleFilterByCategory = (event) => {
-    // console.log("you chose", event.target.value);
-    // this.setState({ selectValue: event.target.value });
     this.setState({ selectValue: event.target.value, currentPage: 1 });
   };
 
@@ -90,7 +89,6 @@ class MyRecipes extends Component {
   };
 
   handleSearch = (query) => {
-    // console.log("searchQuery:", query);
     this.setState({
       searchQuery: query,
       currentPage: 1,
@@ -100,25 +98,29 @@ class MyRecipes extends Component {
   };
 
   handleUnsaveRecipe = async (recipeId) => {
-    console.log("handling unsave recipe", recipeId);
     const recipes = [...this.state.recipes];
     const filtered = recipes.filter((r) => r._id !== recipeId);
     this.setState({ recipes: filtered });
 
     // call backend to remove from saved recipes
-    const oldSavedRecipes = [...this.state.userData.savedRecipes];
-    // console.log("savedRecipes", savedRecipes);
+    let userData = { ...this.state.userData };
+    const oldSavedRecipes = [...userData.savedRecipes];
     const savedRecipes = oldSavedRecipes.filter((r) => {
       return r !== recipeId;
     });
+    userData.savedRecipes = savedRecipes;
+    this.setState({ userData })
+
     try {
       await updateUserProperty(this.state.userData._id, { savedRecipes });
     } catch (ex) {
       this.setState({ recipes });
       console.log("Something failed", ex);
     }
+  };
 
-    // console.log("newSavedRecipes", newSavedRecipes);
+  setRecipeForUnsave = (recipeIdForUnsave, recipeTitleForUnsave) => {
+    this.setState({ recipeIdForUnsave, recipeTitleForUnsave });
   };
 
   render() {
@@ -167,7 +169,6 @@ class MyRecipes extends Component {
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
-          {/* <div className="col-md-4"> */}
           <h2>My Recipes</h2>
           <button
             onClick={this.onNewRecipe}
@@ -175,13 +176,6 @@ class MyRecipes extends Component {
           >
             New Recipe +
           </button>
-          {/* </div> */}
-          {/* <div className="col-md-4"></div>
-          <div className="col-md-4 new-recipe">
-            <button onClick={this.onNewRecipe} className="btn btn-dark">
-              New Recipe +
-            </button>
-          </div> */}
         </div>
         <hr className="divider" />
         <div className="row list-group-row">
@@ -216,13 +210,73 @@ class MyRecipes extends Component {
           {recipes &&
             recipes.map((recipe) => {
               return (
-                <RecipeBlock
-                  unSave={this.handleUnsaveRecipe}
-                  userId={this.props.user._id}
-                  key={recipe._id}
-                  recipe={recipe}
-                  forExplore={false}
-                />
+                <React.Fragment
+                  key = { recipe._id }                
+                >
+                  <RecipeBlock
+                    unSave={this.setRecipeForUnsave}
+                    userId={this.props.user._id}                    
+                    recipe={recipe}
+                    forExplore={false}
+                  />
+
+                  <div
+                    className="modal fade"
+                    id="unsaveModal"
+                    tabIndex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">
+                            Are you sure?
+                          </h5>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <p>
+                            This will un-save your saved{" "}
+                            <span style={{ fontWeight: "bold" }}>
+                              {this.state.recipeTitleForUnsave}
+                            </span>{" "}
+                            recipe. But you can always save it again later.
+                          </p>
+                        </div>
+                        <div className="modal-footer d-flex justify-content-start">
+                          <button
+                            onClick={() =>
+                              this.handleUnsaveRecipe(
+                                this.state.recipeIdForUnsave
+                              )
+                            }
+                            type="button"
+                            className="btn btn-danger"
+                            data-dismiss="modal"
+                          >
+                            Unsave Recipe
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </React.Fragment>
               );
             })}
 
