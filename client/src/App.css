@@ -713,7 +713,7 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   }
 
   .list-group-item {
-    padding: 0.375rem 0.92rem;
+    padding: 0.375rem 0.85rem;
   }
 
   .card-title {
