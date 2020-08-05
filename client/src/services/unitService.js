@@ -15,6 +15,9 @@ export const units = [
   { _id: "14", name: "Cup" },
   { _id: "15", name: "Lb" },
   { _id: "16", name: "Each" },
+  { _id: "17", name: "Can" },
+  { _id: "18", name: "Sticks" },
+  { _id: "19", name: "Slices" },
 ];
 
 export function getUnits() {
