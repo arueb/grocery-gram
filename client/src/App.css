@@ -673,6 +673,10 @@ span.save-recipe svg {
   margin-bottom: 2rem;
 }
 
+.hiddenInputWrapper input {
+  display: none;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
