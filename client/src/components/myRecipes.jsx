@@ -14,6 +14,7 @@ import SearchBox from "./searchBox";
 class MyRecipes extends Component {
   state = {
     data: "",
+    userData: {},
     recipes: [],
     pageSize: 12,
     currentPage: 1,
@@ -97,16 +98,19 @@ class MyRecipes extends Component {
   };
 
   handleUnsaveRecipe = async (recipeId) => {
-    // console.log("handling unsave recipe", recipeId);
     const recipes = [...this.state.recipes];
     const filtered = recipes.filter((r) => r._id !== recipeId);
     this.setState({ recipes: filtered });
 
     // call backend to remove from saved recipes
-    const oldSavedRecipes = [...this.state.userData.savedRecipes];
+    let userData = { ...this.state.userData };
+    const oldSavedRecipes = [...userData.savedRecipes];
     const savedRecipes = oldSavedRecipes.filter((r) => {
       return r !== recipeId;
     });
+    userData.savedRecipes = savedRecipes;
+    this.setState({ userData })
+
     try {
       await updateUserProperty(this.state.userData._id, { savedRecipes });
     } catch (ex) {
@@ -206,11 +210,12 @@ class MyRecipes extends Component {
           {recipes &&
             recipes.map((recipe) => {
               return (
-                <React.Fragment>
+                <React.Fragment
+                  key = { recipe._id }                
+                >
                   <RecipeBlock
                     unSave={this.setRecipeForUnsave}
-                    userId={this.props.user._id}
-                    key={recipe._id}
+                    userId={this.props.user._id}                    
                     recipe={recipe}
                     forExplore={false}
                   />

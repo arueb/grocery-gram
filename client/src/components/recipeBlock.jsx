@@ -51,21 +51,21 @@ class RecipeBlock extends Component {
     }
     // Case if user does not own this recipe
     else if (this.props.recipe.userId !== this.props.userId) {
-      console.log("recipeTitle", this.props.recipe.title);
+      // console.log("recipeTitle", this.props.recipe.title);
       return (
-          <div className="saved-icon">
-            <FaHeart
-              style={{ cursor: "pointer" }}
-              data-toggle="modal"
-              data-target="#unsaveModal"
-              onClick={() =>
-                this.props.unSave(
-                  this.props.recipe._id,
-                  this.props.recipe.title
-                )
-              }
-            ></FaHeart>
-          </div>
+        <div className="saved-icon">
+          <FaHeart
+            style={{ cursor: "pointer" }}
+            data-toggle="modal"
+            data-target="#unsaveModal"
+            onClick={() =>
+              this.props.unSave(
+                this.props.recipe._id,
+                this.props.recipe.title
+              )
+            }
+          ></FaHeart>
+        </div>
       );
     }
   }
