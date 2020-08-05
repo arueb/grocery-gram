@@ -156,18 +156,19 @@ class RecipeForm extends Form {
     if (this.props.match.params.id !== "new") {
       return this.renderButtonCustomHandler(
         "Delete Recipe",
-        this.handleDeleteRecipe
+        // this.handleDeleteRecipe
       );
     }
   }
 
-  async handleDeleteRecipe(e) {
-    e.preventDefault();
+  async handleDeleteRecipe() {
     const { recipeId } = this.state;
     try {
       await deleteRecipe(recipeId);
       this.props.history.push("/my-recipes");
-    } catch (err) { }
+    } catch (err) {
+      console.log('Delete recipe failed', err);
+    }
   }
 
   renderHeader() {
@@ -478,73 +479,72 @@ console.log("let's gooo");
             )}
 
             {this.renderButton("Save Recipe")}
-
-            {this.renderDeleteButton()}
+            
+            {this.props.match.params.id !== "new" &&            
+            <button
+              className="btn btn-dark mt-4 mr-2"
+              onClick={(e) => e.preventDefault()}
+              data-toggle="modal"
+              data-target="#deleteRecipeModal"
+            >
+              Delete Recipe
+            </button>
+            }
           </form>
         </section>
+
+        <div
+          className="modal fade"
+          id="deleteRecipeModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Are you sure?
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  This will permanently delete the recipe. 
+                </p>
+              </div>
+              <div className="modal-footer d-flex justify-content-start">
+                <button
+                  onClick={() => this.handleDeleteRecipe()}
+                  type="button"
+                  className="btn btn-danger"
+                  data-dismiss="modal"
+                >
+                  Delete Recipe
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </React.Fragment>
     );
   }
 }
 
 export default RecipeForm;
-
-// <tbody>
-// {[...Array(ingredients.length)].map((row, i) => {
-//   return (
-//     (this.state.recipeId ||
-//       this.props.match.params.id === "test") && (
-//       <tr key={i}>
-//         {/* </tr><tr key={i}>    */}
-//         <td>
-//           {this.renderMultiRowSelect(
-//             "qty",
-//             null,
-//             // row,
-//             i,
-//             "ingredients",
-//             this.state.quantities
-//           )}
-//         </td>
-//         <td>
-//           {this.renderMultiRowSelect(
-//             "unit",
-//             null,
-//             // row,
-//             i,
-//             "ingredients",
-//             this.state.units
-//           )}
-//         </td>
-//         <td>
-//           <ItemSearch
-//             items={this.props.items}
-//             update={this.handleIngredientUpdate}
-//             row={i}
-//             initialValue={
-//               ingredients[i].item ? ingredients[i].item.name : ""
-//             }
-//           />
-//         </td>
-//         <td>
-//           {this.renderMultiRowInput(
-//             "notes",
-//             null,
-//             i,
-//             "ingredients",
-//             "text",
-//             "Notes"
-//           )}
-//         </td>
-//         <td className="delete">
-//           <FaTrash
-//             className="hover-icon"
-//             onClick={this.handleRemoveSpecificRow(i)}
-//             // onClick={this.handleRemoveSpecificRow(i)} ********
-//           />
-//         </td>
-//       </tr>
-//     )
-//   );
-// })}
-// </tbody>
