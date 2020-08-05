@@ -15,7 +15,7 @@ import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 import SortableComponent from "../components/sortableComponent";
 import arrayMove from "array-move";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 // import * as recipeService from "../services/recipeService";
 
 //const UPLOAD_LIST_PLACEHOLDER =
@@ -25,31 +25,33 @@ class RecipeForm extends Form {
   constructor(props) {
     super(props);
     this.state = {
-      recipeImages: [],
       errors: {},
       units: [],
       quantities: [],
       rows: [{}],
+      ingredients: [],
+      validateIngredientsRow: 0,
       data: {
         title: "",
         category: "",
         isPublished: false,
         instructions: "",
-        filesToUpload: [],
+        recipeImages: [],
+        ingredientCount: 0,
       },
-      //   ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
-      ingredients: [],
+      //    ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
     this.fileInput = React.createRef();
   }
 
   schema = {
-    title: Joi.string().label("Recipe Name"),
-    category: Joi.string().label("Recipe Category"),
-    isPublished: Joi.boolean().label("Recipe Published Slider"),
-    instructions: Joi.string().label("Recipe Instructions"),
-    filesToUpload: Joi.array().label("Files"),
+    title: Joi.string().required().label("Recipe Name"),
+    category: Joi.string().required().label("Recipe Category"),
+    isPublished: Joi.boolean().required().label("Recipe Published Slider"),
+    instructions: Joi.string().required().label("Recipe Instructions"),
+    recipeImages: Joi.array().min(1).required().label("Recipe Images"),
+    ingredientCount: Joi.number().min(1).required(),
     qty: Joi.string().label("Qty"),
     unit: Joi.string().label("Unit"),
     itemId: Joi.string().label("Item"),
@@ -91,24 +93,25 @@ class RecipeForm extends Form {
       if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
 
       const { data: recipe } = await getRecipe(recipeId);
-      this.setState({
-        recipeId: recipe[0]._id,
-        ingredients: recipe[0].ingredients,
-        // ingredients: this.mapToViewModel(recipe),
-      });
-
+      console.log("recipe data", recipe);
       const data = { ...this.state.data };
       data.title = recipe[0].title;
       data.category = recipe[0].category;
       data.instructions = recipe[0].instructions;
       data.isPublished = recipe[0].isPublished;
-      this.setState({ data });
+      data.ingredientCount = recipe[0].ingredients.length;
 
       recipe[0].images.forEach((image) => {
         image.fileId = image.fullsizeUrl;
       });
 
-      this.setState({ recipeImages: recipe[0].images });
+      data.recipeImages = recipe[0].images;
+
+      this.setState({
+        data,
+        recipeId: recipe[0]._id,
+        ingredients: recipe[0].ingredients,
+      });
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         return this.props.history.replace("/not-found");
@@ -124,27 +127,29 @@ class RecipeForm extends Form {
 
     newFile.fileId = Date.now();
 
-    let oldFiles = this.state.recipeImages;
-    this.setState({
-      recipeImages: oldFiles.concat(newFile),
-    });
+    let oldFiles = this.state.data.recipeImages;
+    const data = { ...this.state.data };
+    data.recipeImages = oldFiles.concat(newFile)
+    this.setState({ data });
   }
 
   handleThumbnailRemove = (e) => {
-    if (this.state.recipeImages.length < 2) {
-      toast.error("Must have at least 1 image");
-      return;
-    }
-    const remainingFiles = this.state.recipeImages.filter((el) => {
+
+    const remainingFiles = this.state.data.recipeImages.filter((el) => {
       return el.fileId !== e.fileId;
     });
-    this.setState({ recipeImages: remainingFiles });
+    const data = { ...this.state.data };
+    data.recipeImages = remainingFiles;
+    this.setState({ data });
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
-    this.setState(({ recipeImages }) => ({
-      recipeImages: arrayMove(recipeImages, oldIndex, newIndex),
-    }));
+    const data = { ...this.state.data };
+    data.recipeImages = arrayMove(data.recipeImages, oldIndex, newIndex);
+    this.setState({ data });
+    // this.setState(({ recipeImages }) => ({
+    //   recipeImages: arrayMove(recipeImages, oldIndex, newIndex),
+    // }));
   };
 
   renderDeleteButton() {
@@ -184,7 +189,9 @@ class RecipeForm extends Form {
       notes: "",
     };
     const ingredients = [...this.state.ingredients, ingredient];
-    this.setState({ ingredients, validateIngredientsRow: null });
+    const data = { ...this.state.data };
+    data.ingredientCount = data.ingredientCount + 1;
+    this.setState({ ingredients, validateIngredientsRow: null, data });
     // console.log(this.state.ingredients);
   };
 
@@ -193,7 +200,9 @@ class RecipeForm extends Form {
     console.log('deleting ingredient');
     const ingredients = [...this.state.ingredients];
     ingredients.splice(idx, 1);
-    this.setState({ ingredients, validateIngredientsRow: null });
+    const data = { ...this.state.data };
+    data.ingredientCount = data.ingredientCount + 1;
+    this.setState({ ingredients, validateIngredientsRow: null, data });
     // this.setState({ validateIngredientsRow: null });
   };
 
@@ -232,8 +241,15 @@ class RecipeForm extends Form {
   };
 
   doSubmit = async () => {
-    // console.log("called doSubmit");
-    // console.log("ing length:", this.state.ingredients.length);
+    // if (this.state.data.recipeImages.length < 1) {
+    //   toast.error("Must have at least 1 image");
+    //   return;
+    // }
+
+    // if (this.state.ingredients.length < 1) {
+    //   toast.error("Must have at least 1 ingredient");
+    //   return;
+    // }
 
     const { ingredients } = this.state;
     console.log("validate ingredients form");
@@ -241,24 +257,29 @@ class RecipeForm extends Form {
       ingredients.forEach((ingredient, row) => {
         // console.log("row", row);
         const errors = this.validateIngredients(row);
-        // console.log(errors);
+        console.log("this.validateIngredients(row)=", errors);
         this.setState({ errors: errors || {} });
+        console.log("state change", this.state.errors)
         if (errors) {
+          console.log("if (errors) {", row);
           this.setState({ validateIngredientsRow: row });
           return;
         }
+        console.log("Out of else", errors);
         this.setState({ validateIngredientsRow: null });
       });
 
       //   console.log(this.validateIngredients());
     }
     console.log("state errors", this.state.errors);
-    if (this.state.validateIgredientsRow) return;
+    console.log("this.state.validateIngredientsRow", this.state.validateIngredientsRow);
+    if (this.state.validateIngredientsRow) return;
+    console.log("this.state.validateIngredientsRow", this.state.validateIngredientsRow);
     console.log("maded it past state errosr!");
-
+console.log("let's gooo");
     let imageLinks = [];
 
-    for (const imageFile of this.state.recipeImages) {
+    for (const imageFile of this.state.data.recipeImages) {
       if (imageFile instanceof File) {
         var formData = new FormData();
         formData.append("name", "file");
@@ -290,18 +311,18 @@ class RecipeForm extends Form {
       ingredients: this.state.ingredients,
     };
 
-    const { id } = this.props.match.params;
+    let redirectRecipeId = "";
     try {
-      if (id === "new") {
-        // console.log("saving new recipe", recipeRecord);
-        await newRecipe(recipeRecord);
+      if (this.props.match.params.id === "new") {
+        const createdRecipe = await newRecipe(recipeRecord);
+        redirectRecipeId = createdRecipe.data._id;
       } else {
         // update an existing record via patch
-        await updateRecipe(id, recipeRecord);
-        // console.log("patch success");
+        const updatedRecipe = await updateRecipe(this.props.match.params.id, recipeRecord);
+        redirectRecipeId = updatedRecipe.data._id;
       }
       // redirect to my-recipes page
-      this.props.history.push("/recipes/" + id);
+      this.props.history.push("/recipes/" + redirectRecipeId);
     } catch (ex) {
       console.log("Something went wrong with uploading a recipe");
       console.log(ex);
@@ -336,12 +357,13 @@ class RecipeForm extends Form {
                 </small>
               </label>
               <SortableComponent
-                images={this.state.recipeImages}
+                images={this.state.data.recipeImages}
                 imgClick={this.handleThumbnailRemove}
                 onSortEnd={this.onSortEnd}
               />
+              {this.renderInput("recipeImages")}
               <button
-                name="addImg"
+                name="addImage"
                 className="btn btn-outline-dark"
                 onClick={(event) => {
                   this.triggerInputFile(event);
@@ -427,7 +449,7 @@ class RecipeForm extends Form {
                               <FaTrash
                                 className="hover-icon"
                                 onClick={this.handleRemoveSpecificRow(i)}
-                                // onClick={this.handleRemoveSpecificRow(i)} ********
+                              // onClick={this.handleRemoveSpecificRow(i)} ********
                               />
                             </td>
                           </tr>
@@ -437,7 +459,7 @@ class RecipeForm extends Form {
                   </tbody>
                 </table>
               )}
-
+              {this.renderInput("ingredientCount")}
               <button
                 onClick={this.handleAddRow}
                 className="btn btn-outline-dark"
