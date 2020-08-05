@@ -21,7 +21,7 @@ class ShoppingList extends Component {
     catPercents: null,
     totalNumItems: 0,
     totalPriceItems: 0,
-    activeId: null,
+    activeIndex: null,
     staples: [],
     recipes: [],
     itemCounts: [],
@@ -125,28 +125,29 @@ class ShoppingList extends Component {
     }
   };
 
-  handleAddBackItem = async (itemId) => {
+  handleAddBackItem = async (itemIndex) => {
     console.log("handling add back");
-    await this.moveItemsInLists(itemId, "addBack");
+    await this.moveItemsInLists(itemIndex, "addBack");
     this.handleUpdatePieChart();
     // const itemCounts = [...this.state.itemCounts];
     // this.updateMyStaples(itemCounts);
     this.updateMyStaples(this.state.itemCounts);
   };
 
-  handleRemoveItem = async (itemId) => {
-    this.updateItemCount(itemId);
+  handleRemoveItem = async (index) => {
+    console.log("addedItems.length = " + String(this.state.addedItems.length))
+    this.updateItemCount(this.state.addedItems[index]._id);
     // console.log("clicked an item");
-    this.setState({ activeId: itemId });
+    this.setState({ activeIndex: index });
 
     setTimeout(() => {
-      this.moveItemsInLists(itemId, "removeItem");
+      this.moveItemsInLists(index, "removeItem"); // need to change addBack
       this.handleUpdatePieChart();
-      this.setState({ activeId: null });
+      this.setState({ activeIndex: null });
     }, 300);
   };
 
-  moveItemsInLists = async (itemId, action) => {
+  moveItemsInLists = async (itemIndex, action) => {
     // optimistic update
     // store current state in case we need to revert
     const prevAddedItems = this.state.addedItems;
@@ -162,13 +163,14 @@ class ShoppingList extends Component {
     else if (action === "removeItem") {
       currExtractFromItems = this.state.addedItems;
       currAddToItems = this.state.removedItems;
+      // console.log("trying to remove index " + String(itemIndex) + " from array of length " + String(currExtractFromItems.length));
     }
     // extract item from currExtractFromItems
     let newExtractFromItems = [];
     const newExtractFromItemIds = [];
     let itemToAdd;
-    currExtractFromItems.forEach((item) => {
-      if (item._id !== itemId) {
+    currExtractFromItems.forEach((item, index) => {
+      if (index !== itemIndex) {
         newExtractFromItems.push(item);
         newExtractFromItemIds.push(item._id);
       } else itemToAdd = item;
@@ -176,6 +178,7 @@ class ShoppingList extends Component {
 
     // push item to currAddToItems
     let newAddToItems = [itemToAdd, ...currAddToItems];
+
     const newAddToItemIds = newAddToItems.map((item) => item._id);
 
     // sort and set state according to action, forces a re-render
@@ -356,8 +359,8 @@ class ShoppingList extends Component {
     newRemovedItems.splice(idx, 1);
     const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
     this.setState({ removedItems: newRemovedItems });
-    const addBackNode = this.addBackRef.current;
-    addBackNode.blur();
+    // const addBackNode = this.addBackRef.current;
+    // addBackNode.blur();
     try {
       await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
     } catch (err) {
@@ -429,10 +432,10 @@ class ShoppingList extends Component {
             <div className="list-group lst-grp-hover lst-grp-striped">
               {!addedItems
                 ? null
-                : addedItems.map((item, i) => (
+                : addedItems.map((item, index) => (
                     <li
-                      key={i}
-                      onClick={this.handleRemoveItem.bind(this, item._id)}
+                      key={index}
+                      onClick={this.handleRemoveItem.bind(this, index)}
                       style={{
                         borderTop: 0,
                         borderBottom: 0,
@@ -443,7 +446,7 @@ class ShoppingList extends Component {
                     >
                       <span
                         className={
-                          this.state.activeId === item._id ? "strike" : ""
+                          this.state.activeIndex === index ? "strike" : ""
                         }
                       >
                         {item.name}
@@ -455,10 +458,10 @@ class ShoppingList extends Component {
             <div className="list-group lst-grp-hover lst-grp-removed">
               {!removedItems
                 ? null
-                : removedItems.map((item, i) => (
+                : removedItems.map((item, index) => (
                     <li
                       //   onClick=""
-                      key={i}
+                      key={index}
                       className="list-group-item"
                       style={{
                         borderTop: 0,
@@ -470,14 +473,14 @@ class ShoppingList extends Component {
                       <span
                         className="removed"
                         ref={this.addBackRef}
-                        onClick={() => this.handleAddBackItem(item._id)}
+                        onClick={() => this.handleAddBackItem(index)}
                       >
                         {item.name}
                       </span>
                       <span className="perm-delete">
                         <FaTrash
                           className="hover-icon"
-                          onClick={() => this.handlePermDelete(i)}
+                          onClick={() => this.handlePermDelete(index)}
                         />
                       </span>
                     </li>
