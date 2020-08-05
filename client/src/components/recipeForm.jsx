@@ -30,6 +30,7 @@ class RecipeForm extends Form {
       quantities: [],
       rows: [{}],
       ingredients: [],
+      validateIngredientsRow: 0,
       data: {
         title: "",
         category: "",
@@ -257,8 +258,9 @@ class RecipeForm extends Form {
         const errors = this.validateIngredients(row);
         console.log("this.validateIngredients(row)=", errors);
         this.setState({ errors: errors || {} });
+        console.log("state change", this.state.errors)
         if (errors) {
-          console.log("if (errors) {", errors);
+          console.log("if (errors) {", row);
           this.setState({ validateIngredientsRow: row });
           return;
         }
@@ -269,8 +271,9 @@ class RecipeForm extends Form {
       //   console.log(this.validateIngredients());
     }
     console.log("state errors", this.state.errors);
-    if (this.state.validateIgredientsRow) return;
-    console.log("this.state.validateIgredientsRow", this.state.validateIgredientsRow);
+    console.log("this.state.validateIngredientsRow", this.state.validateIngredientsRow);
+    if (this.state.validateIngredientsRow) return;
+    console.log("this.state.validateIngredientsRow", this.state.validateIngredientsRow);
     console.log("maded it past state errosr!");
 console.log("let's gooo");
     let imageLinks = [];
