@@ -13,7 +13,10 @@ const recipeSchema = new Schema({
   images: [
     {
       type: new Schema({
-        fullSizeHeight: {
+        fullsizeHeight: {
+          type: Number,
+        },
+        fullsizeWidth: {
           type: Number,
         },
         fullsizeUrl: {
