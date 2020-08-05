@@ -12,6 +12,10 @@ const categories = [
   { _id: 7, name: "Cereal", hexColor: "#fab1a0" },
   { _id: 8, name: "Nuts", hexColor: "#fdcb6e" },
   { _id: 9, name: "Vegetables", hexColor: "#009933" },
+  { _id: 10, name: "Seafood", hexColor: "#dbcccc" },
+  { _id: 11, name: "Condiments", hexColor: "#451b04" },
+  { _id: 11, name: "Herbs/Spices", hexColor: "#81b14f" },
+  { _id: 11, name: "Breads", hexColor: "#8faab3" },
 ];
 
 // function itemUrl(id) {
