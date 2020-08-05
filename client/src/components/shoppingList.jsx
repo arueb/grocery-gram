@@ -125,16 +125,16 @@ class ShoppingList extends Component {
     }
   };
 
-  handleAddBackItem = async (itemIndex) => {
+  handleAddBackItem = _.debounce(async (itemIndex) => {
     console.log("handling add back");
     await this.moveItemsInLists(itemIndex, "addBack");
     this.handleUpdatePieChart();
     // const itemCounts = [...this.state.itemCounts];
     // this.updateMyStaples(itemCounts);
     this.updateMyStaples(this.state.itemCounts);
-  };
+  }, 1);
 
-  handleRemoveItem = async (index) => {
+  handleRemoveItem = _.debounce(async (index) => {
     console.log("addedItems.length = " + String(this.state.addedItems.length))
     this.updateItemCount(this.state.addedItems[index]._id);
     // console.log("clicked an item");
@@ -145,7 +145,7 @@ class ShoppingList extends Component {
       this.handleUpdatePieChart();
       this.setState({ activeIndex: null });
     }, 300);
-  };
+  }, 1);
 
   moveItemsInLists = async (itemIndex, action) => {
     // optimistic update
@@ -297,7 +297,7 @@ class ShoppingList extends Component {
     this.updateMyStaples(itemCounts);
     try {
       await updateItemCounts(this.props.user._id, itemCounts);
-    } catch (err) {}
+    } catch (err) { }
   };
 
   updateMyStaples = (itemCounts) => {
@@ -433,58 +433,58 @@ class ShoppingList extends Component {
               {!addedItems
                 ? null
                 : addedItems.map((item, index) => (
-                    <li
-                      key={index}
-                      onClick={this.handleRemoveItem.bind(this, index)}
-                      style={{
-                        borderTop: 0,
-                        borderBottom: 0,
-                        borderRight: 0,
-                        borderLeft: `15px solid ${getColor(item.category)}`,
-                      }}
-                      className="list-group-item"
+                  <li
+                    key={index}
+                    onClick={this.handleRemoveItem.bind(this, index)}
+                    style={{
+                      borderTop: 0,
+                      borderBottom: 0,
+                      borderRight: 0,
+                      borderLeft: `15px solid ${getColor(item.category)}`,
+                    }}
+                    className="list-group-item"
+                  >
+                    <span
+                      className={
+                        this.state.activeIndex === index ? "strike" : ""
+                      }
                     >
-                      <span
-                        className={
-                          this.state.activeIndex === index ? "strike" : ""
-                        }
-                      >
-                        {item.name}
-                      </span>
-                      <span className="sl-price">${item.price.toFixed(2)}</span>
-                    </li>
-                  ))}
+                      {item.name}
+                    </span>
+                    <span className="sl-price">${item.price.toFixed(2)}</span>
+                  </li>
+                ))}
             </div>
             <div className="list-group lst-grp-hover lst-grp-removed">
               {!removedItems
                 ? null
                 : removedItems.map((item, index) => (
-                    <li
-                      //   onClick=""
-                      key={index}
-                      className="list-group-item"
-                      style={{
-                        borderTop: 0,
-                        borderBottom: 0,
-                        borderRight: 0,
-                        borderLeft: "15px solid #fff",
-                      }}
+                  <li
+                    //   onClick=""
+                    key={index}
+                    className="list-group-item"
+                    style={{
+                      borderTop: 0,
+                      borderBottom: 0,
+                      borderRight: 0,
+                      borderLeft: "15px solid #fff",
+                    }}
+                  >
+                    <span
+                      className="removed"
+                      ref={this.addBackRef}
+                      onClick={() => this.handleAddBackItem(index)}
                     >
-                      <span
-                        className="removed"
-                        ref={this.addBackRef}
-                        onClick={() => this.handleAddBackItem(index)}
-                      >
-                        {item.name}
-                      </span>
-                      <span className="perm-delete">
-                        <FaTrash
-                          className="hover-icon"
-                          onClick={() => this.handlePermDelete(index)}
-                        />
-                      </span>
-                    </li>
-                  ))}
+                      {item.name}
+                    </span>
+                    <span className="perm-delete">
+                      <FaTrash
+                        className="hover-icon"
+                        onClick={() => this.handlePermDelete(index)}
+                      />
+                    </span>
+                  </li>
+                ))}
               {numAllItems > 0 && (
                 <React.Fragment>
                   <button
