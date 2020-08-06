@@ -26,13 +26,13 @@ const categories0 = [
 
 // pantone color scheme
 const categories1 = [
-  { _id: 1, name: "Fruit", hexColor: "#ff7675" },
-  { _id: 2, name: "Meat/Poultry", hexColor: "#e17055" },
-  { _id: 3, name: "Grains/Cereals", hexColor: "#ffeaa7" },
-  { _id: 4, name: "Baking Products", hexColor: "#6c5ce7" },
-  { _id: 5, name: "Dairy", hexColor: "#a29bfe" },
-  { _id: 6, name: "Nuts", hexColor: "#fdcb6e" },
-  { _id: 7, name: "Vegetables", hexColor: "#009933" },
+  { _id: 1, name: "Fruit", hexColor: "#B0C964" },
+  { _id: 2, name: "Meat/Poultry", hexColor: "#EEC843" },
+  { _id: 3, name: "Grains/Cereals", hexColor: "#87D9C3" },
+  { _id: 4, name: "Baking Products", hexColor: "#BFBDBE" },
+  { _id: 5, name: "Dairy", hexColor: "#BE9867" },
+  { _id: 6, name: "Nuts", hexColor: "#A66E4B" },
+  { _id: 7, name: "Vegetables", hexColor: "#477050" },
   { _id: 8, name: "Seafood", hexColor: "#dbcccc" },
   { _id: 9, name: "Condiments", hexColor: "#451b04" },
   { _id: 10, name: "Herbs/Spices", hexColor: "#81b14f" },
@@ -57,7 +57,7 @@ export function getItems() {
 
 // switch categoryies to get different color set
 export function getColor(category) {
-  const result = categories0.filter((c) => c.name === category);
+  const result = categories1.filter((c) => c.name === category);
   return result[0].hexColor;
 }
 
