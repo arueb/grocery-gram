@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { Item, validate } = require("../models/item");
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -14,8 +15,7 @@ router.post("/", async (req, res) => {
       return res
         .status(400)
         .send("An item with this name already exists in DB.");
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).send("Something failed.", err);
   }
 
@@ -24,30 +24,29 @@ router.post("/", async (req, res) => {
   try {
     await item.save();
     res.send(item);
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).send("Something failed.", err);
   }
 });
 
 router.get("/", async (req, res) => {
   try {
-    const items = await Item.find().sort('name');
+    const items = await Item.find().sort("name");
     res.send(items);
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).send("Something failed.", err);
-  }  
+  }
 });
 
 router.get("/:id", async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
-    if (!item) return res.status(404).send("The item with the given ID was not found.");
+    if (!item)
+      return res.status(404).send("The item with the given ID was not found.");
 
     res.send(item);
-  }
-  catch (err) { // e.g. id isn't valid mongo ID (e.g. ID isn't 24 chars)
+  } catch (err) {
+    // e.g. id isn't valid mongo ID (e.g. ID isn't 24 chars)
     res.status(500).send("Something failed.", err);
   }
 });

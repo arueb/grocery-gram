@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, validate } = require("../models/user");
 const { Recipe } = require("../models/recipe");
-const { Review } = require("../models/review")
+const { Review } = require("../models/review");
 const mongoose = require("mongoose");
 
 // create new user
@@ -50,14 +51,14 @@ router.post("/", async (req, res) => {
     );
 });
 
-router.post("/:id/items", async (req, res) => {
+router.post("/:id/items", auth, async (req, res) => {
   const { itemsToAdd } = req.body;
   try {
     const user = await User.findOneAndUpdate(
       { _id: req.params.id },
-      { $push: { addedItems: itemsToAdd } },
-    )
-    res.sendStatus(201)
+      { $push: { addedItems: itemsToAdd } }
+    );
+    res.sendStatus(201);
   } catch (err) {
     // id isn't valid mongo ID (e.g. ID isn't 24 chars)
     console.log("/get/:id Error:", err);
@@ -66,7 +67,7 @@ router.post("/:id/items", async (req, res) => {
 });
 
 // update given user's properties with properties sent in request body
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", auth, async (req, res) => {
   const { error } = validate(req.body, true); // ignore required
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -108,9 +109,10 @@ router.patch("/:id", async (req, res) => {
     // Add new JWT if user profile image was updated
     if (req.body.hasOwnProperty("profileImageUrl")) {
       newToken = await user.generateAuthToken();
-      return res.header("x-auth-token", newToken)
+      return res
+        .header("x-auth-token", newToken)
         .header("access-control-expose-headers", "x-auth-token")
-        .json(userJSON)
+        .json(userJSON);
     }
 
     res.json(userJSON);
@@ -155,7 +157,7 @@ router.get("/:id", async (req, res) => {
     user = user.toJSON();
 
     if (!user.hasOwnProperty("profileImageUrl")) {
-      user.profileImageUrl = ""
+      user.profileImageUrl = "";
     }
 
     res.send(
@@ -192,7 +194,7 @@ router.get("/:id", async (req, res) => {
 // });
 
 // get all recipes for user with given id
-router.get("/:id/recipes", async (req, res) => {
+router.get("/:id/recipes", auth, async (req, res) => {
   try {
     // check to make sure the user exists
     const user = await User.findById(req.params.id);
@@ -281,7 +283,7 @@ router.get("/:id/recipes", async (req, res) => {
   }
 });
 
-router.get('/:userId/reviews', async (req, res) => {
+router.get("/:userId/reviews", auth, async (req, res) => {
   let user = await User.findById(req.params.userId);
   if (!user) return res.status(404).send("The userId could not be found.");
 
@@ -329,29 +331,29 @@ router.get('/:userId/reviews', async (req, res) => {
     { $unwind: "$user" },
     { $unwind: "$recipe" },
     {
-      "$replaceRoot": {
-        "newRoot": {
-          "$mergeObjects": ["$user", "$$ROOT"]
-        }
-      }
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: ["$user", "$$ROOT"],
+        },
+      },
     },
-    { "$project": { "user": 0 } },
+    { $project: { user: 0 } },
     {
-      "$replaceRoot": {
-        "newRoot": {
-          "$mergeObjects": ["$recipe", "$$ROOT"]
-        }
-      }
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: ["$recipe", "$$ROOT"],
+        },
+      },
     },
-    { "$project": { "recipe": 0 } },
+    { $project: { recipe: 0 } },
   ]);
 
-  reviews.forEach(review => {
+  reviews.forEach((review) => {
     review.recipeTitle = review.title;
     delete review.title;
   });
 
   res.json(reviews);
-})
+});
 
 module.exports = router;
