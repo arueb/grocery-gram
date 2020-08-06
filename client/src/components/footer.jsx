@@ -55,7 +55,10 @@ const Footer = () => {
       {/* <!-- Copyright --> */}
       <div className="footer-copyright text-center py-3">
         © 2020 Copyright:
-        <a href="https://mdbootstrap.com/"> Code Blue Team</a>
+        <a class="code-blue" href="https://oregonstate.edu/">
+          {" "}
+          Code Blue Team
+        </a>
       </div>
       {/* <!-- Copyright --> */}
     </footer>

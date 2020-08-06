@@ -78,8 +78,12 @@ body {
 }
 
 .modal-form .right-col {
-  padding: 4em 2em;
+  padding: 3em 3em;
 }
+#login-form .modal-form .right-col {
+  padding: 6em 3em;
+}
+
 tr .hover-icon {
   margin-right: 0.5rem;
   opacity: 0;
@@ -97,7 +101,7 @@ tr:hover .hover-icon {
 }
 
 .sl-page-heading {
-  margin-top: 3em;
+  margin-top: 1.5em;
   margin-bottom: 1em;
   position: relative;
 }
@@ -345,7 +349,7 @@ footer {
 
 .totals {
   position: absolute;
-  z-index: 10000;
+  z-index: 10;
   top: 208px;
   right: 0;
   left: 0;
@@ -571,12 +575,6 @@ span.save-recipe svg {
   vertical-align: top;
 }
 
-/* .review-user, .rdp-author {
-    margin-left: 15px;
-    font-size: 1.1em;
-    font-weight: 500;
-  } */
-
 .rdp-heading {
   margin-top: 3em;
 }
@@ -601,7 +599,6 @@ span.save-recipe svg {
 .review-username {
   margin-bottom: 0;
   font-size: 1.1em;
-  /* font-weight: 400; */
 }
 
 .review-row span.review-date {
@@ -632,7 +629,6 @@ span.save-recipe svg {
 
 .up-review-row:hover {
   background: #d3d3d3;
-  /* cursor: pointer; */
 }
 
 .up-review-date {
@@ -677,6 +673,44 @@ span.save-recipe svg {
   display: none;
 }
 
+#register-form .left-col {
+  background-image: url("/img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg");
+  background-size: cover;
+  background-position-x: -60px;
+}
+
+#login-form .left-col {
+  background-image: url(https://images.unsplash.com/photo-1497888329096-51c27beff665?ixlib=rb-1.2.1&auto=format&fit=crop&w=1502&q=80);
+  background-size: cover;
+  background-position-x: -290px;
+}
+
+.modal-form {
+  box-shadow: 5px 5px 10px #f7f7f7;
+}
+
+.modal-form h2 {
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+
+.modal-form label {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.btn {
+  border-radius: 0 !important;
+}
+
+a.code-blue {
+  color: #6aaff9;
+}
+
+.bg-secondary {
+  background-color: #545b61 !important;
+}
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
@@ -937,6 +971,18 @@ collapse
 
   .up-review-row:hover {
     background-color: #f2f2f2;
+  }
+
+  .sl-page-heading {
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .sl-page-heading h2 {
+    font-size: 1.8rem;
+  }
+
+  .divider {
+    display: none;
   }
 }
 

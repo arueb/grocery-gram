@@ -78,7 +78,7 @@ class RecipeForm extends Form {
     // load the units and quantitiy options for select boxes into local state
     this.setState({ units: getUnits(), quantities: getQuantities() });
 
-    document.title = "Shopping List - GroceryGram"
+    document.title = "Shopping List - GroceryGram";
     if (this.props.match.params.id === "new") {
       document.title = "Create A Recipe - GroceryGram";
     } else {
@@ -130,7 +130,7 @@ class RecipeForm extends Form {
 
     let oldFiles = this.state.data.recipeImages;
     const data = { ...this.state.data };
-    data.recipeImages = oldFiles.concat(newFile)
+    data.recipeImages = oldFiles.concat(newFile);
 
     let errors = { ...this.state.errors };
     if (errors.hasOwnProperty("recipeImages")) {
@@ -141,7 +141,6 @@ class RecipeForm extends Form {
   }
 
   handleThumbnailRemove = (e) => {
-
     const remainingFiles = this.state.data.recipeImages.filter((el) => {
       return el.fileId !== e.fileId;
     });
@@ -162,7 +161,7 @@ class RecipeForm extends Form {
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
       return this.renderButtonCustomHandler(
-        "Delete Recipe",
+        "Delete Recipe"
         // this.handleDeleteRecipe
       );
     }
@@ -174,7 +173,7 @@ class RecipeForm extends Form {
       await deleteRecipe(recipeId);
       this.props.history.push("/my-recipes");
     } catch (err) {
-      console.log('Delete recipe failed', err);
+      console.log("Delete recipe failed", err);
     }
   }
 
@@ -204,7 +203,7 @@ class RecipeForm extends Form {
 
   // handle deleting a row from the ingredients table
   handleRemoveSpecificRow = (idx) => () => {
-    console.log('deleting ingredient');
+    console.log("deleting ingredient");
     const ingredients = [...this.state.ingredients];
     ingredients.splice(idx, 1);
     const data = { ...this.state.data };
@@ -322,7 +321,10 @@ class RecipeForm extends Form {
         redirectRecipeId = createdRecipe.data._id;
       } else {
         // update an existing record via patch
-        const updatedRecipe = await updateRecipe(this.props.match.params.id, recipeRecord);
+        const updatedRecipe = await updateRecipe(
+          this.props.match.params.id,
+          recipeRecord
+        );
         redirectRecipeId = updatedRecipe.data._id;
       }
       // redirect to my-recipes page
@@ -381,7 +383,7 @@ class RecipeForm extends Form {
               </div>
             </div>
 
-            <div className="form-group mb-5 mt-5 ingredients-form">
+            <div className="form-group mb-4 mt-4 ingredients-form">
               <div>
                 <label className="ingredients-label">Ingredients</label>
               </div>
@@ -456,7 +458,7 @@ class RecipeForm extends Form {
                               <FaTrash
                                 className="hover-icon"
                                 onClick={this.handleRemoveSpecificRow(i)}
-                              // onClick={this.handleRemoveSpecificRow(i)} ********
+                                // onClick={this.handleRemoveSpecificRow(i)} ********
                               />
                             </td>
                           </tr>
@@ -488,17 +490,17 @@ class RecipeForm extends Form {
             )}
 
             {this.renderButton("Save Recipe")}
-            
-            {this.props.match.params.id !== "new" &&            
-            <button
-              className="btn btn-dark mt-4 mr-2"
-              onClick={(e) => e.preventDefault()}
-              data-toggle="modal"
-              data-target="#deleteRecipeModal"
-            >
-              Delete Recipe
-            </button>
-            }
+
+            {this.props.match.params.id !== "new" && (
+              <button
+                className="btn btn-dark mt-4 mr-2"
+                onClick={(e) => e.preventDefault()}
+                data-toggle="modal"
+                data-target="#deleteRecipeModal"
+              >
+                Delete Recipe
+              </button>
+            )}
           </form>
         </section>
 
@@ -526,9 +528,7 @@ class RecipeForm extends Form {
                 </button>
               </div>
               <div className="modal-body">
-                <p>
-                  This will permanently delete the recipe. 
-                </p>
+                <p>This will permanently delete the recipe.</p>
               </div>
               <div className="modal-footer d-flex justify-content-start">
                 <button
@@ -550,7 +550,6 @@ class RecipeForm extends Form {
             </div>
           </div>
         </div>
-
       </React.Fragment>
     );
   }
