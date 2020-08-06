@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   // get the user from mongo db and make sure exists
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email.toLowerCase() });
   if (!user) return res.status(400).send("Invalid email or password.");
 
   // compare request password with stored user password
@@ -51,7 +51,7 @@ router.patch("/", auth, async function (req, res) {
   if (error) return res.status(400).send(error.details[0].message);
 
   // get the user from mongo db and make sure exists
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email.toLowerCase() });
   if (!user) return res.status(404).send("Email not found");
 
   // compare request password with stored user password

@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email.toLowerCase() });
   if (user)
     return res
       .status(400)
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
       .send("A user with this username is already registered.");
 
   user = new User(_.pick(req.body, ["username", "email", "password"]));
-
+  user.email = user.email.toLowerCase();
   user.addedItems = [];
   user.removedItems = [];
   user.itemCounts = [];
@@ -73,7 +73,7 @@ router.patch("/:id", auth, async (req, res) => {
 
   // for email change: ensure requested email is unique in db
   if (req.body.email) {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email.toLowerCase() });
     if (user)
       return res
         .status(400)
