@@ -314,7 +314,7 @@ class RecipeDetail extends Form {
               </table>
               {this.props.user
                 ? this.renderButtonCustomHandler(
-                    "Add Ingredients To List",
+                    "Add to Shopping List",
                     this.handleAddIngredients.bind(this)
                   )
                 : null}

@@ -738,6 +738,10 @@ section.reviews .review-list {
   margin-top: 3rem;
 }
 
+.qty select {
+  padding-right: 2.5rem;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
