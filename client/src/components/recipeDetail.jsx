@@ -251,7 +251,7 @@ class RecipeDetail extends Form {
     return (
       <React.Fragment>
         <section className="recipe-detail-header">
-          <h1>{data.title}</h1>
+          <h2>{data.title}</h2>
           <p>{"by " + data.author}</p>
           <div>
             <AvgStarRating
@@ -278,88 +278,97 @@ class RecipeDetail extends Form {
             />
           )}
         </section>
-
-        <div className="row">
-          <div className="col-md-6 order-md-12">
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th colSpan={this.props.user ? 4 : 3}>Ingredients List</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.data.ingredients.map((ingredient, index) => (
-                  <tr key={index}>
-                    {this.props.user ? (
-                      <td>
-                        <input
-                          type="checkbox"
-                          onChange={(checkbox) =>
-                            this.handleIngredientCick(
-                              index,
-                              checkbox.target.checked
-                            )
-                          }
-                          checked={ingredient.addToList}
-                        />
-                      </td>
-                    ) : null}
-                    <td>{ingredient.qty}</td>
-                    <td>{ingredient.unit}</td>
-                    <td>{ingredient.item.name}</td>
+        <section className="recipe-body">
+          <div className="row">
+            <div className="col-md-6 order-md-12">
+              <h3>Ingredients</h3>
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    {/* <th colSpan={this.props.user ? 4 : 3}>Ingredients List</th> */}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {this.props.user
-              ? this.renderButtonCustomHandler(
-                  "Add Ingredients To List",
-                  this.handleAddIngredients.bind(this)
-                )
-              : null}
+                </thead>
+                <tbody>
+                  {this.state.data.ingredients.map((ingredient, index) => (
+                    <tr key={index}>
+                      {this.props.user ? (
+                        <td>
+                          <input
+                            type="checkbox"
+                            onChange={(checkbox) =>
+                              this.handleIngredientCick(
+                                index,
+                                checkbox.target.checked
+                              )
+                            }
+                            checked={ingredient.addToList}
+                          />
+                        </td>
+                      ) : null}
+                      <td>{ingredient.qty}</td>
+                      <td>{ingredient.unit}</td>
+                      <td>{ingredient.item.name}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {this.props.user
+                ? this.renderButtonCustomHandler(
+                    "Add Ingredients To List",
+                    this.handleAddIngredients.bind(this)
+                  )
+                : null}
+            </div>
+            <div className="col-md-6">
+              <h3>Preparation</h3>
+              <p style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                {this.state.data.instructions}
+              </p>
+            </div>
           </div>
-          <div className="col-md-6">
-            <h3>Recipe Notes:</h3>
-            <p style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-              {this.state.data.instructions}
-            </p>
-          </div>
-        </div>
+        </section>
         <hr className="divider" />
-        {this.props.user ? (
-          <div>
-            <h3 className="my-3">Review The Recipe</h3>
-            <form onSubmit={this.handleSubmit}>
-              <StarRating
-                starSize={25}
-                onChange={this.handleStarChange}
-                currentStars={this.state.data.reviewStars}
+        <section className="reviews">
+          {this.props.user ? (
+            <div>
+              <h3 className="my-3">Review This Recipe</h3>
+              <form onSubmit={this.handleSubmit}>
+                <StarRating
+                  starSize={25}
+                  onChange={this.handleStarChange}
+                  currentStars={this.state.data.reviewStars}
+                />
+                <br></br>
+                {this.renderTextArea(
+                  "reviewNotes",
+                  "",
+                  3,
+                  "Add your review here"
+                )}
+                {this.renderButton("Submit Review")}
+              </form>
+            </div>
+          ) : (
+            <h3 className="my-3">Reviews</h3>
+          )}
+
+          <div className="review-list">
+            {this.state.reviews.map((review) => (
+              <ReviewRow
+                key={review._id}
+                username={review.username}
+                comments={review.comments}
+                userImage={
+                  review.profileImageUrl ||
+                  process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
+                }
+                date={review.date}
+                rating={review.rating}
+                starSize={20}
               />
-              <br></br>
-              {this.renderTextArea(
-                "reviewNotes",
-                "",
-                3,
-                "Add your review here"
-              )}
-              {this.renderButton("Submit Review")}
-            </form>
+            ))}
           </div>
-        ) : null}
-        {this.state.reviews.map((review) => (
-          <ReviewRow
-            key={review._id}
-            username={review.username}
-            comments={review.comments}
-            userImage={
-              review.profileImageUrl ||
-              process.env.REACT_APP_SERVER_URL + "/images/blank-profile.png"
-            }
-            date={review.date}
-            rating={review.rating}
-            starSize={20}
-          />
-        ))}
+        </section>
       </React.Fragment>
     );
   }

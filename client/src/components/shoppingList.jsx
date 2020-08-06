@@ -421,7 +421,7 @@ class ShoppingList extends Component {
         <hr className="divider" />
         <div className="row">
           <div className="col-md-5 order-md-4 shop-list">
-            <div className="itemSearch pb-3">
+            <div className="itemSearch pb-4">
               <ItemSearch
                 items={this.props.items}
                 update={this.handleUpdate}
