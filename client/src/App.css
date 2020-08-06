@@ -729,6 +729,15 @@ section.reviews .review-list {
   margin-bottom: 4rem;
 }
 
+.edit-review-title {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.rf-hdr {
+  margin-top: 3rem;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
@@ -1068,19 +1077,14 @@ collapse
     font-size: 1.2rem;
     margin: 3rem 0 1.5rem;
   }
+
+  #register-form .left-col {
+    background-position: center;
+  }
 }
 
 @media (hover: none) {
   .up-review-row:hover {
     background-color: initial;
   }
-}
-
-.edit-review-title {
-  font-weight: 500;
-  font-size: 1.2em;
-}
-
-.rf-hdr {
-  margin-top: 3rem;
 }
