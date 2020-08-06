@@ -80,7 +80,7 @@ class Form extends Component {
     this.setState({ valueField: data, errors });
   };
 
-  renderButton(label, style = "btn btn-dark mt-4 mr-2") {
+  renderButton(label, style = "btn btn-dark mt-2 mr-2") {
     // console.log(this.validate());
     return <button className={style}>{label}</button>;
   }
@@ -88,7 +88,7 @@ class Form extends Component {
   renderButtonCustomHandler(
     label,
     handleClick,
-    style = "btn btn-dark mt-4 mr-2"
+    style = "btn btn-dark mt-2 mr-2"
   ) {
     // console.log(this.validate());
     return (

@@ -101,8 +101,8 @@ tr:hover .hover-icon {
 }
 
 .sl-page-heading {
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+  margin-top: 2em;
+  margin-bottom: 1.5em;
   position: relative;
 }
 
@@ -711,6 +711,24 @@ a.code-blue {
 .bg-secondary {
   background-color: #545b61 !important;
 }
+
+.recipe-detail-header h2 {
+  margin-top: 2rem;
+}
+
+section.image-gallery {
+  margin-top: -1rem;
+}
+
+section.recipe-body h3 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0;
+}
+
+section.reviews .review-list {
+  margin-bottom: 4rem;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
@@ -983,6 +1001,27 @@ collapse
 
   .divider {
     display: none;
+  }
+
+  .modal-form {
+    margin-top: 2rem;
+    box-shadow: initial;
+    border: none;
+  }
+
+  .modal-form .left-col {
+    height: 200px;
+    background-position-x: 0 !important;
+  }
+
+  section#register-form,
+  section#login-form {
+    margin: 0 -15px;
+  }
+
+  #login-form .modal-form .right-col,
+  #register-form .modal-form .right-col {
+    padding: 3em 3em 0;
   }
 }
 
