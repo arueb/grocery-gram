@@ -155,7 +155,7 @@ class ShoppingList extends Component {
     // store current state in case we need to revert
     // const prevAddedItems = this.state.addedItems;
     // const prevRemovedItems = this.state.removedItems;
-    const {removedItems: prevRemovedItems, addedItems:prevAddedItems } = {...this.state};
+    const { removedItems: prevRemovedItems, addedItems: prevAddedItems } = { ...this.state };
 
     let currExtractFromItems;
     let currAddToItems;
@@ -180,10 +180,10 @@ class ShoppingList extends Component {
         newExtractFromItemIds.push(item._id);
       } else newAddToItems.push(item);
     });
-
+    // console.log("newAddToItems (pre) = ", newAddToItems);
     // push currAddToItems into newAddToItems
     newAddToItems.push(...currAddToItems);
-
+    // console.log("newAddToItems (post) = ", newAddToItems);
     const newAddToItemIds = newAddToItems.map((item) => item._id);
 
     // sort and set state according to action, forces a re-render
