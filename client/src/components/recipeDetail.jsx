@@ -314,7 +314,7 @@ class RecipeDetail extends Form {
               </table>
               {this.props.user
                 ? this.renderButtonCustomHandler(
-                    "Add Ingredients To List",
+                    "Add to Shopping List",
                     this.handleAddIngredients.bind(this)
                   )
                 : null}
@@ -327,8 +327,8 @@ class RecipeDetail extends Form {
             </div>
           </div>
         </section>
-        <hr className="divider" />
         <section className="reviews">
+          <hr className="divider" />
           {this.props.user ? (
             <div>
               <h3 className="my-3">Review This Recipe</h3>

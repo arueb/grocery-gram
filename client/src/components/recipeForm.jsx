@@ -493,7 +493,7 @@ class RecipeForm extends Form {
 
             {this.props.match.params.id !== "new" && (
               <button
-                className="btn btn-dark mt-4 mr-2"
+                className="btn btn-dark mt-2 mr-2"
                 onClick={(e) => e.preventDefault()}
                 data-toggle="modal"
                 data-target="#deleteRecipeModal"

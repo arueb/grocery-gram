@@ -2,7 +2,7 @@ import React from "react";
 
 const Slider = ({ name, label, checked, error, ...rest }) => {
   return (
-    <div className="custom-control custom-switch">
+    <div className="custom-control custom-switch mt-2 mb-2">
       <input
         {...rest}
         checked={checked}

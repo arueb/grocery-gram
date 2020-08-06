@@ -72,7 +72,7 @@ class ShoppingList extends Component {
           userData,
           userRecipes,
           itemCounts,
-          isLoading: false
+          isLoading: false,
         });
       }, 100);
       this.updateMyStaples(itemCounts);
@@ -155,7 +155,9 @@ class ShoppingList extends Component {
     // store current state in case we need to revert
     // const prevAddedItems = this.state.addedItems;
     // const prevRemovedItems = this.state.removedItems;
-    const { removedItems: prevRemovedItems, addedItems: prevAddedItems } = { ...this.state };
+    const { removedItems: prevRemovedItems, addedItems: prevAddedItems } = {
+      ...this.state,
+    };
 
     let currExtractFromItems;
     let currAddToItems;
@@ -303,7 +305,7 @@ class ShoppingList extends Component {
     this.updateMyStaples(itemCounts);
     try {
       await updateItemCounts(this.props.user._id, itemCounts);
-    } catch (err) { }
+    } catch (err) {}
   };
 
   updateMyStaples = (itemCounts) => {
@@ -346,7 +348,6 @@ class ShoppingList extends Component {
     const itemCounts = [...this.state.itemCounts];
     this.updateMyStaples(itemCounts);
 
-
     try {
       await updateShoppingList(this.props.user._id, newAddedItemIds);
       // this.handleUpdatePieChart();
@@ -382,7 +383,6 @@ class ShoppingList extends Component {
     this.setState({ addedItems: [], removedItems: [] });
 
     // this.handleUpdatePieChart();
-
 
     try {
       await clearAllFromShoppingList(this.props.user._id, [], []);
@@ -425,7 +425,7 @@ class ShoppingList extends Component {
         </div>
         <hr className="divider" />
         <div className="row">
-          <div className="col-md-5 order-md-4 shop-list">
+          <div className="col-md-5   order-md-4 shop-list">
             <div className="itemSearch pb-4">
               <ItemSearch
                 items={this.props.items}
@@ -438,58 +438,58 @@ class ShoppingList extends Component {
               {!addedItems
                 ? null
                 : addedItems.map((item, index) => (
-                  <li
-                    key={index}
-                    onClick={this.handleRemoveItem.bind(this, index)}
-                    style={{
-                      borderTop: 0,
-                      borderBottom: 0,
-                      borderRight: 0,
-                      borderLeft: `15px solid ${getColor(item.category)}`,
-                    }}
-                    className="list-group-item"
-                  >
-                    <span
-                      className={
-                        this.state.activeIndex === index ? "strike" : ""
-                      }
+                    <li
+                      key={index}
+                      onClick={this.handleRemoveItem.bind(this, index)}
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: `15px solid ${getColor(item.category)}`,
+                      }}
+                      className="list-group-item"
                     >
-                      {item.name}
-                    </span>
-                    <span className="sl-price">${item.price.toFixed(2)}</span>
-                  </li>
-                ))}
+                      <span
+                        className={
+                          this.state.activeIndex === index ? "strike" : ""
+                        }
+                      >
+                        {item.name}
+                      </span>
+                      <span className="sl-price">${item.price.toFixed(2)}</span>
+                    </li>
+                  ))}
             </div>
             <div className="list-group lst-grp-hover lst-grp-removed">
               {!removedItems
                 ? null
                 : removedItems.map((item, index) => (
-                  <li
-                    //   onClick=""
-                    key={index}
-                    className="list-group-item"
-                    style={{
-                      borderTop: 0,
-                      borderBottom: 0,
-                      borderRight: 0,
-                      borderLeft: "15px solid #fff",
-                    }}
-                  >
-                    <span
-                      className="removed"
-                      ref={this.addBackRef}
-                      onClick={() => this.handleAddBackItem(index)}
+                    <li
+                      //   onClick=""
+                      key={index}
+                      className="list-group-item"
+                      style={{
+                        borderTop: 0,
+                        borderBottom: 0,
+                        borderRight: 0,
+                        borderLeft: "15px solid #fff",
+                      }}
                     >
-                      {item.name}
-                    </span>
-                    <span className="perm-delete">
-                      <FaTrash
-                        className="hover-icon"
-                        onClick={() => this.handlePermDelete(index)}
-                      />
-                    </span>
-                  </li>
-                ))}
+                      <span
+                        className="removed"
+                        ref={this.addBackRef}
+                        onClick={() => this.handleAddBackItem(index)}
+                      >
+                        {item.name}
+                      </span>
+                      <span className="perm-delete">
+                        <FaTrash
+                          className="hover-icon"
+                          onClick={() => this.handlePermDelete(index)}
+                        />
+                      </span>
+                    </li>
+                  ))}
               {numAllItems > 0 && (
                 <React.Fragment>
                   <button
