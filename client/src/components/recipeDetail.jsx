@@ -327,8 +327,8 @@ class RecipeDetail extends Form {
             </div>
           </div>
         </section>
-        <hr className="divider" />
         <section className="reviews">
+          <hr className="divider" />
           {this.props.user ? (
             <div>
               <h3 className="my-3">Review This Recipe</h3>

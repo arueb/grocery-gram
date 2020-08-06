@@ -415,7 +415,7 @@ footer {
 
 .recipe-block {
   padding: 0 8px;
-  margin-bottom: 1rem !important;
+  margin-bottom: 2rem !important;
 }
 
 tbody .form-group {
@@ -856,6 +856,24 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     left: 1.5rem;
     right: 0;
   }
+
+  .pie {
+    padding-left: 2rem;
+  }
+
+  .totals {
+    font-size: 1.4rem;
+    padding-left: 2rem;
+    padding-right: 15px;
+    top: 125px;
+  }
+
+  .totals .num-items {
+    font-size: 0.8rem;
+  }
+  .category-legend {
+    padding: 1rem;
+  }
 }
 
 /* 
@@ -877,6 +895,20 @@ Large devices (desktops, 992px and up) */
 
   .list-group-item {
     padding: 0.375rem 1.5rem;
+  }
+  .pie {
+    padding-left: 3rem;
+  }
+  .totals {
+    font-size: 1.6rem;
+    top: 160px;
+  }
+
+  .totals .num-items {
+    font-size: 0.9rem;
+  }
+  .category-legend {
+    padding: 1rem;
   }
 }
 
@@ -1003,6 +1035,10 @@ collapse
     display: none;
   }
 
+  .reviews .divider {
+    display: block;
+  }
+
   .modal-form {
     margin-top: 2rem;
     box-shadow: initial;
@@ -1022,6 +1058,15 @@ collapse
   #login-form .modal-form .right-col,
   #register-form .modal-form .right-col {
     padding: 3em 3em 0;
+  }
+
+  section.image-gallery {
+    margin-bottom: 0;
+  }
+
+  section.recipe-body h3 {
+    font-size: 1.2rem;
+    margin: 3rem 0 1.5rem;
   }
 }
 
