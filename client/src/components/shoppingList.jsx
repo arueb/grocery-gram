@@ -415,13 +415,13 @@ class ShoppingList extends Component {
 
     return (
       <React.Fragment>
-        {isLoading && <p>page loading...</p>}
+        {/* {isLoading && <p>page loading...</p>} */}
         <div className="row sl-page-heading">
-          <div className="col-md-3"></div>
-          <div className="col-md">
-            <h2>Shopping List</h2>
-          </div>
-          <div className="col-md"></div>
+          {/* <div className="col-md-3"></div> */}
+          {/* <div className="col-md"> */}
+          <h2>Shopping List</h2>
+          {/* </div> */}
+          {/* <div className="col-md"></div> */}
         </div>
         <hr className="divider" />
         <div className="row">

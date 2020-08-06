@@ -18,6 +18,8 @@ export const units = [
   { _id: "17", name: "Can" },
   { _id: "18", name: "Sticks" },
   { _id: "19", name: "Slices" },
+  { _id: "20", name: "Shot" },
+  { _id: "21", name: "Package" },
 ];
 
 export function getUnits() {

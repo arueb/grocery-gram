@@ -43,7 +43,7 @@ class LoginForm extends Form {
   render() {
     return (
       <React.Fragment>
-        <section id="register-form">
+        <section id="login-form">
           <div className="col-lg-8 col-xl-7 mx-auto modal-form row">
             <div className="col-md-5 left-col bg-info"></div>
             <div className="col-md-7 right-col">

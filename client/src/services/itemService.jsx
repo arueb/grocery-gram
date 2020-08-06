@@ -14,8 +14,14 @@ const categories = [
   { _id: 9, name: "Vegetables", hexColor: "#009933" },
   { _id: 10, name: "Seafood", hexColor: "#dbcccc" },
   { _id: 11, name: "Condiments", hexColor: "#451b04" },
-  { _id: 11, name: "Herbs/Spices", hexColor: "#81b14f" },
-  { _id: 11, name: "Breads", hexColor: "#8faab3" },
+  { _id: 12, name: "Herbs/Spices", hexColor: "#81b14f" },
+  { _id: 13, name: "Breads", hexColor: "#8faab3" },
+  { _id: 14, name: "Alcohol", hexColor: "#d19c4c" },
+  { _id: 15, name: "Sweetener", hexColor: "#9a6642" },
+  { _id: 16, name: "Oils/Fats", hexColor: "#5d3b1a" },
+  { _id: 17, name: "Sauces/Soups/Gravies", hexColor: "#25963e" },
+  { _id: 18, name: "Grilling Products", hexColor: "#d57500" },
+  { _id: 19, name: "Pasta", hexColor: "#bf6b59" },
 ];
 
 // function itemUrl(id) {
