@@ -72,9 +72,7 @@ body {
 }
 
 .modal-form {
-  border: 1px solid #dddddd;
   padding: 0;
-  margin-top: 5em;
 }
 
 .modal-form .right-col {
@@ -677,10 +675,6 @@ span.save-recipe svg {
   background-position-x: -290px;
 }
 
-.modal-form {
-  box-shadow: 5px 5px 10px #f7f7f7;
-}
-
 .modal-form h2 {
   font-size: 1.6rem;
   text-transform: uppercase;
@@ -735,10 +729,28 @@ section.reviews .review-list {
   width: 5rem;
 }
 
+.modal-form .left-col {
+  height: 200px;
+  background-position-x: 0 !important;
+  background-size: cover;
+}
+
+.modal-form {
+  margin-top: 2rem;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
+  .modal-form {
+    box-shadow: 5px 5px 10px #f7f7f7;
+    padding-bottom: 3rem;
+  }
+  .modal-form {
+    border: 1px solid #dddddd;
+    margin-top: 2em;
+  }
 }
 
 /* 
@@ -887,6 +899,24 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     opacity: 1;
     transition-delay: 0.2s;
     cursor: pointer;
+  }
+
+  .modal-form {
+    padding-bottom: 0rem;
+    margin-top: 5rem;
+  }
+
+  .modal-form .left-col {
+    height: initial;
+  }
+  #register-form .left-col {
+    background-size: cover;
+    background-position-x: -60px !important;
+  }
+
+  #login-form .left-col {
+    background-size: cover;
+    background-position-x: -290px !important;
   }
 }
 
@@ -1053,16 +1083,11 @@ collapse
     display: block;
   }
 
-  .modal-form {
+  /* .modal-form {
     margin-top: 2rem;
     box-shadow: initial;
     border: none;
-  }
-
-  .modal-form .left-col {
-    height: 200px;
-    background-position-x: 0 !important;
-  }
+  } */
 
   section#register-form,
   section#login-form {
