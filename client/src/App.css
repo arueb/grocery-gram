@@ -759,8 +759,8 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   }
 
   .card-body {
-    min-height: 152px;
-    padding: 1rem;
+    min-height: 150px;
+    padding: 1rem 1rem 4rem;
   }
 
   .list-group-item {
@@ -771,12 +771,18 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     font-size: 1rem;
   }
 
+  .avg-star-rating {
+    position: absolute;
+    bottom: 1rem;
+  }
+
   .avg-star-rating div {
     font-size: 0.8rem;
   }
 
   .card-text {
     font-size: 0.8rem;
+    margin-bottom: 0;
   }
 
   .edit-icon {
