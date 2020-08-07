@@ -123,7 +123,7 @@ router.patch("/:id", auth, async (req, res) => {
 });
 
 // get all users
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const users = await User.find().sort("username");
     // res.send(users);
