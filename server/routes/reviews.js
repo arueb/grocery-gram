@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const _ = require("lodash");
 const { Review, validate } = require("../models/review");
 const { User } = require("../models/user");
 const { Recipe } = require("../models/recipe");
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -110,7 +111,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   // check to make sure the specified review exists
   let review = {};
   try {
@@ -170,7 +171,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // update given recipe's properties with properties sent in request body
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", auth, async (req, res) => {
   const { error } = validate(req.body, true); // ignore required
   if (error) return res.status(400).send(error.details[0].message);
 

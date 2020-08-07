@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const Multer = require("multer");
 const CLOUD_BUCKET = "grocerygramapi_bucket";
 const { format } = require("util");
@@ -53,7 +54,11 @@ const uploadImageToGCS = (file, fileName) =>
 
 // Modified from GCloud Example: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/appengine/storage/standard/app.js
 // Process the file upload and upload to Google Cloud Storage.
-router.post("/", multer.single("file"), async function (req, res, next) {
+router.post("/", [auth, multer.single("file")], async function (
+  req,
+  res,
+  next
+) {
   let outputJson = {
     fullsizeHeight: "",
     fullsizeUrl: "",
