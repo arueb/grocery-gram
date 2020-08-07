@@ -1121,4 +1121,8 @@ collapse
   .list-group.lst-grp-hover.lst-grp-removed .list-group-item:hover {
     background-color: #fff !important;
   }
+
+  .lst-grp-removed li:hover svg.hover-icon {
+    opacity: 0 !important;
+  }
 }
