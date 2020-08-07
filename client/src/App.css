@@ -17,7 +17,6 @@ html,
 body,
 #root {
   min-height: 100%;
-  /* position: relative; */
 }
 html {
   position: relative;
@@ -29,7 +28,6 @@ body {
 
 #root {
   padding-bottom: 220px;
-  /* position: relative; */
 }
 
 .App {
@@ -72,9 +70,7 @@ body {
 }
 
 .modal-form {
-  border: 1px solid #dddddd;
   padding: 0;
-  margin-top: 5em;
 }
 
 .modal-form .right-col {
@@ -166,7 +162,6 @@ tr:hover .hover-icon {
 .react-autosuggest__container--open .react-autosuggest__suggestions-container {
   display: block;
   position: absolute;
-  /* width: 240px; */
   width: 100%;
   background-color: #fff;
   font-family: Helvetica, sans-serif;
@@ -204,7 +199,6 @@ div.list-group.lst-grp-hover li:hover {
 
 .react-autosuggest__suggestion {
   cursor: pointer;
-  /*   padding: 10px 20px; */
   display: inline-block;
   margin: 6px 3px;
 }
@@ -220,8 +214,6 @@ div.list-group.lst-grp-hover li:hover {
 }
 
 .suggestion-content {
-  /*   display: flex; */
-  /*   align-items: center; */
   background-repeat: no-repeat;
   border-radius: 25px;
 }
@@ -278,7 +270,6 @@ td.delete {
   width: 0;
   height: 1px;
   background: black;
-  /* animation: strike 3s 0.1s ease-in; */
   animation-name: strike;
   animation-duration: 0.2s;
   animation-timing-function: ease-in;
@@ -324,15 +315,6 @@ footer {
 .category-legend {
   list-style: none;
 }
-
-/* .trial-cover {
-  position: absolute;
-  height: 10px;
-  background-color: white;
-  top: 420px;
-  width: 80%;
-  height: 20px;
-} */
 
 .list-group-item {
   padding: 0.6rem 1.25rem;
@@ -415,7 +397,7 @@ footer {
 
 .recipe-block {
   padding: 0 8px;
-  margin-bottom: 1rem !important;
+  margin-bottom: 2rem !important;
 }
 
 tbody .form-group {
@@ -466,20 +448,12 @@ h1 {
 }
 
 .fullscreen .image-gallery-slides {
-  /* margin-top: 2rem; */
-  /* max-height: calc(100vh - 140px); */
   max-width: 100%;
-  /* min-height: calc(100vh - 140px); */
-  /* width: 100%; */
   max-height: calc(90vh) !important;
   width: initial;
 }
 .fullscreen .image-gallery-slides img {
-  /* margin-top: 2rem; */
-  /* max-height: calc(100vh - 140px); */
   max-width: 100%;
-  /* min-height: calc(100vh - 140px); */
-  /* width: 100%; */
   max-height: calc(90vh) !important;
 }
 
@@ -529,19 +503,10 @@ button.add-recipe {
 span.perm-delete .hover-icon {
   margin-top: 0.3rem;
   opacity: 0;
-  /* opacity: 0; */
   transition: opacity 0.1s ease-out;
   cursor: default;
   transition-delay: 0.2s;
   float: right;
-}
-
-/* .hover-icon li:hover  { */
-li:hover span.perm-delete .hover-icon {
-  /* opacity: 1 !important; */
-  opacity: 1;
-  transition-delay: 0.2s;
-  cursor: pointer;
 }
 
 /* on hover over non-span areas */
@@ -680,13 +645,9 @@ span.save-recipe svg {
 }
 
 #login-form .left-col {
-  background-image: url(https://images.unsplash.com/photo-1497888329096-51c27beff665?ixlib=rb-1.2.1&auto=format&fit=crop&w=1502&q=80);
+  background-image: url("/img/photo-1497888329096-51c27beff665.jpg");
   background-size: cover;
   background-position-x: -290px;
-}
-
-.modal-form {
-  box-shadow: 5px 5px 10px #f7f7f7;
 }
 
 .modal-form h2 {
@@ -698,10 +659,11 @@ span.save-recipe svg {
 .modal-form label {
   font-size: 0.9rem;
   margin-bottom: 0;
+  border-radius: 3px;
 }
 
 .btn {
-  border-radius: 0 !important;
+  border-radius: 3px !important;
 }
 
 a.code-blue {
@@ -729,10 +691,45 @@ section.reviews .review-list {
   margin-bottom: 4rem;
 }
 
+.edit-review-title {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.rf-hdr {
+  margin-top: 3rem;
+}
+
+.qty select {
+  width: 5rem;
+}
+
+.modal-form .left-col {
+  height: 200px;
+  background-position-x: 0 !important;
+  background-size: cover;
+}
+
+.modal-form {
+  margin-top: 2rem;
+}
+
+.divider {
+  display: none;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
+  .modal-form {
+    box-shadow: 5px 5px 10px #f7f7f7;
+    padding-bottom: 3rem;
+  }
+  .modal-form {
+    border: 1px solid #dddddd;
+    margin-top: 2em;
+  }
 }
 
 /* 
@@ -742,7 +739,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   /*  Add Recipe Form  */
   #add-recipe-form {
     padding: 0em 5em;
-    /* padding: 5em 5em; */
   }
 
   .pie-chart-container > div {
@@ -756,7 +752,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     top: 240px;
     width: 100%;
     height: 11px;
-    /* bottom: 51px; */
   }
 
   .totals {
@@ -821,7 +816,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   .card:hover .card-body {
     background-color: #343a40 !important;
-    /* background-color: #AD310B; */
     -webkit-transition: background-color 300ms linear;
     -ms-transition: background-color 300ms linear;
     transition: background-color 300ms linear;
@@ -856,6 +850,53 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     left: 1.5rem;
     right: 0;
   }
+
+  .pie {
+    padding-left: 2rem;
+  }
+
+  .totals {
+    font-size: 1.4rem;
+    padding-left: 2rem;
+    padding-right: 15px;
+    top: 125px;
+  }
+
+  .totals .num-items {
+    font-size: 0.8rem;
+  }
+  .category-legend {
+    padding: 1rem;
+  }
+
+  /* .hover-icon li:hover  { */
+  li:hover span.perm-delete .hover-icon {
+    opacity: 1;
+    transition-delay: 0.2s;
+    cursor: pointer;
+  }
+
+  .modal-form {
+    padding-bottom: 0rem;
+    margin-top: 5rem;
+  }
+
+  .modal-form .left-col {
+    height: initial;
+  }
+  #register-form .left-col {
+    background-size: cover;
+    background-position-x: -60px !important;
+  }
+
+  #login-form .left-col {
+    background-size: cover;
+    background-position-x: -290px !important;
+  }
+
+  .divider {
+    display: block;
+  }
 }
 
 /* 
@@ -877,6 +918,20 @@ Large devices (desktops, 992px and up) */
 
   .list-group-item {
     padding: 0.375rem 1.5rem;
+  }
+  .pie {
+    padding-left: 3rem;
+  }
+  .totals {
+    font-size: 1.6rem;
+    top: 160px;
+  }
+
+  .totals .num-items {
+    font-size: 0.9rem;
+  }
+  .category-legend {
+    padding: 1rem;
   }
 }
 
@@ -999,19 +1054,8 @@ collapse
     font-size: 1.8rem;
   }
 
-  .divider {
-    display: none;
-  }
-
-  .modal-form {
-    margin-top: 2rem;
-    box-shadow: initial;
-    border: none;
-  }
-
-  .modal-form .left-col {
-    height: 200px;
-    background-position-x: 0 !important;
+  .reviews .divider {
+    display: block;
   }
 
   section#register-form,
@@ -1023,19 +1067,31 @@ collapse
   #register-form .modal-form .right-col {
     padding: 3em 3em 0;
   }
+
+  section.image-gallery {
+    margin-bottom: 0;
+  }
+
+  section.recipe-body h3 {
+    font-size: 1.2rem;
+    margin: 3rem 0 1.5rem;
+  }
+
+  #register-form .left-col {
+    background-position: center;
+  }
 }
 
 @media (hover: none) {
   .up-review-row:hover {
     background-color: initial;
   }
-}
 
-.edit-review-title {
-  font-weight: 500;
-  font-size: 1.2em;
-}
+  .list-group.lst-grp-hover.lst-grp-removed .list-group-item:hover {
+    background-color: #fff !important;
+  }
 
-.rf-hdr {
-  margin-top: 3rem;
+  .lst-grp-removed li:hover svg.hover-icon {
+    opacity: 0 !important;
+  }
 }
