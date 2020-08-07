@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 const _ = require("lodash");
 const { Recipe, validate } = require("../models/recipe");
 const { User } = require("../models/user");
@@ -113,7 +114,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   //console.log(req.body);
   // validate request body
   const { error } = validate(req.body);
@@ -123,7 +124,7 @@ router.post("/", async (req, res) => {
     // check to make sure the specified user exists
     let user = await User.findOne({ _id: req.body.userId });
     if (!user) return res.status(404).send("The userId does not exist");
-// console.log("req.body=", req.body)
+    // console.log("req.body=", req.body)
     // create the recipe object from the request body and save
     const recipe = new Recipe(req.body);
     // console.log(recipe);
@@ -131,13 +132,13 @@ router.post("/", async (req, res) => {
     // console.log * "saved recipe successfully!";
     res.status(200).send(recipe); // send recipe back with response
   } catch (err) {
-    console.log("POST /recipes error:", err)
+    console.log("POST /recipes error:", err);
     res.status(500).send("Something failed creating a new recipes.");
   }
 });
 
 // update given recipe's properties with properties sent in request body
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", auth, async (req, res) => {
   console.log("req.body", req.body);
   const { error } = validate(req.body, true); // ignore required
   if (error) return res.status(400).send(error.details[0].message);
@@ -173,7 +174,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     //   check to make sure the specified recipe exists
     const recipe = await Recipe.findByIdAndRemove(req.params.id);
@@ -194,7 +195,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.get("/:id/reviews", async (req, res) => {
+router.get("/:id/reviews", auth, async (req, res) => {
   let recipe = await Recipe.findById(req.params.id);
   if (!recipe) return res.status(404).send("The recipeId could not be found.");
 
