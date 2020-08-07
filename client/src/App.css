@@ -17,7 +17,6 @@ html,
 body,
 #root {
   min-height: 100%;
-  /* position: relative; */
 }
 html {
   position: relative;
@@ -29,7 +28,6 @@ body {
 
 #root {
   padding-bottom: 220px;
-  /* position: relative; */
 }
 
 .App {
@@ -164,7 +162,6 @@ tr:hover .hover-icon {
 .react-autosuggest__container--open .react-autosuggest__suggestions-container {
   display: block;
   position: absolute;
-  /* width: 240px; */
   width: 100%;
   background-color: #fff;
   font-family: Helvetica, sans-serif;
@@ -202,7 +199,6 @@ div.list-group.lst-grp-hover li:hover {
 
 .react-autosuggest__suggestion {
   cursor: pointer;
-  /*   padding: 10px 20px; */
   display: inline-block;
   margin: 6px 3px;
 }
@@ -218,8 +214,6 @@ div.list-group.lst-grp-hover li:hover {
 }
 
 .suggestion-content {
-  /*   display: flex; */
-  /*   align-items: center; */
   background-repeat: no-repeat;
   border-radius: 25px;
 }
@@ -276,7 +270,6 @@ td.delete {
   width: 0;
   height: 1px;
   background: black;
-  /* animation: strike 3s 0.1s ease-in; */
   animation-name: strike;
   animation-duration: 0.2s;
   animation-timing-function: ease-in;
@@ -322,15 +315,6 @@ footer {
 .category-legend {
   list-style: none;
 }
-
-/* .trial-cover {
-  position: absolute;
-  height: 10px;
-  background-color: white;
-  top: 420px;
-  width: 80%;
-  height: 20px;
-} */
 
 .list-group-item {
   padding: 0.6rem 1.25rem;
@@ -464,20 +448,12 @@ h1 {
 }
 
 .fullscreen .image-gallery-slides {
-  /* margin-top: 2rem; */
-  /* max-height: calc(100vh - 140px); */
   max-width: 100%;
-  /* min-height: calc(100vh - 140px); */
-  /* width: 100%; */
   max-height: calc(90vh) !important;
   width: initial;
 }
 .fullscreen .image-gallery-slides img {
-  /* margin-top: 2rem; */
-  /* max-height: calc(100vh - 140px); */
   max-width: 100%;
-  /* min-height: calc(100vh - 140px); */
-  /* width: 100%; */
   max-height: calc(90vh) !important;
 }
 
@@ -527,7 +503,6 @@ button.add-recipe {
 span.perm-delete .hover-icon {
   margin-top: 0.3rem;
   opacity: 0;
-  /* opacity: 0; */
   transition: opacity 0.1s ease-out;
   cursor: default;
   transition-delay: 0.2s;
@@ -764,7 +739,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   /*  Add Recipe Form  */
   #add-recipe-form {
     padding: 0em 5em;
-    /* padding: 5em 5em; */
   }
 
   .pie-chart-container > div {
@@ -778,7 +752,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     top: 240px;
     width: 100%;
     height: 11px;
-    /* bottom: 51px; */
   }
 
   .totals {
@@ -843,7 +816,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   .card:hover .card-body {
     background-color: #343a40 !important;
-    /* background-color: #AD310B; */
     -webkit-transition: background-color 300ms linear;
     -ms-transition: background-color 300ms linear;
     transition: background-color 300ms linear;
@@ -899,7 +871,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   /* .hover-icon li:hover  { */
   li:hover span.perm-delete .hover-icon {
-    /* opacity: 1 !important; */
     opacity: 1;
     transition-delay: 0.2s;
     cursor: pointer;
@@ -1086,12 +1057,6 @@ collapse
   .reviews .divider {
     display: block;
   }
-
-  /* .modal-form {
-    margin-top: 2rem;
-    box-shadow: initial;
-    border: none;
-  } */
 
   section#register-form,
   section#login-form {
