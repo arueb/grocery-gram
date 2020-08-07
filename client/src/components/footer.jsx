@@ -54,9 +54,8 @@ const Footer = () => {
 
       {/* <!-- Copyright --> */}
       <div className="footer-copyright text-center py-3">
-        © 2020 Copyright:
+        © 2020 Copyright:{" "}
         <a className="code-blue" href="https://oregonstate.edu/">
-          {" "}
           Code Blue Team
         </a>
       </div>
