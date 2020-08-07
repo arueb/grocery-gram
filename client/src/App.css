@@ -536,14 +536,6 @@ span.perm-delete .hover-icon {
   float: right;
 }
 
-/* .hover-icon li:hover  { */
-li:hover span.perm-delete .hover-icon {
-  /* opacity: 1 !important; */
-  opacity: 1;
-  transition-delay: 0.2s;
-  cursor: pointer;
-}
-
 /* on hover over non-span areas */
 .list-group.lst-grp-hover.lst-grp-removed .list-group-item {
   cursor: default;
@@ -887,6 +879,14 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   .category-legend {
     padding: 1rem;
   }
+
+  /* .hover-icon li:hover  { */
+  li:hover span.perm-delete .hover-icon {
+    /* opacity: 1 !important; */
+    opacity: 1;
+    transition-delay: 0.2s;
+    cursor: pointer;
+  }
 }
 
 /* 
@@ -1090,5 +1090,9 @@ collapse
 @media (hover: none) {
   .up-review-row:hover {
     background-color: initial;
+  }
+
+  .list-group.lst-grp-hover.lst-grp-removed .list-group-item:hover {
+    background-color: #fff !important;
   }
 }
