@@ -68,7 +68,8 @@ class ShoppingList extends Component {
           isLoading: false,
         });
       }, 100);
-      this.updateMyStaples(itemCounts);
+      console.log("addedItems", addedItems);
+      this.updateMyStaples(itemCounts, addedItems);
     }
   }
 
@@ -101,7 +102,7 @@ class ShoppingList extends Component {
     const removedItemIds = this.state.removedItems.map((item) => item._id);
     this.setState({ addedItems: newAddedItems });
     const itemCounts = [...this.state.itemCounts];
-    this.updateMyStaples(itemCounts);
+    this.updateMyStaples(itemCounts, newAddedItems);
 
     try {
       await updateShoppingList(
@@ -118,7 +119,7 @@ class ShoppingList extends Component {
 
   handleAddBackItem = async (itemIndex) => {
     this.moveItemsInLists(itemIndex, "addBack");
-    this.updateMyStaples(this.state.itemCounts);
+    this.updateMyStaples(this.state.itemCounts, this.state.addedItems);
   };
 
   handleRemoveItem = async (index) => {
@@ -171,6 +172,7 @@ class ShoppingList extends Component {
         addedItems: newAddToItems,
         removedItems: newExtractFromItems,
       });
+      this.updateMyStaples(this.state.itemCounts, newAddToItems);
     } else {
       // removeItem
       newExtractFromItems = this.sortItems(newExtractFromItems);
@@ -178,6 +180,7 @@ class ShoppingList extends Component {
         addedItems: newExtractFromItems,
         removedItems: newAddToItems,
       });
+      this.updateMyStaples(this.state.itemCounts, newExtractFromItems);
     }
 
     // handle user shopping list in backend according to action
@@ -232,14 +235,15 @@ class ShoppingList extends Component {
     }
 
     this.setState({ itemCounts });
-    this.updateMyStaples(itemCounts);
+    this.updateMyStaples(itemCounts, this.state.addedItems);
     try {
       await updateItemCounts(this.props.user._id, itemCounts);
     } catch (err) {}
   };
 
-  updateMyStaples = (itemCounts) => {
-    const addedItems = [...this.state.addedItems].map((i) => i._id);
+  updateMyStaples = (itemCounts, addedItems) => {
+    addedItems = [...addedItems].map((i) => i._id);
+    // }
     const allItems = [...this.props.items];
 
     // only include items not already present in addedItems
@@ -252,7 +256,6 @@ class ShoppingList extends Component {
       .map((i) => {
         return allItems.find((item) => item._id === i._id);
       });
-    // return results;
     this.setState({ staples });
   };
 
@@ -274,7 +277,7 @@ class ShoppingList extends Component {
 
     this.setState({ addedItems: newAddedItems });
     const itemCounts = [...this.state.itemCounts];
-    this.updateMyStaples(itemCounts);
+    this.updateMyStaples(itemCounts, newAddedItems);
 
     try {
       await updateShoppingList(this.props.user._id, newAddedItemIds);
