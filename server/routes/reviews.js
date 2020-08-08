@@ -51,10 +51,6 @@ router.post("/", auth, async (req, res) => {
     res.status(500).send("Problem updating user reviews array");
   }
 
-  console.log("recipe.numReviews", recipe.numReviews);
-  console.log("recipe.avgRating", recipe.avgRating);
-  console.log("review.rating", review.rating);
-
   // calculate average rating
   const avgRating =
     (recipe.numReviews * recipe.avgRating + review.rating) /
