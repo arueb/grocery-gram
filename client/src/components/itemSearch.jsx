@@ -11,7 +11,6 @@ function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-// function getSuggestions(value) {
 function getSuggestions(value, data) {
   const escapedValue = escapeRegexCharacters(value.trim());
 
@@ -77,19 +76,15 @@ class ItemSearch extends Component {
     console.log("onBlur event triggered");
     // TODO: test to make sure this is tab key event
     if (this.state.suggestions.length && highlightedSuggestion) {
-      // const suggestionId = highlightedSuggestion._id;
       // there is a suggestion to use
 
       // set the value (ingredient name) in local state
-      //   this.setState({ value: this.state.suggestions[0].name });
       this.setState({ value: highlightedSuggestion.name });
 
       // update the ingredient id
-      //   this.props.update(this.state.suggestions[0]._id, this.props.row);
       console.log("suggestionId:", this.state.suggestionId);
       console.log("highlightedSuggestion:", highlightedSuggestion._id);
       this.props.update(highlightedSuggestion._id, this.props.row);
-      //   this.props.update(this.state.suggestionId, this.props.row);
     } else {
       // there is no suggestion to use
 
@@ -115,7 +110,6 @@ class ItemSearch extends Component {
 
   onSuggestionsFetchRequested = ({ value }) => {
     const items = [...this.props.items];
-    // console.log("my items array:", items);
     this.setState({
       suggestions: getSuggestions(value, items),
     });

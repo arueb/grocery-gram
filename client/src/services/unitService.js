@@ -25,5 +25,4 @@ export const units = [
 
 export function getUnits() {
   return units.sort((a, b) => (a.name > b.name ? 1 : -1));
-  //   .map(unit => { return unit.});
 }

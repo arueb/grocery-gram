@@ -32,7 +32,6 @@ export const categories = [
   
   export function getAllCategories() {
     return categories.sort((a, b) => (a.name > b.name ? 1 : -1));
-    //   .map(unit => { return unit.});
   }
 
 export function getCategories(recipes) {

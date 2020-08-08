@@ -22,13 +22,9 @@ class Form extends Component {
   };
 
   validateProperty = ({ name, value }) => {
-    // console.log("validating property...");
     const obj = { [name]: value };
-    // console.log("obj:", obj);
     const schema = { [name]: this.schema[name] };
-    // console.log("schema", schema);
     const { error } = Joi.validate(obj, schema);
-    // console.log("error:", error);
     return error ? error.details[0].message : null;
   };
 
@@ -44,8 +40,6 @@ class Form extends Component {
   };
 
   handleSliderChange = ({ currentTarget: input }) => {
-    // console.log("handle slider change called");
-    // console.log(input.checked);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
 
@@ -58,8 +52,6 @@ class Form extends Component {
 
   handleChange = ({ currentTarget: input }) => {
     console.log("handle change called");
-    // console.log(input.value);
-    // console.log(e.target.value);
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
 
@@ -81,7 +73,6 @@ class Form extends Component {
   };
 
   renderButton(label, style = "btn btn-dark mt-2 mr-2") {
-    // console.log(this.validate());
     return <button className={style}>{label}</button>;
   }
 
@@ -90,7 +81,6 @@ class Form extends Component {
     handleClick,
     style = "btn btn-dark mt-2 mr-2"
   ) {
-    // console.log(this.validate());
     return (
       <button className={style} onClick={(e) => handleClick(e)}>
         {label}
@@ -100,9 +90,6 @@ class Form extends Component {
 
   renderInput(name, label, type = "text", placeholder = "") {
     const { data, errors } = this.state;
-    // console.log("errors in renderInput errors[name]", errors[name]);
-    // console.log("name", name);
-    // console.log("error", errors);
     return (
       <Input
         type={type}
@@ -165,7 +152,6 @@ class Form extends Component {
         value={stateField[row][name]}
         onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
         error={row === this.state.validateIngredientsRow && errors[name]}
-        // error={errors[name]}
       />
     );
   }
@@ -192,11 +178,9 @@ class Form extends Component {
       <Select
         name={name}
         label={label}
-        // placeholder={placeholder}
         value={stateField[row][name]}
         options={options}
         onChange={(e) => this.handleChangeMultiRow(e, row, valueField)}
-        // error={errors[name]}
         error={row === this.state.validateIngredientsRow && errors[name]}
       />
     );

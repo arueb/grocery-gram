@@ -1,7 +1,6 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { FaStarHalfAlt } from "react-icons/fa";
-import "../../css/starRating.css";
 
 const AvgStarRating = ({ avgRating, numReviews, starSize = 50 }) => {
   if (numReviews <= 0) {

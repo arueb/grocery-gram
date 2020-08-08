@@ -37,8 +37,6 @@ class MyRecipes extends Component {
 
   async componentDidMount() {
     document.title = this.props.pageTitle;
-    // this.handleUnsaveRecipe = this.handleUnsaveRecipe.bind(this);
-
     this.setState({ selectValue: this.getInitialSelectVal() });
 
     try {
@@ -53,24 +51,6 @@ class MyRecipes extends Component {
       console.log("Something failed", ex);
     }
   }
-
-  //   renderRecipeBlocks(recipes, userId) {
-  //     let items = [];
-  //     if (recipes) {
-  //       recipes.forEach(function (recipe) {
-  //         items.push(
-  //           <RecipeBlock
-  //             unSave={this.handleUnsaveRecipe}
-  //             userId={userId}
-  //             key={recipe._id}
-  //             recipe={recipe}
-  //             forExplore={false}
-  //           />
-  //         );
-  //       });
-  //     }
-  //     return items;
-  //   }
 
   handleOwnerSelect = (ownerType) => {
     this.setState({
@@ -219,7 +199,7 @@ class MyRecipes extends Component {
                     recipe={recipe}
                     forExplore={false}
                   />
-
+                  {/* Confirm Modal */}
                   <div
                     className="modal fade"
                     id="unsaveModal"
@@ -279,8 +259,6 @@ class MyRecipes extends Component {
                 </React.Fragment>
               );
             })}
-
-          {/* {this.renderRecipeBlocks(recipes, this.props.user._id)} */}
         </div>
         <Pagination
           recipesCount={filtered.length}

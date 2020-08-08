@@ -10,7 +10,6 @@ import {
 } from "../services/userService";
 import { getColor } from "../services/itemService";
 import ItemSearch from "../components/itemSearch";
-// import PieChart from "./pieChart";
 import PieChartAndLegend from "./pieChartAndLegend";
 import { FaTrash } from "react-icons/fa";
 
@@ -19,9 +18,6 @@ class ShoppingList extends Component {
     userData: null,
     addedItems: [],
     removedItems: null,
-    // catPercents: null,
-    // totalNumItems: 0,
-    // totalPriceItems: 0,
     activeIndex: null,
     staples: [],
     recipes: [],
@@ -43,9 +39,6 @@ class ShoppingList extends Component {
 
     // populate the users lists and recipes
     await this.expandShoppingLists();
-
-    // update the pie chart
-    // this.handleUpdatePieChart();
   }
 
   async expandShoppingLists() {
@@ -76,8 +69,6 @@ class ShoppingList extends Component {
         });
       }, 100);
       this.updateMyStaples(itemCounts);
-
-      // this.setState({ isLoading: false });
     }
   }
 
@@ -118,34 +109,24 @@ class ShoppingList extends Component {
         newAddedItemIds,
         removedItemIds
       );
-      // this.handleUpdatePieChart();
     } catch (err) {
       // revert state back to original
       this.setState({ addedItems: prevAddedItems });
-      // this.handleUpdatePieChart();
       console.log("Something went wrong.", err);
     }
   };
 
   handleAddBackItem = async (itemIndex) => {
-    // setTimeout(() => {
     this.moveItemsInLists(itemIndex, "addBack");
-    // }, 200);
-    // this.handleUpdatePieChart();
-    // const itemCounts = [...this.state.itemCounts];
-    // this.updateMyStaples(itemCounts);
     this.updateMyStaples(this.state.itemCounts);
   };
 
   handleRemoveItem = async (index) => {
-    // console.log("addedItems.length = " + String(this.state.addedItems.length))
     this.updateItemCount(this.state.addedItems[index]._id);
-    // console.log("clicked an item");
     this.setState({ activeIndex: index });
 
     setTimeout(() => {
       this.moveItemsInLists(index, "removeItem"); // need to change addBack
-      // this.handleUpdatePieChart();
       this.setState({ activeIndex: null });
     }, 300);
   };
@@ -153,8 +134,6 @@ class ShoppingList extends Component {
   moveItemsInLists = async (itemIndex, action) => {
     // optimistic update
     // store current state in case we need to revert
-    // const prevAddedItems = this.state.addedItems;
-    // const prevRemovedItems = this.state.removedItems;
     const { removedItems: prevRemovedItems, addedItems: prevAddedItems } = {
       ...this.state,
     };
@@ -169,7 +148,6 @@ class ShoppingList extends Component {
     else if (action === "removeItem") {
       currExtractFromItems = prevAddedItems;
       currAddToItems = prevRemovedItems;
-      // console.log("trying to remove index " + String(itemIndex) + " from array of length " + String(currExtractFromItems.length));
     }
     // extract item from currExtractFromItems
     let newExtractFromItems = [];
@@ -182,10 +160,8 @@ class ShoppingList extends Component {
         newExtractFromItemIds.push(item._id);
       } else newAddToItems.push(item);
     });
-    // console.log("newAddToItems (pre) = ", newAddToItems);
     // push currAddToItems into newAddToItems
     newAddToItems.push(...currAddToItems);
-    // console.log("newAddToItems (post) = ", newAddToItems);
     const newAddToItemIds = newAddToItems.map((item) => item._id);
 
     // sort and set state according to action, forces a re-render
@@ -244,52 +220,6 @@ class ShoppingList extends Component {
     }
   }
 
-  // handleUpdatePieChart = () => {
-  //   // create array of category objects for use in pie chart
-  //   const { addedItems } = this.state;
-  //   if (addedItems === null) return;
-  //   let catStats = [];
-  //   let cats = [];
-  //   for (let i = 0; i < addedItems.length; i++) {
-  //     const catName = addedItems[i].category;
-  //     if (!cats.includes(catName)) {
-  //       cats.push(catName);
-  //       let catObj = {
-  //         name: catName,
-  //         count: 1,
-  //         cost: addedItems[i].price,
-  //       };
-  //       catStats.push(catObj);
-  //     } else {
-  //       const catArr = catStats.filter((cat) => {
-  //         return cat.name === catName;
-  //       });
-  //       let catObj = catArr[0];
-  //       catObj.count++;
-  //       catObj.cost += addedItems[i].price;
-  //     }
-  //   }
-  //   // calculate item totals
-  //   let totalNumItems = addedItems.length;
-  //   let totalPriceItems = 0;
-  //   for (let i = 0; i < addedItems.length; i++) {
-  //     totalPriceItems += addedItems[i].price;
-  //   }
-  //   totalPriceItems = totalPriceItems.toFixed(2); // set to 2 dec places
-  //   // calculate percentage and add pie chart colors
-  //   const catPercents = [];
-  //   catStats.forEach((cat) =>
-  //     catPercents.push({
-  //       name: cat.name,
-  //       y: (cat.count / totalNumItems) * 100, // calc percent of total
-  //       color: getColor(cat.name),
-  //     })
-  //   );
-  //   this.setState({ catPercents, totalNumItems, totalPriceItems });
-  // };
-
-  // updateMyStaples
-
   updateItemCount = async (itemId) => {
     const itemCounts = [...this.state.itemCounts];
     const idx = itemCounts.findIndex((i) => i._id === itemId);
@@ -316,7 +246,6 @@ class ShoppingList extends Component {
     const filtered = itemCounts.filter((item) => {
       return !addedItems.includes(item._id);
     });
-    // console.log("filtered", filtered);
     const staples = filtered
       .sort((a, b) => b.count - a.count)
       .slice(0, 6)
@@ -328,7 +257,6 @@ class ShoppingList extends Component {
   };
 
   handleAddRecipeIngredients = async (recipe) => {
-    // console.log(recipe);
     let itemsToAdd = recipe.ingredients.map((ingredient) => {
       return ingredient.item;
     });
@@ -350,11 +278,9 @@ class ShoppingList extends Component {
 
     try {
       await updateShoppingList(this.props.user._id, newAddedItemIds);
-      // this.handleUpdatePieChart();
     } catch (err) {
       // revert state back to original
       this.setState({ addedItems: prevAddedItems });
-      // this.handleUpdatePieChart();
       console.log("Something went wrong.", err);
     }
   };
@@ -365,8 +291,6 @@ class ShoppingList extends Component {
     newRemovedItems.splice(idx, 1);
     const newRemovedItemsIds = newRemovedItems.map((item) => item._id);
     this.setState({ removedItems: newRemovedItems });
-    // const addBackNode = this.addBackRef.current;
-    // addBackNode.blur();
     try {
       await deleteItemFromShoppingList(this.props.user._id, newRemovedItemsIds);
     } catch (err) {
@@ -377,12 +301,9 @@ class ShoppingList extends Component {
   };
 
   handleClearAll = async () => {
-    // console.log("clearing all!");
     const prevAddedItems = [...this.state.addedItems];
     const prevRemovedItems = [...this.state.removedItems];
     this.setState({ addedItems: [], removedItems: [] });
-
-    // this.handleUpdatePieChart();
 
     try {
       await clearAllFromShoppingList(this.props.user._id, [], []);
@@ -400,9 +321,6 @@ class ShoppingList extends Component {
     const {
       addedItems,
       removedItems,
-      // totalNumItems,
-      // totalPriceItems,
-      // catPercents,
       staples,
       userRecipes,
       isLoading,
@@ -411,17 +329,12 @@ class ShoppingList extends Component {
     let numAllItems = 0;
     if (addedItems) numAllItems += addedItems.length;
     if (removedItems) numAllItems += removedItems.length;
-    // console.log('numAllItems', numAllItems);
 
     return (
       <React.Fragment>
         {/* {isLoading && <p>page loading...</p>} */}
         <div className="row sl-page-heading">
-          {/* <div className="col-md-3"></div> */}
-          {/* <div className="col-md"> */}
           <h2>Shopping List</h2>
-          {/* </div> */}
-          {/* <div className="col-md"></div> */}
         </div>
         <hr className="divider" />
         <div className="row">
@@ -465,7 +378,6 @@ class ShoppingList extends Component {
                 ? null
                 : removedItems.map((item, index) => (
                     <li
-                      //   onClick=""
                       key={index}
                       className="list-group-item"
                       style={{
@@ -583,7 +495,6 @@ class ShoppingList extends Component {
                       <li
                         key={i}
                         className="list-group-item border-0"
-                        // onClick={() => this.handleAddItemFromSearchBox(recipe)}
                         onClick={() => this.handleAddRecipeIngredients(recipe)}
                       >
                         {recipe.title}

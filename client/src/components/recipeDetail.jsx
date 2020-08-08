@@ -8,7 +8,6 @@ import Like from "./common/like";
 import ReviewRow from "./common/reviewRow";
 import AvgStarRating from "./common/avgStarRating";
 import StarRating from "./common/starRating";
-// import { getRecipe, deleteRecipe, updateRecipe, newRecipe, } from "../services/recipeService";
 import { getUserData } from "../services/userService";
 import { FaPen } from "react-icons/fa";
 import { getRecipe, getReviews } from "../services/recipeService";
@@ -43,7 +42,7 @@ class RecipeDetail extends Form {
     userId: Joi.any(),
     _id: Joi.any(),
     reviews: Joi.any(),
-    images: Joi.any(), // I am not sure if it's correct to just be ignoring all this stuff
+    images: Joi.any(), 
     author: Joi.any(),
     title: Joi.any(),
     category: Joi.any(),
@@ -175,7 +174,6 @@ class RecipeDetail extends Form {
     try {
       await updateUserProperty(this.props.user._id, {
         savedRecipes,
-        //   savedRecipes: newSavedRecipes,
       });
     } catch (err) {
       this.setState({ origSavedRecipes });

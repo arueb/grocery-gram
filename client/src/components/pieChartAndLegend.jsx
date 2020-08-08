@@ -102,13 +102,3 @@ class PieChart extends Component {
 }
 
 export default PieChart;
-
-/*
-     <React.Fragment>
-        <div className="pie-chart-container">
-          <CanvasJSChart
-            options={options}
-          />
-        </div>
-      </React.Fragment>
-*/

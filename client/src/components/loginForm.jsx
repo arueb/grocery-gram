@@ -4,12 +4,6 @@ import Joi from "joi-browser";
 import auth from "../services/authService";
 
 class LoginForm extends Form {
-  //   username = React.createRef(); //as a best practice, minimize the user of ref
-  // gives the username field focus upon loading the component
-
-  //   componentDidMount() {
-  //     this.username.current.focus();
-  //   }
   state = {
     data: { email: "", password: "" },
     errors: {},
