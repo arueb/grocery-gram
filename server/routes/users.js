@@ -138,6 +138,7 @@ router.get("/", auth, async (req, res) => {
           "removedItems",
           "itemCounts",
           "savedRecipes",
+          "reviews",
         ])
       )
     );
