@@ -718,6 +718,28 @@ section.reviews .review-list {
   display: none;
 }
 
+.bio {
+  padding: 1.5rem;
+}
+.bio h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.bio img {
+  margin-bottom: 2rem;
+  border-radius: 50%;
+  width: 90%;
+}
+
+.bio .title {
+  font-style: italic;
+  color: #666;
+}
+
+.bio .location {
+  font-size: 0.9rem;
+}
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
@@ -875,7 +897,6 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     padding: 1rem;
   }
 
-  /* .hover-icon li:hover  { */
   li:hover span.perm-delete .hover-icon {
     opacity: 1;
     transition-delay: 0.2s;
@@ -903,6 +924,10 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   .divider {
     display: block;
   }
+
+  section.dev-team {
+    padding: 0 5rem;
+  }
 }
 
 /* 
@@ -920,6 +945,7 @@ Large devices (desktops, 992px and up) */
 
   .totals {
     top: 154px;
+    padding-left: 3rem;
   }
 
   .list-group-item {

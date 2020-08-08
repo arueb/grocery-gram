@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   // FaGgCircle,
   FaFacebook,
@@ -55,9 +56,9 @@ const Footer = () => {
       {/* <!-- Copyright --> */}
       <div className="footer-copyright text-center py-3">
         © 2020 Copyright:{" "}
-        <a className="code-blue" href="https://oregonstate.edu/">
+        <Link className="code-blue" to="/development-team">
           Code Blue Team
-        </a>
+        </Link>
       </div>
       {/* <!-- Copyright --> */}
     </footer>
