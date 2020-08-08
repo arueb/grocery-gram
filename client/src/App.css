@@ -793,7 +793,7 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
     font-size: 1rem;
   }
 
-  .avg-star-rating {
+  .card-body .avg-star-rating {
     position: absolute;
     bottom: 1rem;
   }
