@@ -15,8 +15,6 @@ import { FaTrash } from "react-icons/fa";
 import ItemSearch from "../components/itemSearch";
 import SortableComponent from "../components/sortableComponent";
 import arrayMove from "array-move";
-// import { toast } from "react-toastify";
-// import * as recipeService from "../services/recipeService";
 
 //const UPLOAD_LIST_PLACEHOLDER =
 //  process.env.REACT_APP_SERVER_URL + "/images/image-uploader-blank.jpg";
@@ -39,7 +37,6 @@ class RecipeForm extends Form {
         recipeImages: [],
         ingredientCount: 0,
       },
-      //    ingredients: [{ qty: "", unit: "", itemId: "", notes: "" }],
     };
     this.handleThumbnailAdd = this.handleThumbnailAdd.bind(this);
     this.fileInput = React.createRef();
@@ -70,7 +67,6 @@ class RecipeForm extends Form {
     // Bind the this context to the handler function
     this.handleIngredientUpdate = this.handleIngredientUpdate.bind(this);
     this.handleDeleteRecipe = this.handleDeleteRecipe.bind(this);
-    // this.handleValidation = this.handleValidation.bind(this);
 
     // load the recipe (unless new)
     await this.populateRecipe();
@@ -90,8 +86,7 @@ class RecipeForm extends Form {
   async populateRecipe() {
     try {
       const recipeId = this.props.match.params.id;
-      //   console.log("recipeId", recipeId);
-      if (recipeId === "new") return; /// TODO:  Change this "new" instead of test
+      if (recipeId === "new") return; 
 
       const { data: recipe } = await getRecipe(recipeId);
       console.log("recipe data", recipe);
@@ -153,16 +148,12 @@ class RecipeForm extends Form {
     const data = { ...this.state.data };
     data.recipeImages = arrayMove(data.recipeImages, oldIndex, newIndex);
     this.setState({ data });
-    // this.setState(({ recipeImages }) => ({
-    //   recipeImages: arrayMove(recipeImages, oldIndex, newIndex),
-    // }));
   };
 
   renderDeleteButton() {
     if (this.props.match.params.id !== "new") {
       return this.renderButtonCustomHandler(
         "Delete Recipe"
-        // this.handleDeleteRecipe
       );
     }
   }
@@ -198,7 +189,6 @@ class RecipeForm extends Form {
     const data = { ...this.state.data };
     data.ingredientCount = ingredients.length;
     this.setState({ ingredients, validateIngredientsRow: null, data });
-    // console.log(this.state.ingredients);
   };
 
   // handle deleting a row from the ingredients table
@@ -209,7 +199,6 @@ class RecipeForm extends Form {
     const data = { ...this.state.data };
     data.ingredientCount = ingredients.length;
     this.setState({ ingredients, validateIngredientsRow: null, data });
-    // this.setState({ validateIngredientsRow: null });
   };
 
   // handle updating ingredients from child itemSearch component
@@ -226,19 +215,14 @@ class RecipeForm extends Form {
   };
 
   validateIngredients = (row) => {
-    // console.log("validateIngrents() fired");
     const options = { abortEarly: true };
     const ingredient = this.state.ingredients[row];
-    // console.log("ingredient to be validated", ingredient);
-    // delete ingredient.notes;
     delete ingredient.item;
     const { error } = Joi.validate(
-      // this.state.ingredients[row],
       ingredient,
       this.ingredientsSchema,
       options
     );
-    // console.log("validationerror", error);
     if (!error) return null;
 
     const errors = {};
@@ -247,16 +231,6 @@ class RecipeForm extends Form {
   };
 
   doSubmit = async () => {
-    // if (this.state.data.recipeImages.length < 1) {
-    //   toast.error("Must have at least 1 image");
-    //   return;
-    // }
-
-    // if (this.state.ingredients.length < 1) {
-    //   toast.error("Must have at least 1 ingredient");
-    //   return;
-    // }
-
     const { ingredients } = this.state;
     let ingredientsValidationFailed = false;
     if (ingredients.length > 0) {
@@ -458,7 +432,6 @@ class RecipeForm extends Form {
                               <FaTrash
                                 className="hover-icon"
                                 onClick={this.handleRemoveSpecificRow(i)}
-                                // onClick={this.handleRemoveSpecificRow(i)} ********
                               />
                             </td>
                           </tr>
@@ -503,7 +476,7 @@ class RecipeForm extends Form {
             )}
           </form>
         </section>
-
+        {/* Delete Recipe Modal */}
         <div
           className="modal fade"
           id="deleteRecipeModal"

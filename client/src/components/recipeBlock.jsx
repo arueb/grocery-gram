@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-//import { FaStarHalfAlt, FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
-//import StarRating from "./common/starRating";
 import AvgStarRating from "./common/avgStarRating";
 import { FaPen, FaHeart } from "react-icons/fa";
 
@@ -51,7 +49,6 @@ class RecipeBlock extends Component {
     }
     // Case if user does not own this recipe
     else if (this.props.recipe.userId !== this.props.userId) {
-      // console.log("recipeTitle", this.props.recipe.title);
       return (
         <div className="saved-icon">
           <FaHeart

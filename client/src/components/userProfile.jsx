@@ -108,7 +108,6 @@ class UserProfile extends Form {
     // Need to send image url to mongodb field profileImageUrl
     loginWithJwt(newUserData.headers["x-auth-token"]);
 
-    // window.location.reload();
     await this.props.appCDM();
 
     toast.success("Profile Image Updated!", {
