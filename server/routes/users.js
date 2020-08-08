@@ -180,20 +180,6 @@ router.get("/:id", async (req, res) => {
 });
 
 // get all recipes for user with given id
-// router.get("/:id/recipes", async (req, res) => {
-//   try {
-//     const user = await User.findById(req.params.id);
-//     if (!user)
-//       return res.status(404).send("The user with the given ID was not found.");
-
-//     const recipes = await Recipe.find({ userId: req.params.id });
-//     res.send(recipes);
-//   } catch (err) {
-//     res.status(500).send("Something failed.");
-//   }
-// });
-
-// get all recipes for user with given id
 router.get("/:id/recipes", auth, async (req, res) => {
   try {
     // check to make sure the user exists

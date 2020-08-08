@@ -115,7 +115,6 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
-  //console.log(req.body);
   // validate request body
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -124,12 +123,9 @@ router.post("/", auth, async (req, res) => {
     // check to make sure the specified user exists
     let user = await User.findOne({ _id: req.body.userId });
     if (!user) return res.status(404).send("The userId does not exist");
-    // console.log("req.body=", req.body)
     // create the recipe object from the request body and save
     const recipe = new Recipe(req.body);
-    // console.log(recipe);
     await recipe.save();
-    // console.log * "saved recipe successfully!";
     res.status(200).send(recipe); // send recipe back with response
   } catch (err) {
     console.log("POST /recipes error:", err);
