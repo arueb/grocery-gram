@@ -26,11 +26,8 @@ class ExploreRecipes extends Component {
     this.setState({ selectValue: this.getInitialSelectVal() });
 
     try {
-      //     const user = this.props.user;
-      //     if (user) {
       const { data: recipes } = await getPublishedRecipes();
       this.setState({ recipes });
-      //    }
     } catch (ex) {
       console.log("Something failed", ex);
     }
@@ -54,7 +51,6 @@ class ExploreRecipes extends Component {
   }
 
   handleFilterByCategory = (event) => {
-    // console.log("you chose", event.target.value);
     this.setState({
       selectValue: event.target.value,
       currentPage: 1,
@@ -67,7 +63,6 @@ class ExploreRecipes extends Component {
   };
 
   handleSearch = (query) => {
-    // console.log("searchQuery:", query);
     this.setState({
       searchQuery: query,
       currentPage: 1,
@@ -105,9 +100,7 @@ class ExploreRecipes extends Component {
     return (
       <React.Fragment>
         <div className="row sl-page-heading">
-          {/* <div className="col-md"> */}
           <h2>Explore Recipes</h2>
-          {/* </div> */}
         </div>
         <hr className="divider" />
         <div className="row list-group-row">

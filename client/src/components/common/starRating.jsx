@@ -3,7 +3,6 @@ import { FaStar } from "react-icons/fa";
 import "../../css/starRating.css";
 
 const StarRating = ({ starSize = 50, onChange, currentStars}) => {
-//  const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
 
   return (

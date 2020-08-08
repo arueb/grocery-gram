@@ -2,6 +2,7 @@ import http from "./httpService";
 
 const apiEndpoint = "/items";
 
+// ------------- DO NOT DELETE COMMENTS BELOW!! ---------------------
 // original (dev) color scheme
 // const categories0 = [
 //   { _id: 1, name: "Fruit", hexColor: "#ff7675" },
@@ -45,6 +46,7 @@ const apiEndpoint = "/items";
 //   { _id: 17, name: "Other", hexColor: "#7D5379" },
 // ];
 
+
 // gorgeous color scheme
 // https://www.pinterest.com/pin/327707310365891177/ 
 const categories2 = [
@@ -66,12 +68,6 @@ const categories2 = [
   { _id: 16, name: "Pasta", hexColor: "#949494" },
   { _id: 17, name: "Other", hexColor: "#00909e" },
 ];
-
-
-
-
-
-
 
 export function getItems() {
   return http.get(apiEndpoint);
