@@ -945,6 +945,7 @@ Large devices (desktops, 992px and up) */
 
   .totals {
     top: 154px;
+    padding-left: 3rem;
   }
 
   .list-group-item {
