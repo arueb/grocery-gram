@@ -13,7 +13,7 @@ const DevTeam = () => {
       <section className="row dev-team">
         <div className="col-md-4 bio">
           <div className="text-center">
-            <img className="img-fluid" src="/img/david.jpg" />
+            <img alt="David" className="img-fluid" src="/img/david.jpg" />
             <h3>David Coopersmith</h3>
             <p className="title">Full Stack Developer</p>
             <p className="location">Moreno Valley, CA</p>
@@ -21,7 +21,7 @@ const DevTeam = () => {
         </div>
         <div className="col-md-4 bio">
           <div className="text-center">
-            <img className="img-fluid" src="/img/brooks.jpg" />
+            <img alt="Brooks" className="img-fluid" src="/img/brooks.jpg" />
             <h3>Brooks Przybylek</h3>
             <p className="title">Full Stack Developer</p>
             <p className="location">Dallas, TX</p>
@@ -29,7 +29,7 @@ const DevTeam = () => {
         </div>
         <div className="col-md-4 bio">
           <div className="text-center">
-            <img className="img-fluid" src="/img/alex.jpg" />
+            <img alt="Alex" className="img-fluid" src="/img/alex.jpg" />
             <h3>Alex Rueb</h3>
             <p className="title">Full Stack Developer</p>
             <p className="location">Austin, TX</p>
