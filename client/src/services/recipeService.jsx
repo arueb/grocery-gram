@@ -29,18 +29,7 @@ export function newRecipe(recipe) {
   return http.post(
     apiEndpoint,
     recipe
-  ); /* {
-    title: recipe.title,
-    author: recipe.author,
-    avgRating: recipe.avgRating,
-    numReviews: recipe.numReviews,
-    category: recipe.category,
-    images: recipe.images,
-    isPublished: recipe.isPublished,
-    instructions: recipe.instructions,
-    ingredients: recipe.ingredients,
-  });
-  */
+  ); 
 }
 
 export function getReviews(recipe) {
