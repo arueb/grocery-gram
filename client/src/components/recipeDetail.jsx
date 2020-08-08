@@ -42,7 +42,7 @@ class RecipeDetail extends Form {
     userId: Joi.any(),
     _id: Joi.any(),
     reviews: Joi.any(),
-    images: Joi.any(), 
+    images: Joi.any(),
     author: Joi.any(),
     title: Joi.any(),
     category: Joi.any(),
@@ -56,14 +56,14 @@ class RecipeDetail extends Form {
   async componentDidMount() {
     // Load the Page
     await this.populateRecipe();
-
+    // const { data: userData } = await getUserData(user._id);
     if (this.props.user) {
       // Load the user
-      const user = await getUserData(this.props.user._id);
+      const { data: userData } = await getUserData(this.props.user._id);
 
       // figure out if the recipe is saved
-      const isSaved = user.data.savedRecipes.includes(this.state.data._id);
-      this.setState({ savedRecipes: user.data.savedRecipes, isSaved });
+      const isSaved = userData.savedRecipes.includes(this.state.data._id);
+      this.setState({ savedRecipes: userData.savedRecipes, isSaved, userData });
     }
 
     document.title = this.state.data.title + " - GroceryGram";
@@ -205,38 +205,62 @@ class RecipeDetail extends Form {
     this.setState({ data });
   };
 
+  toastMsg = (msg, type) => {
+    toast[type](msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   async handleAddIngredients() {
     try {
       let newAddedItemIds = [];
+      let numChecked = 0;
+      let numAdded = 0;
+      const { addedItems } = this.state.userData;
+      console.log("addedItems", addedItems);
       this.state.data.ingredients.forEach((ingredient) => {
+        console.log("ingredient._id", ingredient._id);
+        console.log(
+          "!addedItems.includes(ingredient.itemId)",
+          !addedItems.includes(ingredient._id)
+        );
         if (ingredient.addToList) {
-          newAddedItemIds.push(ingredient.itemId);
+          numChecked++;
+          // only add items not already in shopping list
+          if (!addedItems.includes(ingredient.itemId)) {
+            newAddedItemIds.push(ingredient.itemId);
+            numAdded++;
+          }
         }
       });
 
-      if (newAddedItemIds.length === 0) {
-        return toast.info("No items selected to add to shopping list", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+      if (numChecked === 0) {
+        return this.toastMsg(
+          "No items selected to add to shopping list",
+          "info"
+        );
+      }
+
+      if (numAdded === 0) {
+        return this.toastMsg(
+          "All selected ingredients are already in your shopping cart",
+          "info"
+        );
       }
 
       await addToShoppingList(this.props.user._id, newAddedItemIds);
-
-      toast.success("Items added to Shopping List!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      this.toastMsg(
+        numAdded +
+          (numAdded > 1 ? " items " : " item ") +
+          "added to Shopping List!",
+        "success"
+      );
     } catch (err) {
       // revert state back to original
       console.log("Adding Ingredients Error", err);
