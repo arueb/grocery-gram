@@ -335,7 +335,6 @@ class ShoppingList extends Component {
 
     return (
       <React.Fragment>
-        {/* {isLoading && <p>page loading...</p>} */}
         <div className="row sl-page-heading">
           <h2>Shopping List</h2>
         </div>
