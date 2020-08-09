@@ -740,6 +740,15 @@ section.reviews .review-list {
 .bio .location {
   font-size: 0.9rem;
 }
+
+.list-group-item .removed {
+  display: block;
+}
+
+.perm-delete {
+  display: none;
+}
+
 /* 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
 Small devices (landscape phones, 576px and up) */
@@ -927,6 +936,13 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
 
   section.dev-team {
     padding: 0 5rem;
+  }
+
+  .list-group-item .removed {
+    display: inline;
+  }
+  .perm-delete {
+    display: inline;
   }
 }
 
