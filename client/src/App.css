@@ -700,10 +700,6 @@ section.reviews .review-list {
   margin-top: 3rem;
 }
 
-.qty select {
-  width: 5rem;
-}
-
 .modal-form .left-col {
   height: 200px;
   background-position-x: 0 !important;
@@ -943,6 +939,10 @@ Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpo
   }
   .perm-delete {
     display: inline;
+  }
+
+  .qty select {
+    width: 5rem;
   }
 }
 
